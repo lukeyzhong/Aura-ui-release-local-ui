@@ -1,0 +1,465 @@
+<div class="conditions">
+  <div class="overlay"></div>
+
+  <!-- TERMS & CONDITIONS -->
+  <div class="card" *ngIf="showTermsCondns">
+    <div class="card__left">
+      <div class="card__left--logo">
+        <img
+          src="./assets/svg/candidate-dashboard/antra-logo.png"
+          width="150px"
+          alt=""
+        />
+      </div>
+      <img
+        src="./assets/svg/terms-conditions/policy.svg"
+        width="200px"
+        alt=""
+      />
+      <div class="card__left--bg">
+        <img
+          src="./assets/svg/terms-conditions/reg-bg.svg"
+          width="100%"
+          alt=""
+        />
+      </div>
+    </div>
+    <div class="card__right">
+      <div class="card__right--header">
+        <h2>Terms and Conditions</h2>
+      </div>
+      <div class="card__right--cnt">
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div [innerHtml]="templateTC"></div>
+      </div>
+
+      <div class="card__right--footer">
+        <div class="footer__dt">
+          <section class="example-section">
+            <mat-checkbox color="primary" (change)="acceptTerms($event)"
+              >I have read and agree to terms and conditions.</mat-checkbox
+            >
+          </section>
+          <h3>Name: {{ fullName }}</h3>
+        </div>
+        <div class="footer__dt">
+          <p>Date: {{ acceptanceDate | date: 'MM/dd/yyyy' }}</p>
+          <div class="footer__btns">
+            <button
+              mat-stroked-button
+              color="primary"
+              type="button"
+              (click)="onReject()"
+              [disabled]="!disableAccept"
+            >
+              Reject
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              type="button"
+              [disabled]="disableAccept"
+              (click)="acceptTermsAndConditions()"
+            >
+              Accept
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VALIDATE PERSON -->
+  <div class="info-card card" *ngIf="showValidatePerson">
+    <div class="card__left">
+      <div class="card__left--logo">
+        <img
+          src="./assets/svg/candidate-dashboard/antra-logo.png"
+          width="100px"
+          alt=""
+        />
+      </div>
+      <img src="./assets/svg/terms-conditions/mail.svg" width="250px" alt="" />
+      <div class="card__left--bg">
+        <img
+          src="./assets/svg/terms-conditions/reg-bg.svg"
+          width="100%"
+          alt=""
+        />
+      </div>
+    </div>
+    <div class="card__right ph-40">
+      <div class="info-not-valid" *ngIf="linkExpired">
+        <img
+          src="./assets/svg/terms-conditions/linkexpired.svg"
+          width="200px"
+          alt=""
+        />
+        <br />
+        <h2 class="link-expired">Link Expired.</h2>
+        <p>
+          Please contact
+          <a href="mailto:hr@antra.com" target="_blank">hr@antra.com</a> for
+          further assistance.
+        </p>
+      </div>
+
+      <div class="info-not-valid" *ngIf="personInfoNotValid">
+        <img
+          src="./assets/svg/terms-conditions/nodata.svg"
+          width="250px"
+          alt=""
+        />
+        <br />
+        <h2 class="link-expired">Information you provided is not valid.</h2>
+        <h2>
+          Please contact
+          <a href="mailto:hr@antra.com" target="_blank">hr@antra.com</a> for
+          further assistance.
+        </h2>
+      </div>
+
+      <div class="card__right--header" *ngIf="personInfoValid">
+        <h2>Validate Your Information</h2>
+        <p class="info-text">
+          Fill the same details that you submitted in recruitment process.
+        </p>
+      </div>
+      <form [formGroup]="validatePersonForm" *ngIf="personInfoValid">
+        <div class="card__right--cnt info-card__cnt">
+          <div class="form-fld-group">
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                notValid:
+                  validationErrorsMap.has('firstName') && firstName.value !== ''
+              }"
+            >
+              <mat-label>Legal First Name</mat-label>
+              <input
+                required
+                #firstName
+                matInput
+                placeholder="First Name"
+                formControlName="firstName"
+                maxlength="50"
+              />
+              <mat-error
+                *ngIf="
+                  validatePersonForm.controls['firstName'].errors?.required
+                "
+                >This field is mandatory.
+              </mat-error>
+
+              <mat-error
+                *ngIf="validatePersonForm.controls['firstName'].errors?.pattern"
+                >Only alphabets are allowed.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                notValid:
+                  validationErrorsMap.has('lastName') && lastName.value !== ''
+              }"
+            >
+              <mat-label>Legal Last Name</mat-label>
+              <input
+                matInput
+                required
+                #lastName
+                placeholder="Last Name"
+                formControlName="lastName"
+                maxlength="50"
+              />
+              <mat-error
+                *ngIf="validatePersonForm.controls['lastName'].errors?.required"
+                >This field is mandatory.
+              </mat-error>
+              <mat-error
+                *ngIf="validatePersonForm.controls['lastName'].errors?.pattern"
+                >Only alphabets are allowed.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                notValid: validationErrorsMap.has('dob') && doBirth.value !== ''
+              }"
+            >
+              <mat-label>Date Of Birth</mat-label>
+              <input
+                matInput
+                required
+                #doBirth
+                [matDatepicker]="dob"
+                formControlName="dateOfBirth"
+                placeholder="MM/DD/YYYY"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="dob"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #dob></mat-datepicker>
+              <mat-error
+                *ngIf="
+                  validatePersonForm.controls['dateOfBirth'].errors?.required
+                "
+                >This field is mandatory.
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  validatePersonForm.controls['dateOfBirth'].errors
+                    ?.isAgeInvalid
+                "
+                >Age can not be < 18 and> 100 years</mat-error
+              >
+            </mat-form-field>
+            <div class="phone">
+              <mat-form-field
+                appearance="outline"
+                class="phone__code"
+                [ngClass]="{
+                  notValid:
+                    validationErrorsMap.has('countryCode') &&
+                    countryCode.value !== ''
+                }"
+              >
+                <mat-label>Code</mat-label>
+                <input
+                  matInput
+                  required
+                  #countryCode
+                  placeholder="123"
+                  formControlName="countryCode"
+                  maxlength="3"
+                />
+                <span matPrefix>+&nbsp;</span>
+                <mat-error
+                  *ngIf="
+                    validatePersonForm.controls['countryCode'].errors?.required
+                  "
+                  >*
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    validatePersonForm.controls['countryCode'].errors?.pattern
+                  "
+                  >E.g: +1
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  notValid:
+                    validationErrorsMap.has('phone') && phone.value !== ''
+                }"
+              >
+                <mat-label>Cell Phone</mat-label>
+                <input
+                  matInput
+                  required
+                  #phone
+                  formControlName="phone"
+                  phoneMask
+                  maxlength="14"
+                  placeholder="(012) 345-6789"
+                  [preValue]="validatePersonForm.value.phone"
+                />
+                <mat-error
+                  *ngIf="validatePersonForm.controls['phone'].errors?.required"
+                  >This field is mandatory.
+                </mat-error>
+                <mat-error
+                  *ngIf="validatePersonForm.controls['phone'].errors?.minlength"
+                  >Should be of 10 digits.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <mat-form-field
+              appearance="outline"
+              class="email"
+              [ngClass]="{
+                notValid: validationErrorsMap.has('email') && email.value !== ''
+              }"
+            >
+              <mat-label>Email Address</mat-label>
+              <input
+                matInput
+                required
+                #email
+                placeholder="Email Address"
+                formControlName="email"
+                maxlength="100"
+              />
+              <mat-error
+                *ngIf="validatePersonForm.controls['email'].errors?.required"
+                >This field is mandatory.
+              </mat-error>
+              <mat-error
+                *ngIf="validatePersonForm.controls['email'].errors?.email"
+                >Invalid Email Address.</mat-error
+              >
+            </mat-form-field>
+            <p class="email info-txt" *ngIf="verifyErrMsg !== ''">
+              <mat-icon> error_outline </mat-icon> {{ verifyErrMsg }}
+            </p>
+          </div>
+        </div>
+
+        <div class="card__right--footer info-card__footer">
+          <button
+            mat-raised-button
+            [disabled]="validatePersonForm.invalid"
+            color="primary"
+            type="button"
+            (click)="onValidatePerson()"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CREATE PASSWORD -->
+  <div class="info-card card" *ngIf="showCreatePassword">
+    <div class="card__left">
+      <div class="card__left--logo">
+        <img
+          src="./assets/svg/candidate-dashboard/antra-logo.png"
+          width="100px"
+          alt=""
+        />
+      </div>
+      <img
+        src="./assets/svg/terms-conditions/password.svg"
+        width="250px"
+        alt=""
+      />
+      <div class="card__left--bg">
+        <img
+          src="./assets/svg/terms-conditions/reg-bg.svg"
+          width="100%"
+          alt=""
+        />
+      </div>
+    </div>
+    <div class="card__right ph-40">
+      <form [formGroup]="createPwdForm">
+        <div class="confirm-password">
+          <p class="info-text">New Password</p>
+          <div class="card__right--header">
+            <h2>Create Password</h2>
+          </div>
+          <div class="card__right--cnt info-card__cnt">
+            <div class="form-fld-group">
+              <mat-form-field appearance="outline">
+                <mat-label>User Name</mat-label>
+                <input
+                  matInput
+                  required
+                  placeholder="User Name"
+                  formControlName="userName"
+                  maxlength="30"
+                />
+                <mat-error
+                  *ngIf="createPwdForm.controls['userName'].errors?.required"
+                  >This field is mandatory.
+                </mat-error>
+                <mat-error
+                  *ngIf="createPwdForm.controls['userName'].errors?.pattern"
+                  >Special characters are not allowed.
+                </mat-error>
+              </mat-form-field>
+              <div></div>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Password</mat-label>
+                <input
+                  matInput
+                  [type]="showPassword ? 'text' : 'password'"
+                  required
+                  placeholder="Password"
+                  formControlName="newPassword"
+                  maxlength="20"
+                />
+                <mat-error
+                  *ngIf="createPwdForm.controls['newPassword'].errors?.required"
+                  >This field is mandatory.
+                </mat-error>
+                <mat-icon
+                  matSuffix
+                  (click)="togglePasswordVisibility()"
+                  color="primary"
+                >
+                  {{ showPassword ? 'visibility_off' : 'visibility' }}
+                </mat-icon>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Confirm Password</mat-label>
+                <input
+                  matInput
+                  [type]="showCnfPassword ? 'text' : 'password'"
+                  required
+                  formControlName="confirmPassword"
+                  placeholder="Confirm Password"
+                  maxlength="20"
+                />
+                <mat-icon
+                  matSuffix
+                  (click)="toggleCnfPasswordVisibility()"
+                  color="primary"
+                >
+                  {{ showCnfPassword ? 'visibility_off' : 'visibility' }}
+                </mat-icon>
+                <small
+                  class="error_message-date"
+                  *ngIf="createPwdForm?.hasError('mismatch')"
+                >
+                  <span class="material-icons"> error_outline </span> Passwords
+                  do not match.
+                </small>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="card__right--footer info-card__footer">
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            [disabled]="createPwdForm.invalid"
+            (click)="createPassword()"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- REJECTION -->
+  <div class="reject" *ngIf="showRejectDialog">
+    <div class="reject__header">
+      <img
+        src="./assets/svg/candidate-dashboard/antra-logo.png"
+        width="150px"
+        alt=""
+      />
+    </div>
+    <div class="reject__cnt">
+      <img
+        src="./assets/svg/terms-conditions/mobile.svg"
+        width="100px"
+        alt=""
+      />
+      <h2>Contact</h2>
+      <h3>Your Recruiter for any further assistance</h3>
+    </div>
+  
+  </div>
+</div>

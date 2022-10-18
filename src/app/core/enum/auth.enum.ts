@@ -1,0 +1,18 @@
+export enum LoginStatus {
+  SUCCESS = 'Success',
+  NO_USER_EXISTS = 'NoUserExists',
+  WRONG_PASSWORD = 'WrongPassword',
+  ACCOUNT_DISABLED = 'AccountDisabled',
+  ACCOUNT_LOCKED = 'AccountLocked',
+  PASSWORD_EXPIRED = 'PasswordExpired',
+}
+
+export enum Role {
+  ROLE_RECRUITER = 'ROLE_RECRUITER',
+  ROLE_RECRUITMENT_MANAGER = 'ROLE_RECRUITMENT_MANAGER',
+  ROLE_HR = 'ROLE_HR',
+  ADMIN = 'ADMIN',
+  ROLE_READ_ONLY = 'ROLE_READ_ONLY',
+  ROLE_SR_RECRUITER = 'ROLE_SR_RECRUITER',
+  ROLE_ACCOUNT_MANAGER = 'ROLE_ACCOUNT_MANAGER',
+}

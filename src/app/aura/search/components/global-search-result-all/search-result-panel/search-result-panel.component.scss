@@ -1,0 +1,261 @@
+.gs-accordian {
+  &__count {
+    font-weight: normal;
+    font-size: 12px;
+    margin-left: 20px;
+    color: #000000;
+    position: relative;
+  }
+
+  &__search-btn {
+    position: absolute;
+    left: 225px;
+    top: 6px;
+    background: #83d6f6;
+    border-radius: 100px;
+    padding: 4px 5px;
+    color: white;
+
+    .material-icons {
+      font-size: 18px;
+    }
+  }
+}
+
+.sr-panel {
+  margin: 10px 15px;
+  border: solid 1px #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+
+  table {
+    border-radius: 15px;
+  }
+
+  &__sort-icon {
+    font-size: 12px;
+    cursor: pointer;
+    background: none;
+  }
+
+  &__sort-asc {
+    transform: rotate(0deg);
+    color: black;
+    font-size: 12px;
+    padding: 2px;
+    background: #b4e6f9;
+    border-radius: 100px;
+  }
+
+  &__sort-desc {
+    transform: rotate(180deg);
+    color: black;
+    font-size: 12px;
+    padding: 2px;
+    background: #b4e6f9;
+    border-radius: 100px;
+  }
+
+  &__sort-default {
+    transform: rotate(0deg);
+  }
+}
+
+.sr-table {
+  max-height: 386px;
+  overflow: auto;
+  position: relative;
+}
+
+.gs-advanced {
+  width: 260px;
+  padding: 15px;
+  text-align: right;
+
+  input {
+    width: 100%;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    width: 210px !important;
+  }
+}
+
+.sr-filters {
+  margin: 10px 15px;
+
+  ::ng-deep .mat-chip.mat-standard-chip {
+    background: white !important;
+    border: solid 1px #b2b2b2;
+    color: #6c6c6c;
+    font-size: 12px;
+    padding: 10px;
+    min-height: 25px;
+  }
+
+  .material-icons {
+    font-size: 14px;
+    line-height: 24px;
+    padding-left: 5px;
+    margin-top: -3px;
+  }
+
+  &__close-btn {
+    background: #95989a;
+    color: white;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 100px;
+    padding: 0px;
+    line-height: 20px;
+    text-align: center;
+
+    .material-icons {
+      font-size: 16px;
+      padding-left: 3.5px;
+      padding-top: 2px;
+    }
+  }
+}
+
+::ng-deep .mat-form-field-flex > .mat-form-field-infix {
+  padding: 0.4em 0px !important;
+}
+
+::ng-deep .mat-form-field-label-wrapper {
+  top: -1.5em;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0.34375em;
+}
+
+::ng-deep
+  .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-label {
+  transform: translateY(-1.1em) scale(0.75);
+  width: 133.33333%;
+}
+
+// Customized Mat Expansion styles
+::ng-deep .mat-paginator-container {
+  justify-content: space-between !important;
+
+  button:disabled,
+  button[disabled] {
+    background: none;
+    border: none;
+  }
+}
+
+::ng-deep .mat-expansion-indicator {
+  position: absolute;
+  right: 30px;
+  color: #0088c9 !important;
+  border-radius: 100px;
+  border: solid 1px #0088c9;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .mat-expansion-indicator::after {
+  color: #0088c9 !important;
+}
+
+.mat-expansion-panel-header-title {
+  color: #008acc !important;
+  font-weight: bold;
+}
+
+.mat-expansion-panel-header {
+  color: red !important;
+}
+
+.mat-expansion-panel {
+  color: #008acc !important;
+  margin-bottom: 10px !important;
+  border-radius: 5px !important;
+}
+
+.mat-expansion-panel-header,
+.mat-expansion-panel:not(.mat-expanded)
+  .mat-expansion-panel-header:hover:not([aria-disabled='true']),
+.mat-expansion-panel-header.mat-expanded:focus,
+.mat-expansion-panel-header.mat-expanded:hover {
+  background: #eaeaea;
+  border-radius: 5px;
+  height: 40px !important;
+}
+
+.mat-expansion-panel-spacing {
+  margin: 0;
+}
+
+::ng-deep .mat-expansion-panel-body {
+  padding: 0 !important;
+}
+
+.search-name {
+  color: #0182c1;
+  cursor: pointer;
+}
+
+.mat-table {
+  tr th {
+    background: #008acc;
+    color: white;
+  }
+
+  .mat-row:nth-child(even),
+  .mat-header-cell {
+    background-color: #f7f7f7;
+  }
+
+  .mat-header-cell {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .mat-row,
+  .mat-header-row {
+    height: 35px;
+  }
+
+  .mat-cell,
+  .mat-header-cell {
+    text-align: left;
+    padding-left: 15px;
+  }
+
+  .mat-cell:not(:last-child),
+  .mat-header-cell:not(:last-child) {
+    border-right: 1px solid #ebebeb;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+  background: #e7f7fe !important;
+}
+
+::ng-deep .mat-sort-header-arrow {
+  color: white;
+}
+
+.spinner {
+  margin-top: 200px;
+}
+
+.no-data-display {
+  text-align: center;
+  margin-top: 20px;
+  color: rgba(0, 0, 0, 0.54);
+}

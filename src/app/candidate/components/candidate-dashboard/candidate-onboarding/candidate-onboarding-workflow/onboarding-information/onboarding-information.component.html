@@ -1,0 +1,330 @@
+<div class="cnd-onboard-form" (mouseleave)="collapseOnboardingInfo()">
+  <div class="onboard-info">
+    <mat-accordion class="onboard-info-parent aura-accordion">
+      <mat-expansion-panel
+        class="panel-body"
+        (opened)="onBoardingOpenState = true"
+        (closed)="onBoardingOpenState = false"
+        [expanded]="onBoardingOpenState"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <h3>
+              Onboarding Information -
+              <p>&nbsp;{{ candidateName }}</p>
+            </h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div class="card">
+          <div class="form">
+            <div class="employment-info">
+              <div class="form-l-group__header-hr">
+                <h3><b>Employment Information</b></h3>
+                <hr />
+              </div>
+              <div class="form-l-group">
+                <div class="on-board-info">
+                  <img
+                    src="./assets/svg/Onboarding Info Icons/jobtitle.svg"
+                    alt=""
+                  />
+                  <div class="on-board-info__dtls">
+                    <label for="">Job Title</label>
+                    <p>{{ employmentInfo?.jobTitle }}</p>
+                  </div>
+                </div>
+                <div class="on-board-info">
+                  <img
+                    src="./assets/svg/Onboarding Info Icons/department.svg"
+                    alt=""
+                  />
+                  <div class="on-board-info__dtls">
+                    <label for="">Department </label>
+                    <p>{{ employmentInfo?.department }}</p>
+                  </div>
+                </div>
+                <div class="on-board-info">
+                  <img
+                    src="./assets/svg/Onboarding Info Icons/employment type.svg"
+                    alt=""
+                  />
+                  <div class="on-board-info__dtls">
+                    <label for="">Employment Type</label>
+                    <p>{{ employmentInfo?.employmentType }}</p>
+                  </div>
+                </div>
+                <div class="on-board-info">
+                  <img
+                    src="./assets/svg/Onboarding Info Icons/employment.svg"
+                    alt=""
+                  />
+                  <div class="on-board-info__dtls">
+                    <label for="">Employment Category </label>
+                    <p>{{ employmentInfo?.employmentCategory }}</p>
+                  </div>
+                </div>
+                <div class="on-board-info">
+                  <img
+                    src="./assets/svg/Onboarding Info Icons/hiredate.svg"
+                    alt=""
+                  />
+                  <div class="on-board-info__dtls">
+                    <label for="">Hire Date </label>
+                    <p>{{ employmentInfo?.hireDate | date: 'mediumDate' }}</p>
+                  </div>
+                </div>
+                <div class="on-board-info">
+                  <img
+                    src="./assets/svg/Onboarding Info Icons/start date.svg"
+                    alt=""
+                  />
+                  <div class="on-board-info__dtls">
+                    <label for="">Start Date </label>
+                    <p>{{ employmentInfo?.startDate | date: 'mediumDate' }}</p>
+                  </div>
+                </div>
+                <div class="on-board-info">
+                  <img
+                    src="./assets/svg/Onboarding Info Icons/hr manager.svg"
+                    alt=""
+                  />
+                  <div class="on-board-info__dtls">
+                    <label for="">HR Manager </label>
+                    <p>{{ employmentInfo?.hrManager }}</p>
+                  </div>
+                </div>
+                <div class="on-board-info">
+                  <img
+                    src="./assets/svg/Onboarding Info Icons/reporting manager.svg"
+                    alt=""
+                  />
+                  <div class="on-board-info__dtls">
+                    <label for="">Reporting Manager </label>
+                    <p>{{ employmentInfo?.reportingManager }}</p>
+                  </div>
+                </div>
+                <div class="on-board-info">
+                  <img
+                    src="./assets/svg/Onboarding Info Icons/work location.svg"
+                    alt=""
+                  />
+                  <div class="on-board-info__dtls">
+                    <label for="">Work Location </label>
+                    <p>{{ employmentInfo?.workLocation }}</p>
+                  </div>
+                </div>
+                <div class="on-board-info">
+                  <img
+                    src="./assets/svg/Onboarding Info Icons/businessunit.svg"
+                    alt=""
+                  />
+                  <div class="on-board-info__dtls">
+                    <label for="">Business Unit </label>
+                    <p>{{ employmentInfo?.businessUnit }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="earnings">
+              <div class="compensation">
+                <div class="form-l-group__header-hr">
+                  <h3><b>Compensation</b></h3>
+                  <hr />
+                </div>
+                <ul>
+                  <li>
+                    <label for="">Compensation Type</label>
+                    <p>{{ compensationInfo?.compensationType }}</p>
+                  </li>
+                  <li>
+                    <label for="">Calculated By</label>
+                    <p>{{ compensationInfo?.calculatedBy }}</p>
+                  </li>
+                  <li>
+                    <label for="">Payment Frequency </label>
+                    <p>{{ compensationInfo?.paymentFrequency }}</p>
+                  </li>
+                  <li>
+                    <label for="">Amount </label>
+                    <p>{{ compensationInfo?.amount | currency: 'USD' }}</p>
+                  </li>
+                </ul>
+                <div class="flsa">
+                  <div class="form-l-group__header-hr">
+                    <h3><b>FLSA</b></h3>
+                    <hr />
+                    <button mat-button color="primary" class="flsa-info">
+                      <mat-icon>info</mat-icon>
+                      <div class="field-info field-info--top">
+                        <h4>FLSA: The Fair Labor Standards Act</h4>
+                        <hr />
+
+                        <div class="field-info__form">
+                          <label for=""> Exempt: </label>
+                          <p>
+                            An exempt employee is not paid overtime wages for
+                            hours worked over 40hours in a week.
+                          </p>
+                        </div>
+                        <div class="field-info__form">
+                          <label for=""> Non-exempt: </label>
+                          <p>
+                            Employees must receive overtime pay for hours worked
+                            over 40 hours in a week.
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+                  <div class="form-l-group">
+                    <div class="on-board-info">
+                      <img
+                        src="./assets/svg/Onboarding Info Icons/department.svg"
+                        height="30px"
+                        alt=""
+                      />
+                      <div class="on-board-info__dtls">
+                        <label for="">FLSA Classification </label>
+                        <p>
+                          {{
+                            compensationInfo?.flsaClassification === true
+                              ? 'Exempt'
+                              : 'Non-Exempt'
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="on-board-info">
+                      <img
+                        src="./assets/svg/Onboarding Info Icons/clock.svg"
+                        height="30px"
+                        alt=""
+                      />
+                      <div class="on-board-info__dtls">
+                        <label for="">Overtime Pay Info </label>
+                        <p>{{ compensationInfo?.overTimePayInfo }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="compensation additional">
+                <mat-accordion *ngIf="totalEarnings === 0">
+                  <mat-expansion-panel
+                    [expanded]="true"
+                    class="no-earnings additional-earnings"
+                  >
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <b>Additional Earnings</b>
+                        <hr />
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div>No Additional Earnings</div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+                <mat-accordion *ngIf="totalEarnings > 0">
+                  <mat-expansion-panel
+                    [expanded]="first"
+                    *ngFor="
+                      let earning of compensationInfo?.additionalEarnings;
+                      let first = first
+                    "
+                    class="additional-earnings"
+                  >
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        <b>Additional Earnings</b>
+                        <hr />
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+                    <ul>
+                      <li>
+                        <label for="">Compensation Name</label>
+                        <p>{{ earning?.compensationType }}</p>
+                      </li>
+                      <li>
+                        <label for="">Calculated By</label>
+                        <p>{{ earning?.calculatedBy }}</p>
+                      </li>
+                      <li>
+                        <label for="">Payment Frequency </label>
+                        <p>{{ earning?.paymentFrequency }}</p>
+                      </li>
+                      <li>
+                        <label for="">Amount </label>
+                        <p>
+                          {{ earning?.amount | currency: 'USD' }}
+                        </p>
+                      </li>
+                    </ul>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+            </div>
+          </div>
+          <div class="form__docs information-docs">
+            <div class="form-l-group__header-hr">
+              <h3><b>Information Documents</b></h3>
+              <hr />
+            </div>
+            <div class="form__docs--parent">
+              <div class="form__docs--card">
+                <img src="./assets/svg/pdf_icon.svg" alt="" />
+                <p>Offer Letter.pdf</p>
+                <div class="form__docs--hover">
+                  <button
+                    mat-button
+                    color="primary"
+                    matTooltip="Preview"
+                    (click)="previewOfferLetter()"
+                  >
+                    <mat-icon>visibility </mat-icon>
+                  </button>
+                  <button
+                    mat-button
+                    color="primary"
+                    matTooltip="Download"
+                    (click)="downloadDocument()"
+                  >
+                    <mat-icon>file_download</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div
+                class="form__docs--card"
+                *ngFor="let templateDoc of documentInfo"
+              >
+                <img src="./assets/svg/pdf_icon.svg" alt="" />
+                <p>{{ templateDoc?.templateName }}</p>
+                <div class="form__docs--hover">
+                  <button
+                    mat-button
+                    color="primary"
+                    matTooltip="Preview"
+                    (click)="previewDocument(templateDoc)"
+                  >
+                    <mat-icon>visibility </mat-icon>
+                  </button>
+                  <button
+                    mat-button
+                    color="primary"
+                    matTooltip="Download"
+                    (click)="downloadDocument(templateDoc)"
+                  >
+                    <mat-icon>file_download</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

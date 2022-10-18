@@ -1,0 +1,177 @@
+@import '../../../../styles/component/_dashboard-layout.scss';
+
+.card {
+  grid-column: span 2;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  app-basic-info,
+  app-employee-tasks,
+  app-payroll-calendar,
+  app-donut-chart,
+  app-donut-chart,
+  app-employee-interviews,
+  app-dashboard-holidays,
+  app-quick-links,
+  app-pto-chart,
+  app-time-sheets,
+  app-my-notes,
+  app-recent-activity,
+  app-totalhours-chart {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}
+.emp-dboard {
+  padding: 15px;
+  &__header {
+    background-image: url('^assets/svg/employee-dashboard/Emp-header-bg.svg');
+    background-size: 100%;
+    padding: 10px 15px 40px 15px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @media (max-width: 600px) {
+      background-size: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, 100%);
+      .emp-prfl {
+        grid-template-columns: 100%;
+      }
+      h2 {
+        text-align: center;
+        padding-left: 0;
+        font-size: 14px;
+      }
+      &--log-time {
+        text-align: center;
+        p {
+          text-align: center;
+          font-size: 10px !important;
+        }
+        app-digital-clock {
+          font-size: 10px;
+        }
+      }
+    }
+    h2 {
+      padding-left: 30px;
+      color: #fff;
+    }
+    &--log-time {
+      color: #fff;
+      text-align: right;
+      p {
+        font-size: 13px;
+        font-family: 'ProximaNova-light' !important;
+      }
+    }
+  }
+  &__cnt {
+    margin-top: -30px;
+    padding: 10px 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    @include d-layout(8, 1fr);
+    max-height: Calc(100vh - 81px);
+    @media (max-width: 1000px) {
+      grid-template-columns: repeat(auto-fill, 100%) !important;
+      .card {
+        grid-column: unset;
+      }
+      .quick-links {
+        grid-row: span 1;
+      }
+      .t-sheet {
+        margin-top: 0;
+      }
+    }
+    grid-auto-rows: 1fr;
+    gap: 15px;
+    // max-height: Calc(100vh - 100px);
+    min-height: 550px;
+  }
+}
+
+// FIRST component
+.empl-card {
+  grid-column: span 4;
+}
+.payroll {
+  padding: 10px;
+  background-color: #f7f7f7;
+  position: relative;
+  &__open-new {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    min-width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.tasks {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.holidays {
+  background-color: #f9ebdf;
+  padding: 10px;
+  position: relative;
+}
+.total-hours {
+  background-color: #d0f4ff;
+}
+.opt {
+  background-color: #f1e7f8;
+}
+.interviews {
+  background-color: #edf9ff;
+}
+.quick-links {
+  grid-row: span 1;
+  ::ng-deep app-quick-links {
+    .task-actions {
+      display: flex;
+      flex-direction: column;
+      &__nav {
+        display: flex;
+        flex: 1;
+        &--center {
+          grid-template-columns: repeat(2, 1fr);
+          grid-template-rows: repeat(3, 1fr);
+        }
+      }
+    }
+  }
+}
+.time-sheets {
+  grid-column: span 4;
+  grid-row: span 1;
+  -webkit-box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.26);
+  -moz-box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.26);
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.26);
+}
+.recent-activity {
+  -webkit-box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.26);
+  -moz-box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.26);
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.26);
+  grid-row: span 1;
+  @media (max-width: 600px) {
+    grid-row: auto;
+  }
+}
+.c-time {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 13px;
+  font-family: 'ProximaNova-light' !important;
+}

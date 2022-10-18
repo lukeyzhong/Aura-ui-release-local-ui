@@ -1,0 +1,73 @@
+@import '../../../styles/utilities/modal-box';
+
+.i9_card {
+	&__container {
+		&-content {
+			margin-bottom: 30px;
+		}
+		&-fiels {
+			display: flex;
+			flex-direction: row;
+			margin-bottom: 15px;
+
+			.file-info {
+				flex-direction: row;
+				border: 1px solid #dedede;
+				background-color: #f5f5f5;
+				font-size: 13px;
+				padding: 8px 13px;
+				display: flex;
+				align-items: center;
+				border-radius: 5px;
+				min-width: 300px;
+				margin-right: 15px;
+				.file-type {
+					width: 20px;
+					margin-right: 15px;
+					display: flex;
+					img {
+						max-width: 100%;
+					}
+				}
+				h4 {
+					flex: 1;
+				}
+				.actions {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+
+					.action-btn {
+						width: 28px;
+						height: 28px;
+						line-height: 14px;
+						font-size: 14px;
+						background: #fff;
+						margin-left: 10px;
+						box-shadow: none;
+
+						&::ng-deep .mat-button-wrapper {
+							line-height: 14px;
+							padding: 0;
+
+							.mat-icon {
+								font-size: 18px;
+								color: #0082c1;
+								padding: 0;
+								display: flex;
+								align-items: center;
+								justify-content: center;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+.error-msg {
+    color: red;
+    font-size: small;
+    margin-left: 320px;
+}

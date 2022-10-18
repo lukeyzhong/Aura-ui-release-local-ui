@@ -1,0 +1,51 @@
+<div class="adp">
+  <div class="adp__title">
+    <h3>ADP Integration Failed</h3>   
+  </div>
+  <div class="adp__cnt">
+    <mat-tab-group>
+      <mat-tab label="Pending Cases">
+        <ng-template mat-tab-label>
+          Pending Cases
+          <span class="count-text pending">{{ total }}</span>
+        </ng-template>
+        <div class="adp__header">
+          <div class="adp__header--search">
+            <div class="orm-fld-group">
+              <mat-form-field appearance="outline" floatLabel="always">
+                <input matInput matTooltip="Search....." class="example-right-align" #search
+                  (keyup)="performSearch(search.value)" placeholder="Search....." />
+                <span matPrefix>
+                  <mat-icon>search</mat-icon> &nbsp;
+                </span>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="adp__header--filter">
+            <div class="orm-fld-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Year</mat-label>
+                <mat-select [formControl]="adpYear" (selectionChange)="adpYearSelection()">
+                  <mat-option *ngFor="let yr of year" [value]="yr">{{
+                    yr
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <app-download-icon (downloadBtnClicked)="download($event)"></app-download-icon>
+          </div>
+        </div>
+        <app-adp-table-details [isLoading]="adpTablePanelConfig.isLoading"
+          [displayedColumns]="adpTablePanelConfig.displayedColumns" [columns]="adpTablePanelConfig.columns"
+          [tableData]="adpTablePanelConfig.tableData" [totalRows]="adpTablePanelConfig.totalRows"
+          (paginatorClicked)="getNextRecords($event)" (adpUpdateSuccess)="refreshADPPendingList($event)">
+        </app-adp-table-details>
+      </mat-tab>
+    </mat-tab-group>
+    <div class="cnd-personal-info__footer">
+      <button mat-raised-button color="primary" (click)="goToDashboard()">
+        Close
+      </button>
+    </div>
+  </div>
+</div>

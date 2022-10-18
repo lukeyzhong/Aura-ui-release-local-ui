@@ -1,0 +1,371 @@
+<mat-expansion-panel (afterExpand)="getComments()" class="accordion-parent">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="accordion-header">
+        <img
+          src="./assets/svg/HR Verify Icons/bank-paychecks.svg"
+          width=""
+          alt=""
+        />
+        <h3>Banks & Paychecks</h3>
+        <div *ngIf="countKeysBanksPaychecksInfo !== 0" class="comment">
+          HR Comments
+          <div class="count">
+            <p>{{ countKeysBanksPaychecksInfo }}</p>
+          </div>
+        </div>
+        <div *ngIf="countKeysBanksPaychecksInfo !== 0" class="comment">
+          <button
+            class="delete"
+            type="button"
+            (click)="deleteComment('All', $event)"
+            mat-button
+            color="warn"
+            matTooltip="Delete All Comments"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div
+    class="hv-banks-paychecks"
+    *ngFor="let bankInfo of bankPaycheckInfo; let i = index"
+  >
+    <div class="form-l-group__header-hr">
+      <h3>
+        <b>Bank Account {{ i + 1 }}</b>
+      </h3>
+      <hr />
+    </div>
+    <p class="page-note" *ngIf="i === 0">
+      *This bank account will be considered as primary account
+    </p>
+    <div class="form-l-group">
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('banksPaychecks.accountName' + i)
+        }"
+      >
+        <label for="">Name</label>
+        <p
+          id="{{ 'banksPaychecks.accountName' + i }}"
+          #accountNme
+          (mouseenter)="onHover(accountNme.id)"
+        >
+          {{ bankInfo?.bankAccountData?.accountName }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('banksPaychecks.bankAccountType' + i)
+        }"
+      >
+        <label for="">Account Type</label>
+        <p
+          id="{{ 'banksPaychecks.bankAccountType' + i }}"
+          #accountType
+          (mouseenter)="onHover(accountType.id)"
+        >
+          {{ bankInfo?.bankAccountData?.bankAccountType }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('banksPaychecks.bankName' + i)
+        }"
+      >
+        <label for="">Bank Name</label>
+        <p
+          id="{{ 'banksPaychecks.bankName' + i }}"
+          #bankNme
+          (mouseenter)="onHover(bankNme.id)"
+        >
+          {{ bankInfo?.bankAccountData?.bankName }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('banksPaychecks.routingNumber' + i)
+        }"
+      >
+        <label for=""> Routing Number</label>
+        <p
+          id="{{ 'banksPaychecks.routingNumber' + i }}"
+          #routingNum
+          (mouseenter)="onHover(routingNum.id)"
+        >
+          {{ bankInfo?.bankAccountData?.routingNumber }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('banksPaychecks.accountNumber' + i)
+        }"
+      >
+        <label for=""> Account Number</label>
+        <p
+          id="{{ 'banksPaychecks.accountNumber' + i }}"
+          #accountNum
+          (mouseenter)="onHover(accountNum.id)"
+        >
+          {{ bankInfo?.bankAccountData?.accountNumber }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('banksPaychecks.branchName' + i)
+        }"
+      >
+        <label for=""> Branch Name</label>
+        <p
+          id="{{ 'banksPaychecks.branchName' + i }}"
+          #branchNme
+          (mouseenter)="onHover(branchNme.id)"
+        >
+          {{ bankInfo?.bankAccountData?.branchName }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('banksPaychecks.calculationType' + i)
+        }"
+      >
+        <label for=""> Paycheck distribution</label>
+        <p
+          id="{{ 'banksPaychecks.calculationType' + i }}"
+          #calType
+          (mouseenter)="onHover(calType.id)"
+        >
+          {{ bankInfo?.bankAccountData?.calculationType }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form amountFont"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('banksPaychecks.calculationValue' + i)
+        }"
+      >
+        <label *ngIf="bankInfo?.bankAccountData?.calculationTypeCode === 2">
+          Percentage</label
+        >
+        <label *ngIf="bankInfo?.bankAccountData?.calculationTypeCode === 1">
+          Amount</label
+        >
+        <p
+          id="{{ 'banksPaychecks.calculationValue' + i }}"
+          #calValue
+          (mouseenter)="onHover(calValue.id)"
+        >
+          <span
+            *ngIf="bankInfo?.bankAccountData?.calculationTypeCode === 1"
+            matPrefix
+            >$&nbsp;</span
+          >
+          {{ bankInfo?.bankAccountData?.calculationValue }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        *ngIf="bankInfo?.bankAccountData?.document"
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('banksPaychecks.document' + i)
+        }"
+      >
+        <label for="">Document</label>
+        <p
+          id="{{ 'banksPaychecks.document' + i }}"
+          class="file"
+          #bankDoc
+          (mouseenter)="onHover(bankDoc.id)"
+        >
+          <img
+            *ngIf="
+              bankInfo?.bankAccountData?.document?.fileExtension === '.pdf'
+            "
+            src="./assets/svg/icn-pdf.svg"
+            width="24px"
+            alt=""
+          />
+          <img
+            *ngIf="
+              fileExtO.includes(
+                bankInfo?.bankAccountData?.document?.fileExtension!.toLowerCase()
+              )
+            "
+            src="./assets/svg/icn-image.svg"
+            width="24px"
+            alt=""
+          />
+          {{ bankInfo?.bankAccountData?.document?.displayName }}
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-sm btn-sm__white view"
+            (click)="
+              previewCancelChequeDocument(
+                bankInfo?.bankAccountData?.document?.documentId!,
+                bankInfo?.bankAccountData?.document?.displayName!,
+                bankInfo?.bankAccountData?.document?.fileExtension!
+              )
+            "
+          >
+            <mat-icon matTooltip="Preview">remove_red_eye</mat-icon>
+          </button>
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mat-menu-parent">
+    <mat-menu
+      #commentMenus="matMenu"
+      xPosition="before"
+      yPosition="below"
+      [overlapTrigger]="false"
+    >
+      <div class="rejection-reasson" (click)="$event.stopPropagation()">
+        <form [formGroup]="commentForm" (ngSubmit)="onSave()">
+          <div class="rejection-reasson__header">
+            <h4>Rejection Reason</h4>
+            <div
+              class="rejection-reasson__header--btns"
+              *ngIf="hrCommentsMap.has(commentKey)"
+            >
+              <button
+                type="button"
+                (click)="deleteComment('Single', $event)"
+                mat-button
+                color="warn"
+                matTooltip="Delete"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="rejection-reasson__content">
+            <textarea
+              formControlName="comment"
+              matInput
+              cols="30"
+              rows="4"
+            ></textarea>
+          </div>
+          <div class="rejection-reasson__footer">
+            <button
+              type="button"
+              (click)="closeMenu()"
+              mat-stroked-button
+              color="primary"
+            >
+              Close
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="commentForm.invalid || commentForm?.pristine"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-menu>
+  </div>
+
+  <ng-template #showUpdateBtn>
+    <button
+      mat-raised-button
+      color="warn"
+      matTooltip="Update Reason"
+      [matMenuTriggerFor]="commentMenus"
+      class="rejection rejection__update"
+    >
+      <mat-icon> chat_bubble </mat-icon>
+    </button>
+  </ng-template>
+
+  <ng-template #showAddBtn>
+    <button
+      mat-raised-button
+      color="warn"
+      matTooltip="Reject"
+      (click)="$event.stopPropagation()"
+      [matMenuTriggerFor]="commentMenus"
+      class="rejection rejection__add"
+    >
+      <mat-icon> close </mat-icon>
+    </button>
+  </ng-template>
+</mat-expansion-panel>

@@ -1,0 +1,61 @@
+@import '../../../../../../../styles/utilities/form-group';
+.employee-details-parent {
+  padding: 20px;
+}
+
+::ng-deep .mat-dialog-container {
+  padding: 0px;
+}
+
+.spinner {
+  position: inherit;
+  background-color: #fafafa;
+}
+
+.error-msg {
+  color: red;
+  font-size: small;
+  margin-left: 320px;
+}
+
+.file-name {
+  position: relative;
+  ::ng-deep .mat-form-field-infix {
+    padding: 1em 3em 1em 0;
+  }
+}
+
+.file-format {
+  position: absolute;
+  margin: 0 auto;
+  top: 10px;
+  bottom: 0;
+  right: 13px;
+  color: #adadad;
+  font-size: 16px;
+}
+
+.work-autho-ead {
+  position: relative;
+  .mat-form-field {
+    width: 100%;
+  }
+  mat-icon {
+    position: absolute;
+    right: -27px;
+    top: 10px;
+    color: #0182c1;
+    cursor: pointer;
+  }
+}
+.ead-name {
+  .mat-input-element:disabled {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.edit-files{
+  padding: 0 15px;
+}

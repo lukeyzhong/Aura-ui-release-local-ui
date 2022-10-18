@@ -1,0 +1,135 @@
+.aura-accordion {
+  .mat-expansion-panel {
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0px 3px 6px rgb(0 0 0 / 16%) !important;
+  }
+  .mat-expansion-panel-header-title {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    font-family: 'ProximaNova-semibold' !important;
+    hr {
+      flex-grow: 1;
+      margin-left: 10px;
+    }
+    img {
+      width: 40px;
+      height: 40px;
+      margin-right: 15px;
+    }
+    h3 {
+      font-family: 'ProximaNova-semibold' !important;
+      display: flex;
+      p {
+        font-family: 'ProximaNova-light' !important;
+      }
+    }
+  }
+  ::ng-deep .mat-expansion-panel-header {
+    height: 50px;
+    padding: 0 17px;
+    .mat-content {
+      overflow: visible;
+    }
+    .mat-expansion-panel-header-title .title-icon {
+      width: 70px;
+      margin-left: -17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        height: 28px;
+      }
+    }
+    ::ng-deep .mat-expansion-indicator {
+      width: 28px;
+      height: 28px;
+      border: 1px solid $primary;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &::after {
+        color: $primary;
+      }
+    }
+
+    &.mat-expanded {
+      ::ng-deep .mat-expansion-indicator {
+        border: 0px none;
+        background: $primary;
+        &::after {
+          color: white;
+        }
+      }
+    }
+  }
+}
+.mat-expansion-panel.accordion-parent {
+  border-radius: 10px !important;
+  margin-bottom: 12px;
+  box-shadow: 0px 3px 6px rgb(0 0 0 / 16%) !important;
+
+  .mat-expansion-panel-header-title {
+    display: flex;
+    align-items: center;
+
+    hr {
+      flex-grow: 1;
+      margin-left: 10px;
+    }
+    img {
+      width: 40px;
+      height: 40px;
+      margin-right: 15px;
+    }
+    h3 {
+      font-family: 'ProximaNova-semibold' !important;
+    }
+  }
+  ::ng-deep .mat-expansion-panel-header {
+    height: 50px;
+    padding: 0 17px;
+    font-family: 'ProximaNova-semibold' !important;
+    .mat-content {
+      overflow: visible;
+    }
+    .mat-expansion-panel-header-title .title-icon {
+      width: 70px;
+      margin-left: -17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        height: 28px;
+      }
+    }
+    ::ng-deep .mat-expansion-indicator {
+      width: 28px;
+      height: 28px;
+      border: 1px solid $primary;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &::after {
+        color: $primary;
+      }
+    }
+
+    &.mat-expanded {
+      ::ng-deep .mat-expansion-indicator {
+        border: 0px none;
+        background: $primary;
+        &::after {
+          color: white;
+        }
+      }
+    }
+  }
+}

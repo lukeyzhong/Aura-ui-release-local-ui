@@ -1,0 +1,65 @@
+.sr-panel {
+	border: solid 1px #e0e0e0;
+	border-radius: 10px;
+	overflow: hidden;
+	height: auto !important;
+
+	table {
+		border-radius: 15px;
+		th {
+			font-weight: 400;
+		}
+		th,
+		td {
+			padding: 10px;
+		}
+		td:last-child,
+		th:last-child {
+			width: 90px;
+			text-align: center;
+		}
+	}
+}
+
+.sr-table {
+	height: auto;
+	overflow: auto;
+	position: relative;
+}
+
+.spinner {
+	height: 441px;
+}
+
+.no-data-display {
+	text-align: center;
+	margin-top: 20px;
+	color: rgba(0, 0, 0, 0.54);
+}
+
+.mat-table {
+	width: 100%;
+	th,
+	td {
+		padding: 10px 5px;
+	}
+}
+
+a {
+	color: rgb(0, 153, 255);
+}
+
+a:hover {
+	color: blue;
+	cursor: pointer;
+}
+::ng-deep .mat-paginator-container {
+	justify-content: space-between !important;
+}
+::ng-deep .mat-paginator-range-actions {
+	button {
+		background-color: transparent !important;
+		border: transparent !important;
+	}
+}
+

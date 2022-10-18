@@ -1,0 +1,114 @@
+<div class="emp-card">
+  <div class="spinner" *ngIf="isLoading">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <span class="card-title" *ngIf="infoTypes.includes(infoType)"
+    >My Profile</span
+  >
+  <div class="emp-card__edit" *ngIf="false">
+    <button mat-button color="primary">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <div></div>
+  </div>
+  <div class="emp-prfl">
+    <div class="emp-prfl--img">
+      <div class="emp-prfl__upload">
+        <img [src]="profilePic" width="60px" alt="" />
+      </div>
+    </div>
+    <div class="emp-prfl__dtls">
+      <div class="emp-prfl__dtls--name">
+        <h2>{{ personData?.firstName }} &nbsp;{{ personData?.lastName }}</h2>
+        <button mat-button *ngIf="infoTypes.includes(infoType) && onProject">
+          On Project
+        </button>
+      </div>
+      <div class="emp-prfl__dtls--contact">
+        <div class="emp-prfl__dtls--role" *ngIf="infoTypes.includes(infoType)">
+          <div class="emp-form">
+            <label for="">Designation: &nbsp;</label>
+            <p>{{ profileInfo?.employeeTitle }}</p>
+          </div>
+          <div class="emp-form">
+            <label for="">Client: &nbsp;</label>
+            <p>{{ profileInfo?.client }}</p>
+          </div>
+          <div class="emp-form">
+            <ul>
+              <li *ngFor="let socialProfile of socialMediaLinks">
+                <div *ngIf="socialProfile?.socialMediaLink === 'Linkedin'">
+                  <a href="{{ socialProfile?.url }}" target="_blank">
+                    <img
+                      width="18px"
+                      src="./assets/svg/linkedin-sm.svg"
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div *ngIf="socialProfile?.socialMediaLink === 'Twitter'">
+                  <a href="{{ socialProfile?.url }}" target="_blank">
+                    <img
+                      width="18px"
+                      src="./assets/svg/twitter-sm.svg"
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div *ngIf="socialProfile?.socialMediaLink === 'Facebook'">
+                  <a href="{{ socialProfile?.url }}" target="_blank">
+                    <img
+                      width="18px"
+                      src="./assets/svg/facebook-sm.svg"
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div *ngIf="socialProfile?.socialMediaLink === 'Youtube'">
+                  <a href="{{ socialProfile?.url }}" target="_blank">
+                    <img
+                      width="18px"
+                      src="./assets/svg/youtube-sm.svg"
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <div *ngIf="socialProfile?.socialMediaLink === 'Web'">
+                  <a href="{{ socialProfile?.url }}" target="_blank">
+                    <img width="18px" src="./assets/svg/web-sm.svg" alt="" />
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="emp-prfl__dtls--address">
+          <ul>
+            <li>
+              <mat-icon>call</mat-icon>
+              <p matTooltip="Info about the action">{{ cellPhoneNumber }}</p>
+            </li>
+            <li>
+              <mat-icon>mail</mat-icon>
+              <p matTooltip="{{ email }}">
+                {{ email }}
+              </p>
+            </li>
+            <li>
+              <mat-icon>location_on</mat-icon>
+              <p
+                matTooltip="{{
+                  livingAddress?.city ? livingAddress?.city + ', ' : ''
+                }}
+              {{ livingAddress?.state }}"
+              >
+                {{ livingAddress?.city ? livingAddress?.city + ', ' : '' }}
+                {{ livingAddress?.state }}
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,337 @@
+<div class="employee-details-parent">
+  <div class="employee-details__tabs-content">
+    <div class="employee-details__content-header btn-alignment">
+      <h3><b>Documents</b></h3>
+      <button
+        mat-button
+        color="primary"
+        matTooltip="Add New"
+        (click)="addCandidateDocumentInfo('Add')"
+      >
+        Add New
+      </button>
+    </div>
+    <div class="card-parent" *ngIf="isZeroDocuments(); else DocumentsAvailable">
+      <div>
+        <div class="card card-no-data">
+          <div class="no-data">
+            <mat-icon> find_in_page </mat-icon>
+            <h4>Information Not Added</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #DocumentsAvailable>
+      <div
+        class="employee-details__tabs-content"
+        *ngIf="offerLetterList.length > 0"
+      >
+        <!-- Offer Letter -->
+        <div class="card-parent">
+          <div>
+            <div class="card card-header">
+              <h4 class=""><b>Offer Letter</b></h4>
+
+              <div
+                class="card__edit-icon"
+                (click)="editCandidateDocumentInfo('Edit', offerLetterList)"
+                aria-label="Button that displays a tooltip when focused or hovered over"
+              >
+                <mat-icon matTooltip="Edit">edit</mat-icon>
+              </div>
+              <div class="file-area">
+                <div
+                  class="document-table"
+                  [ngClass]="{ 'rows-collapse': toggleMoreLessOL }"
+                  *ngIf="offerLetterList.length > 0"
+                >
+                  <table cellspacing="0">
+                    <tr>
+                      <th width="45%">Document Name</th>
+                          <th width="20%">Description</th>
+                          <th width="20%">Uploaded On</th>
+                          <th>Uploaded By</th>
+                    </tr>
+                    <tr *ngFor="let offerLetter of offerLetterList">
+                      <td class="file-name">
+                        <div *ngIf="offerLetter?.fileExtension === '.pdf'">
+                          <img
+                            width="24px"
+                            src="./assets/svg/icn-pdf.svg"
+                            alt=""
+                          />
+                        </div>
+                        <div
+                          *ngIf="fileExt.includes(offerLetter?.fileExtension!)"
+                        >
+                          <img
+                            width="24px"
+                            src="./assets/svg/icn-image.svg"
+                            alt=""
+                          />
+                        </div>
+                        <p>{{ offerLetter?.displayName }}</p>
+                        <span>
+                          <mat-icon
+                            matTooltip="Preview"
+                            (click)="previewDocument(offerLetter)"
+                            >remove_red_eye</mat-icon
+                          ></span
+                        ><span>
+                          <mat-icon
+                            matTooltip="Download"
+                            (click)="downloadDocument(offerLetter)"
+                            >get_app</mat-icon
+                          >
+                        </span>
+                      </td>
+                      <td>
+                        {{
+                          offerLetter?.fileDescription === 'null'
+                            ? ''
+                            : offerLetter?.fileDescription
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          offerLetter?.createdDateTime | date: 'M-d-yyyy h:mm a'
+                        }}
+                      </td>
+                      <td>
+                        {{ personName }}
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="min-rows" *ngIf="offerLetterList?.length! > 1">
+                  <button
+                    class="show-more-btn"
+                    (click)="showMoreLess(18)"
+                  >
+                    {{ btnMoreLessOLText }}
+                    <mat-icon [ngClass]="{ less: btnMoreLessOLText === 'Less' }"
+                      >expand_more</mat-icon
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="employee-details__tabs-content"
+        *ngIf="codeAssessmentList.length > 0"
+      >
+        <!-- Code Assessment -->
+        <div class="card-parent">
+          <div>
+            <div class="card card-header">
+              <h4 class=""><b>Assessment</b></h4>
+
+              <div
+                class="card__edit-icon"
+                (click)="editCandidateDocumentInfo('Edit', codeAssessmentList)"
+                aria-label="Button that displays a tooltip when focused or hovered over"
+              >
+                <mat-icon matTooltip="Edit">edit</mat-icon>
+              </div>
+              <div class="file-area">
+                <div
+                  class="document-table"
+                  [ngClass]="{ 'rows-collapse': toggleMoreLessCA }"
+                  *ngIf="codeAssessmentList.length > 0"
+                >
+                  <table cellspacing="0">
+                    <tr>
+                      <th width="45%">Document Name</th>
+                          <th width="20%">Description</th>
+                          <th width="20%">Uploaded On</th>
+                          <th>Uploaded By</th>
+                    </tr>
+                    <tr *ngFor="let codeAssessment of codeAssessmentList">
+                      <td class="file-name">
+                        <div *ngIf="codeAssessment?.fileExtension === '.pdf'">
+                          <img
+                            width="24px"
+                            src="./assets/svg/icn-pdf.svg"
+                            alt=""
+                          />
+                        </div>
+                        <div
+                          *ngIf="
+                            fileExt.includes(codeAssessment?.fileExtension!)
+                          "
+                        >
+                          <img
+                            width="24px"
+                            src="./assets/svg/icn-image.svg"
+                            alt=""
+                          />
+                        </div>
+                        <p>{{ codeAssessment?.displayName }}</p>
+                        <span>
+                          <mat-icon
+                            matTooltip="Preview"
+                            (click)="previewDocument(codeAssessment)"
+                            >remove_red_eye</mat-icon
+                          ></span
+                        ><span>
+                          <mat-icon
+                            matTooltip="Download"
+                            (click)="downloadDocument(codeAssessment)"
+                            >get_app</mat-icon
+                          >
+                        </span>
+                      </td>
+                      <td>
+                        {{
+                          codeAssessment?.fileDescription === 'null'
+                            ? ''
+                            : codeAssessment?.fileDescription
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          codeAssessment?.createdDateTime
+                            | date: 'M-d-yyyy h:mm a'
+                        }}
+                      </td>
+                      <td>
+                        {{ personName }}
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="min-rows" *ngIf="codeAssessmentList?.length! > 1">
+                  <button
+                    class="show-more-btn"
+                    (click)="showMoreLess(52)"
+                  >
+                    {{ btnMoreLessCAText }}
+                    <mat-icon [ngClass]="{ less: btnMoreLessCAText === 'Less' }"
+                      >expand_more</mat-icon
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="employee-details__tabs-content"
+        *ngIf="exclusivityAgreementList.length > 0"
+      >
+        <!-- Exclusivity Agreement -->
+        <div class="card-parent">
+          <div>
+            <div class="card card-header">
+              <h4 class=""><b>Exclusivity Agreement</b></h4>
+
+              <div
+                class="card__edit-icon"
+                (click)="
+                  editCandidateDocumentInfo('Edit', exclusivityAgreementList)
+                "
+                aria-label="Button that displays a tooltip when focused or hovered over"
+              >
+                <mat-icon matTooltip="Edit">edit</mat-icon>
+              </div>
+              <div class="file-area">
+                <div
+                  class="document-table"
+                  [ngClass]="{ 'rows-collapse': toggleMoreLessEA }"
+                  *ngIf="exclusivityAgreementList.length > 0"
+                >
+                  <table cellspacing="0">
+                    <tr>
+                      <th width="45%">Document Name</th>
+                          <th width="20%">Description</th>
+                          <th width="20%">Uploaded On</th>
+                          <th>Uploaded By</th>
+                    </tr>
+                    <tr
+                      *ngFor="
+                        let exclusivityAgreement of exclusivityAgreementList
+                      "
+                    >
+                      <td class="file-name">
+                        <div
+                          *ngIf="exclusivityAgreement?.fileExtension === '.pdf'"
+                        >
+                          <img
+                            width="24px"
+                            src="./assets/svg/icn-pdf.svg"
+                            alt=""
+                          />
+                        </div>
+                        <div
+                          *ngIf="
+                            fileExt.includes(
+                              exclusivityAgreement?.fileExtension!
+                            )
+                          "
+                        >
+                          <img
+                            width="24px"
+                            src="./assets/svg/icn-image.svg"
+                            alt=""
+                          />
+                        </div>
+                        <p>{{ exclusivityAgreement?.displayName }}</p>
+                        <span>
+                          <mat-icon
+                            matTooltip="Preview"
+                            (click)="previewDocument(exclusivityAgreement)"
+                            >remove_red_eye</mat-icon
+                          ></span
+                        ><span>
+                          <mat-icon
+                            matTooltip="Download"
+                            (click)="downloadDocument(exclusivityAgreement)"
+                            >get_app</mat-icon
+                          >
+                        </span>
+                      </td>
+                      <td>
+                        {{
+                          exclusivityAgreement?.fileDescription === 'null'
+                            ? ''
+                            : exclusivityAgreement?.fileDescription
+                        }}
+                      </td>
+                      <td>
+                        {{
+                          exclusivityAgreement?.createdDateTime
+                            | date: 'M-d-yyyy h:mm a'
+                        }}
+                      </td>
+                      <td>
+                        {{ personName }}
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div
+                  class="min-rows"
+                  *ngIf="exclusivityAgreementList?.length! > 1"
+                >
+                  <button
+                    class="show-more-btn"
+                    (click)="showMoreLess(53)"
+                  >
+                    {{ btnMoreLessEAText }}
+                    <mat-icon [ngClass]="{ less: btnMoreLessEAText === 'Less' }"
+                      >expand_more</mat-icon
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="employee-details-parent">
+    <div class="employee-details">
+        <div class="employee-details__tabs-content">
+          <div class="resume-controls">
+              <ul *ngIf="isResumeExist">
+                  <li matTooltip="Full Screen"
+                  ><span><mat-icon  (click)="resumeFullView()">fullscreen</mat-icon></span></li>                 
+                  <li matTooltip="Download"
+                  ><span><mat-icon (click)="downloadDocument()">download</mat-icon></span></li>                 
+              </ul>
+          </div>
+          <div class="spinner" *ngIf="isLoading">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+        <div class="resume-area">
+            <div *ngIf="isResumeExist" class="resume-height">
+                <pdf-viewer [src]="docURL" [original-size]="false"></pdf-viewer>
+            </div>            
+            <div class="error-Message" *ngIf="errorMessage">
+                <img src="./assets/svg/data-error.svg" width="100px" />
+                <p>{{ errorMessage }}</p>
+            </div>         
+        </div>
+    </div>
+</div>

@@ -1,0 +1,80 @@
+<form [formGroup]="onBoardStatusForm" *ngIf="offerDeclineInfoResponse?.errorCode === 0">
+    <div class="offer-dcld">
+        <h2>Candidate Onboarding - Offer Declined</h2>
+        <mat-card class="card">
+            <div class="card__header">
+                <div class="card__header--profile">
+                    <h2>{{offerDeclineInfoResult?.firstName}} {{offerDeclineInfoResult?.lastName}}</h2>
+                </div>
+                <div class="form-l-group small-form">
+                    <div class="form-l-group__form">
+                        <img src="" alt="" />
+                        <label for="">Cell Phone No</label>
+                        <p>{{offerDeclineInfoResult?.cellPhone}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <img src="" alt="" />
+                        <label for="">Home Phone No</label>
+                        <p>{{offerDeclineInfoResult?.homePhone}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                    </div>
+                </div>
+            </div>
+            <div class="card__cnt">
+                <div class="form-l-group">
+                    <div class="form-l-group__form">
+                        <label for="">Candidate Code</label>
+                        <p>{{offerDeclineInfoResult?.candidateCode}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="">Role</label>
+                        <p>{{offerDeclineInfoResult?.employeeTitle}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="">Offer Sent Date</label>
+                        <p>{{offerDeclineInfoResult?.offerSentDate | date: 'MM/dd/yyyy'}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="">Offer Declined Date</label>
+                        <p>{{offerDeclineInfoResult?.offerDeclineDate | date: 'MM/dd/yyyy'}}</p>
+                    </div>
+                </div>
+                <div class="form-l-group">
+                    <div class="form-l-group__form form-large">
+                        <label for="">Rejection Reason</label>
+                        <p>{{ getRejectionReason(offerDeclineInfoResult?.rejectionReasonCodes!) }}</p>
+                    </div>
+                </div>
+                <div class="form-l-group">
+                    <div class="form-l-group__form form-large">
+                        <label for="">Additional Notes</label>
+                        <p>{{offerDeclineInfoResult?.additionalComments}}</p>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+        <mat-form-field appearance="outline" class="text-area">
+            <mat-label>Textarea</mat-label>
+            <textarea matInput formControlName="comments" placeholder="Comments..." rows="4"></textarea>
+            <mat-error *ngIf="onBoardStatusForm.controls['comments'].errors?.required">This field is mandatory.
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="offer-dcld__footer">
+        <button mat-stroked-button [disabled]="onBoardStatusForm.invalid" (click)="rollBackOffer()"
+            color="primary">Rollback Offer</button>
+        <button mat-raised-button [disabled]="onBoardStatusForm.invalid" (click)="resendOffer()" color="primary">Resend
+            Offer</button>
+    </div>
+</form>
+
+<div class="offer-dcld" *ngIf="offerDeclineInfoResponse?.errorCode !== 0">
+    <h2>Candidate Onboarding - Offer Declined</h2>     
+    <mat-card class="card" style="height:190px;">   
+        <br><br><br> 
+    <div>    
+    <b>Error Message : {{offerDeclineInfoResponse?.errorMessage}}</b>
+    </div>
+    </mat-card>
+</div>

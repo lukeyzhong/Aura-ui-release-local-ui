@@ -1,0 +1,13 @@
+.snack-container {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    &__button {
+        cursor: pointer;
+    }
+    &__message {
+        margin:0 15px 0 5px;
+        line-height: 25px;
+    }
+}

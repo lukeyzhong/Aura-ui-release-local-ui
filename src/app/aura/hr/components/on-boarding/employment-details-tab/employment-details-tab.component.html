@@ -1,0 +1,318 @@
+<form [formGroup]="employmentDetailsForm" class="p-tab">
+  <div class="si__content">
+    <div class="form-l-group__header-hr">
+      <h3>Employment Details</h3>
+      <hr />
+    </div>
+
+    <div class="form-fld-group employment-details">
+      <mat-form-field appearance="outline">
+        <mat-label>Job Title</mat-label>
+        <input
+          required
+          matInput
+          formControlName="jobTitle"
+          placeholder="Job Title"
+          maxlength="50"
+        />
+        <mat-error
+          *ngIf="employmentDetailsForm.controls['jobTitle'].errors?.required"
+          >This field is mandatory.
+        </mat-error>
+        <mat-error
+          *ngIf="employmentDetailsForm.controls['jobTitle'].errors?.pattern"
+          >Only alphabets are allowed.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Department </mat-label>
+        <mat-select required formControlName="department">
+          <mat-option
+            *ngFor="let entry of mapDepartment | keyvalue"
+            [value]="entry.key"
+            >{{ entry.value }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="employmentDetailsForm.controls['department'].errors?.required"
+          >This field is mandatory.</mat-error
+        >
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Employment Type </mat-label>
+        <div class="form-info">
+          <mat-select
+            required
+            formControlName="employmentType"
+            (selectionChange)="
+              setStartDate(
+                employmentDetailsForm.controls['employmentType'].value,
+                hireDate.value
+              );
+              checkForValidStartDate(hireDate.value, startDate.value)
+            "
+          >
+            <mat-option
+              *ngFor="let entry of mapEmpType | keyvalue"
+              [value]="entry.key"
+              >{{ entry.value }}
+            </mat-option>
+          </mat-select>
+          <mat-icon>info</mat-icon>
+          <div class="field-info">
+            <div
+              class="field-info__form"
+              *ngFor="let entry of mapEmploymentType | keyvalue"
+            >
+              <label for=""> {{ entry.key }} : </label>
+              <p>{{ entry.value }}</p>
+            </div>
+          </div>
+        </div>
+        <mat-error
+          *ngIf="
+            employmentDetailsForm.controls['employmentType'].errors?.required
+          "
+          >This field is mandatory.</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-info-icon">
+        <mat-label>Employment Category</mat-label>
+        <mat-select required formControlName="employmentCategory">
+          <mat-option
+            *ngFor="let entry of mapEmpCategory | keyvalue"
+            [value]="entry.key"
+            >{{ entry.value }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            employmentDetailsForm.controls['employmentCategory'].errors
+              ?.required
+          "
+          >This field is mandatory.</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field
+        appearance="outline"
+        class="form-info-icon form-info date-error"
+      >
+        <mat-label>Hire Date </mat-label>
+        <input
+          required
+          matInput
+          #hireDate
+          formControlName="hireDate"
+          [matDatepicker]="employmentHireDate"
+          placeholder="MM/DD/YYYY"
+          [max]="maxDate"
+          [min]="minDate"
+          (blur)="
+            setStartDate(
+              employmentDetailsForm.controls['employmentType'].value,
+              hireDate.value
+            );
+            checkForValidStartDate(hireDate.value, startDate.value)
+          "
+          (dateInput)="
+            setStartDate(
+              employmentDetailsForm.controls['employmentType'].value,
+              hireDate.value
+            );
+            checkForValidStartDate(hireDate.value, startDate.value)
+          "
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="employmentHireDate"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #employmentHireDate></mat-datepicker>
+
+        <mat-error
+          *ngIf="employmentDetailsForm.controls['hireDate'].errors?.required"
+          >This field is mandatory.
+        </mat-error>
+
+        <small
+          class="error_message-date"
+          *ngIf="hireDateIsBig && hireDate.value"
+        >
+          <span class="material-icons"> error_outline </span> Hire Date should
+          be same or before Start Date.
+        </small>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="form-info-icon form-info">
+        <mat-label>Start Date </mat-label>
+        <input
+          required
+          matInput
+          #startDate
+          formControlName="startDate"
+          [matDatepicker]="employmentStartDate"
+          [max]="maxDate"
+          [min]="minDate"
+          placeholder="MM/DD/YYYY"
+          (dateInput)="checkForValidStartDate(hireDate.value, startDate.value)"
+          (blur)="checkForValidStartDate(hireDate.value, startDate.value)"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="employmentStartDate"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #employmentStartDate></mat-datepicker>
+        <mat-icon
+          class="no-after"
+          (click)="openPayRollDialog()"
+          matTooltip="Click to open Payroll Calendar"
+          >info
+        </mat-icon>
+        <mat-error
+          *ngIf="employmentDetailsForm.controls['startDate'].errors?.required"
+          >This field is mandatory.
+        </mat-error>
+
+        <mat-hint
+          align="end"
+          *ngIf="!employmentDetailsForm.controls['startDate'].errors?.required"
+        >
+          *First payroll date: &nbsp;
+          <b>
+            {{
+              getFirstPayrollDate(startDate) === ''
+                ? 'No payroll date'
+                : (getFirstPayrollDate(startDate) | date: 'mediumDate')
+            }}
+          </b>
+        </mat-hint>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>HR Manager</mat-label>
+        <input
+          required
+          matInput
+          formControlName="hrManager"
+          placeholder="HR Manager"
+        />
+        <mat-error
+          *ngIf="employmentDetailsForm.controls['hrManager'].errors?.required"
+          >This field is mandatory.</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Reporting Manager</mat-label>
+        <mat-select required formControlName="reportingManager">
+          <mat-option
+            *ngFor="let entry of mapReportingMgr | keyvalue"
+            [value]="entry.value"
+            >{{ entry.value }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            employmentDetailsForm.controls['reportingManager'].errors?.required
+          "
+          >This field is mandatory.</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Work Location</mat-label>
+        <mat-select required formControlName="workLocation">
+          <mat-option
+            *ngFor="let entry of mapState | keyvalue"
+            [value]="entry.key"
+            >{{ entry.value }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            employmentDetailsForm.controls['workLocation'].errors?.required
+          "
+          >This field is mandatory.</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Business Unit</mat-label>
+        <mat-select required formControlName="businessUnit">
+          <mat-option
+            *ngFor="let entry of mapBusinessUnit | keyvalue"
+            [value]="entry.key"
+            >{{ entry.value }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            employmentDetailsForm.controls['businessUnit'].errors?.required
+          "
+          >This field is mandatory.</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="form-l-group__header-hr">
+      <h3>Background Verification</h3>
+      <hr />
+    </div>
+
+    <div class="form-l-group employment-details">
+      <div class="form-l-group__form">
+        <label for="">BGC Verification Status</label>
+        <p>
+          {{ employmentInformationResult?.backgroundVerificationStatus }}
+        </p>
+      </div>
+      <div class="form-l-group__form">
+        <label for="">BGC Company Name</label>
+        <p>
+          {{ employmentInformationResult?.backgroundVerificationCompanyName }}
+        </p>
+      </div>
+      <div class="form-l-group__form">
+        <label for="">BGC Result </label>
+        <p>
+          {{ employmentInformationResult?.backgroundVerificationResult }}
+        </p>
+      </div>
+      <div class="form-l-group__form">
+        <label for="">BGC Initiated Date </label>
+        <p>
+          {{
+            employmentInformationResult?.backgroundVerificationInitiationDate
+              | date: 'mediumDate'
+          }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card__footer">
+    <button
+      mat-stroked-button
+      type="button"
+      color="primary"
+      (click)="onRestore($event, employmentDetailsForm)"
+    >
+      Previous
+    </button>
+
+    <button
+      type="button"
+      (click)="goToHrDashboard(employmentDetailsForm)"
+      mat-stroked-button
+      color="primary"
+    >
+      Close
+    </button>
+
+    <button
+      mat-raised-button
+      [disabled]="employmentDetailsForm.invalid || hireDateIsBig"
+      type="button"
+      color="primary"
+      (click)="saveContinue(employmentDetailsForm)"
+    >
+      Save & Continue
+    </button>
+  </div>
+</form>

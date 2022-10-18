@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="card__window">
+    <div class="card__window--header">
+      <span class="red"></span><span class="yellow"></span
+      ><span class="green"></span>
+    </div>
+    <div class="card__window--center">
+      <div class="card__window--cnt">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="changeEndPoint('local')"
+        >
+          Local
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="changeEndPoint('dev')"
+        >
+          Dev
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="changeEndPoint('test')"
+        >
+          Test
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

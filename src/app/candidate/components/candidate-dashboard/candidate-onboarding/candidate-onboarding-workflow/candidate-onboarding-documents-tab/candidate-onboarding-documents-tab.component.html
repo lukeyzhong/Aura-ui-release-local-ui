@@ -1,0 +1,127 @@
+<div class="doc-card">
+  <div
+    class="doc-card__header"
+    *ngIf="compName !== 'CandidatePreviewTabComponent'"
+  >
+    <h3>
+      <img src="./assets/svg/candidate-onboard/Documents.svg" alt="" />
+      Documents
+    </h3>
+    <hr />
+  </div>
+  <div class="doc-card__container">
+    <div class="doc-card__container--pdf">
+      <div class="doc-card__container--pdf--header">
+        <h4>
+          <b>{{ templateName }}</b>
+        </h4>
+        <div>
+          <button
+            mat-button
+            color="primary"
+            [disabled]="!templateName"
+            (click)="downloadDocument()"
+          >
+            <mat-icon>download</mat-icon></button
+          ><button
+            mat-button
+            color="primary"
+            [disabled]="!templateName"
+            (click)="launchDocument()"
+          >
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="doc-card__container--pdf-view">
+        <div class="spinner" *ngIf="isLoading">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+
+        <pdf-viewer src="{{ docURL }}" [original-size]="false"></pdf-viewer>
+      </div>
+      <div
+        class="doc-card__sign"
+        [ngClass]="{ preview: compName === 'CandidatePreviewTabComponent' }"
+      >
+        <button
+          *ngIf="compName !== 'CandidatePreviewTabComponent'"
+          mat-stroked-button
+          color="primary"
+          (click)="openSignatureDialog()"
+          [disabled]="!templateName || disableSignBtn"
+        >
+          Click to Sign
+        </button>
+        <div class="doc-card__footer">
+          <button
+            type="button"
+            mat-stroked-button
+            color="primary"
+            *ngIf="currentDocIndex > 0"
+            (click)="previewPreviousDocument()"
+          >
+            Previous
+          </button>
+          <!-- *ngIf="!disableNextBtn || !noSign" -->
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="disableNextBtn || noSign"
+            (click)="previewNextDocument()"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="doc-card__container--pdf-list">
+      <ul>
+        <li
+          *ngFor="let doc of documentsResult; let i = index"
+          (click)="documentPreview(doc, i); document = doc"
+          [ngClass]="{
+            active: currentDocIndex === i,
+            verified: docsSeen.includes(i)
+          }"
+        >
+          <span class="doc-card__container--preview">
+            <mat-icon>check_circle</mat-icon>
+          </span>
+          <p matTooltip="{{ doc.templateName }}">{{ doc.templateName }}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div
+    class="doc-card__footer"
+    *ngIf="compName !== 'CandidatePreviewTabComponent'"
+  >
+    <button
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onPrevious()"
+    >
+      Previous
+    </button>
+    <button
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="goToDashboard()"
+    >
+      Close
+    </button>
+    <button
+      [disabled]="!disableNextBtn"
+      type="button"
+      mat-raised-button
+      color="primary"
+      (click)="continueToPreviewTab()"
+    >
+      Continue
+    </button>
+  </div>
+</div>

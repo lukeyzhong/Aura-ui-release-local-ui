@@ -1,0 +1,134 @@
+@import '../../../../../styles/utilities/variables';
+.welcome-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: Calc(100vh - 60px);
+  background-color: #ededed;
+}
+.card {
+  width: 90%;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 10px 20px rgb(0 0 0 / 19%);
+  border-radius: 10px;
+  &__top {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  &__bottom {
+    h4 {
+      color: $primary;
+      font-size: 18px;
+      padding-bottom: 15px;
+    }
+    h1 {
+      font-weight: bold;
+      padding-bottom: 15px;
+    }
+    h2 {
+      font-weight: bold;
+      padding: 15px 0;
+    }
+
+    p {
+      line-height: 26px;
+      font-size: 16px;
+      color: #4e4e4e;
+    }
+  }
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+::ng-deep .ng2-pdf-viewer-container {
+  top: 0px !important;
+  left: 0 !important;
+  bottom: 100px;
+  height: Calc(100vh - 235px) !important;
+  box-shadow: 0 10px 20px rgb(0 0 0 / 19%) !important;
+  background-color: #fff;
+}
+
+.offer-letter {
+  width: 100%;
+  .offer-pdf {
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    position: relative;
+    flex-direction: column;
+    min-height: Calc(100vh - 149px);
+    &__actions {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+      display: flex;
+      flex-direction: column;
+      button {
+        margin-bottom: 15px;
+      }
+    }
+    &__header {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      height: 60px;
+      background-color: #323639;
+      align-items: center;
+      padding: 10px 25px;
+      h3 {
+        color: #fff;
+      }
+      mat-icon {
+        color: #fff;
+      }
+    }
+    .pdf-viewer {
+      width: 85%;
+      position: relative;
+      background-color: #fff;
+
+      margin-bottom: 40px;
+      pdf-viewer {
+        width: 100%;
+      }
+
+      &__signature {
+        box-shadow: 0 10px 20px rgb(0 0 0 / 19%);
+        position: absolute;
+        bottom: 0;
+        width: 85%;
+        padding: 10px 30px;
+        display: flex;
+        background-color: #eaf7fe;
+        flex-direction: column;
+        &--dtl {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          padding-bottom: 15px;
+          font-family: 'ProximaNova-semibold' !important;
+          p {
+            font-size: 16px;
+            font-family: 'ProximaNova-semibold' !important;
+          }
+        }
+        &--btns {
+          display: flex;
+          justify-content: flex-end;
+          button {
+            margin-left: 15px;
+          }
+        }
+      }
+    }
+  }
+}
+.spinner {
+  top: 220px;
+}

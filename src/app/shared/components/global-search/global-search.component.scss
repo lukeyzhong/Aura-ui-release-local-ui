@@ -1,0 +1,351 @@
+@import '../../../styles/utilities/variables';
+
+.globalsearch {
+  position: relative;
+
+  &__input {
+    width: 566px;
+    height: 36px;
+    background: white;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+    padding: 5px 5px 5px 50px;
+  }
+
+  &__icon {
+    padding: 6px;
+    background: white;
+    border-radius: 100px;
+    border: solid 3px #ededed;
+    text-align: center;
+    color: #5c8ba0;
+    position: absolute;
+    top: -3px;
+    left: 0px;
+  }
+}
+
+// ####  Responsive styles
+@media (max-width: 576px) {
+  .globalsearch__input {
+    width: auto;
+  }
+}
+
+.global-filter {
+  position: relative;
+  color: #909090;
+  margin: 10px 0 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__title {
+    margin-right: 5px;
+  }
+
+  &__items {
+    display: flex;
+    align-items: center;
+  }
+
+  &__active {
+    background: red;
+  }
+
+  .material-icons {
+    font-size: 16px;
+  }
+
+  &__active-btn {
+    border-radius: 100px;
+    border: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    background: none;
+    outline: none;
+    margin-left: 10px;
+    background: $primary;
+    color: white;
+  }
+}
+
+::ng-deep .global-search-wrap {
+  padding: 5px 15px;
+  border-radius: 10px !important;
+  margin-top: 5px;
+  max-height: none !important;
+  position: relative;
+  overflow: unset !important;
+  &__more {
+    padding: 5px 0;
+    text-align: right;
+    color: $primary;
+
+    button {
+      outline: none;
+    }
+  }
+  &__noResults,
+  &__errorMsg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 50px;
+  }
+  &__errorMsg {
+    color: red;
+  }
+
+  .mat-button-toggle-group-appearance-standard,
+  .mat-button-toggle-standalone.mat-button-toggle-appearance-standard {
+    border-radius: 20px;
+    margin-left: 10px;
+  }
+
+  ::ng-deep
+    .mat-button-toggle-appearance-standard
+    .mat-button-toggle-label-content {
+    line-height: normal !important;
+    font-size: 13px;
+    padding: 0px 8px !important;
+    display: flex;
+    align-items: center;
+    min-height: 18px;
+  }
+
+  ::ng-deep .mat-button-toggle-checked {
+    color: white;
+    background: $primary;
+  }
+
+  ::ng-deep .mat-body p,
+  .mat-body-1 p,
+  .mat-typography p {
+    margin: 0px;
+  }
+}
+
+.filter-group {
+  border-bottom: solid 1px #ececec;
+  margin-bottom: 10px;
+
+  .filter-group__row {
+    display: flex;
+  }
+
+  .filter-group__totalNum {
+    text-align: right;
+  }
+}
+
+.gs-section-head {
+  display: flex;
+  justify-content: space-between;
+
+  &__title {
+    color: #6f6f6f;
+    font-size: 13px;
+    margin-bottom: 5px;
+
+    &__results {
+      padding-right: 10px;
+      font-size: 12px;
+      color: $primary;
+      cursor: pointer;
+    }
+  }
+}
+
+.gs-results {
+  max-height: 130px;
+  overflow: hidden;
+
+  ::ng-deep .mat-option-text {
+    display: flex !important;
+    padding: 5px;
+  }
+
+  &__name {
+    color: black;
+    font-weight: bold;
+  }
+
+  &__desc {
+    color: #808080;
+    font-size: 13px;
+  }
+
+  &__border {
+    border-left: solid 1px #e8e8e8;
+    padding-left: 10px;
+  }
+
+  // OVERWRITE CLASSES
+
+  ::ng-deep .mat-option {
+    margin-bottom: 5px;
+    height: 50px;
+    line-height: normal;
+    padding: 0;
+  }
+
+  .mat-option.is-loading {
+    height: 100px;
+  }
+}
+
+.gs-userpic {
+  margin-right: 15px;
+  width: 40px;
+  height: 40px;
+  background: grey;
+  border-radius: 100px;
+  position: relative;
+
+  &__img {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 100px;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  &__status {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 10px;
+    border-radius: 50px;
+    height: 10px;
+    border: solid 2px white;
+
+    &--active {
+      background: #11bc25;
+    }
+
+    &--resigned {
+      background: #c9c9c9;
+    }
+
+    &--terminated {
+      background: red;
+    }
+  }
+}
+
+.gs-userdesc {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  &__username {
+    font-weight: bold;
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: row;
+    font-size: 13px;
+    color: #505050;
+
+    .col {
+      margin-right: 5px;
+      border-right: solid 1px #ccc;
+      padding-right: 5px;
+      padding-left: 0px;
+
+      &:last-child {
+        border: none !important;
+      }
+    }
+
+    .label {
+      color: #7c7c7c;
+      font-size: 12px;
+    }
+  }
+}
+
+.gs-results-item {
+  margin: 10px 0;
+}
+
+.gs-moreinfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19);
+  padding: 10px;
+  background-color: white;
+
+  &__row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__lable {
+    color: #868686;
+    min-height: 20px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 13px;
+  }
+
+  &__value {
+    color: #000;
+    width: 150px;
+    min-height: 20px;
+    font-size: 13px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
+::ng-deep .popover {
+  max-width: 340px !important;
+  width: 340px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.antra-spacer-md {
+  padding: 10px 0;
+}
+
+.popover-arrow {
+  position: absolute;
+  left: -10px;
+  top: 15px;
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid white;
+}
+
+.mat-option {
+  &:hover:not(.mat-option-disabled) {
+    background: #f2f2f2 !important;
+  }
+
+  &:focus:not(.mat-option-disabled) {
+    background: white;
+  }
+}
+
+.filters-container {
+  max-height: 400px;
+  overflow: auto;
+}

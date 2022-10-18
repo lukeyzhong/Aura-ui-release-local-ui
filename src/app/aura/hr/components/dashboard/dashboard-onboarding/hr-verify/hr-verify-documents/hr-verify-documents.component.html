@@ -1,0 +1,51 @@
+<mat-expansion-panel class="accordion-parent">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="accordion-header">
+        <img src="./assets/svg/HR Verify Icons/documents.svg" width="" alt="" />
+        <h3>Documents</h3>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="doc-card">
+    <div class="doc-card__container">
+      <div class="doc-card__container--pdf">
+        <div class="doc-card__container--pdf--header">
+          <h4><b>{{headerText}}</b></h4>
+        </div>
+        <div *ngIf="showBookDiv" class="doc-card__container--pdf-view">
+          <div class="pdf-viewer">
+            <div class="spinner" *ngIf="isLoading; else handBookView">
+              <app-spinner diameter="35"></app-spinner>
+            </div>
+            <ng-template #handBookView>
+              <pdf-viewer [src]="handBookURL" [render-text]="false" [original-size]="false"></pdf-viewer>
+            </ng-template>
+          </div>
+        </div>
+        <div *ngIf="showOfferDiv" class="doc-card__container--pdf-view">
+          <div class="pdf-viewer">
+            <div class="spinner" *ngIf="isLoading; else offerLetterView">
+              <app-spinner diameter="35"></app-spinner>
+            </div>
+            <ng-template #offerLetterView>
+              <pdf-viewer [src]="offerLetterURL" [original-size]="false"></pdf-viewer>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+      <div class="doc-card__container--pdf-list">
+        <ul>
+          <li (click)="showHandbBook()" [ngClass]="{ 'link-Color': showBookDiv }">
+            <mat-icon>check_circle</mat-icon> Candidate Hand Book
+          </li>
+          <li (click)="showOfferLetter()" [ngClass]="{ 'link-Color': showOfferDiv }">
+            <mat-icon>check_circle</mat-icon> Candidate Offer Letter
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="doc-card__footer">     
+    </div>
+  </div>
+</mat-expansion-panel>

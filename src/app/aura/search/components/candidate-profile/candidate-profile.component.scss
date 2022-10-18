@@ -1,0 +1,73 @@
+@import '../employee-profile/employee-profile.component.scss';
+app-candidate-details-panel {
+  padding: 15px 0;
+}
+.candidate {
+  position: relative;
+  &__label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 2px 10px;
+    font-weight: 500;
+    border-radius: 8px 0 10px 0;
+    background-color: #dd9123;
+  }
+}
+.user--activity-icon {
+  padding: 5px 7px;
+  width: auto;
+}
+.candidate-profile-padding {
+  padding: 20px 0px;
+}
+.social-profiles {
+  margin: 0;
+  li {
+    margin-right: 5px;
+  }
+}
+.security {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  width: 200px;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.17);
+  -webkit-box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.17);
+  -moz-box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.17);
+  position: relative;
+  mat-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+  }
+  &__field {
+    &--label {
+      color: #9d9d9d;
+      font-size: 11px;
+    }
+    &--value {
+      font-size: 13px;
+      color: #000;
+    }
+  }
+}
+.security-pop-arrow {
+  top: -10px;
+  margin: 0 auto;
+  left: 68px;
+  width: 10px;
+  height: 10px;
+  display: block;
+  position: absolute;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 10px solid rgb(226, 226, 226);
+}
+.candidate-profile {
+  padding: 20px 0px;
+}

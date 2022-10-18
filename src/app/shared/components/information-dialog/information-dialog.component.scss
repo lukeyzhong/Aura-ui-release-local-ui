@@ -1,0 +1,14 @@
+.information {
+  position: relative;
+  height: 127px;
+  width: 209px;
+  padding-top: 21px;
+  padding-left: 31px;
+  padding-right: 31px;
+  padding-bottom: 26px;
+  text-align: center;
+  font-size: 14px;
+}
+::ng-deep .mat-dialog-actions {
+  justify-content: center;
+}

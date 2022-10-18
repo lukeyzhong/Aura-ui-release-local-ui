@@ -1,0 +1,39 @@
+<div class="aura-page-container">
+  <mat-accordion>
+    <!-- Employees Search Results -->
+    <app-search-result-panel [title]="employeesPanelConfig.title" [isLoading]="employeesPanelConfig.isLoading"
+      [displayedColumns]="employeesPanelConfig.displayedColumns" [columns]="employeesPanelConfig.columns"
+      [tableData]="employeesPanelConfig.tableData" [totalRows]="employeesPanelConfig.totalRows"
+      [type]="employeesPanelConfig.type" [searchText]="searchText" [expanded]="employeesPanelConfig.title===panelName"
+      (paginatorClicked)="getNextRecords($event)" (sortClicked)="sortData($event)"
+      (onSelectFilterValues)="getSelectedFilterValues($event)" (onCloseMatChipsValues)="getRemainingChipValues($event)"         
+    ></app-search-result-panel>
+
+    <!-- Candidates Search Results -->
+    <app-search-result-panel [title]="candidatesPanelConfig.title" [isLoading]="candidatesPanelConfig.isLoading"
+      [displayedColumns]="candidatesPanelConfig.displayedColumns" [columns]="candidatesPanelConfig.columns"
+      [tableData]="candidatesPanelConfig.tableData" [totalRows]="candidatesPanelConfig.totalRows"
+      [type]="candidatesPanelConfig.type" [searchText]="searchText" [expanded]="candidatesPanelConfig.title===panelName"
+      (paginatorClicked)="getNextRecords($event)" (sortClicked)="sortData($event)"
+      (onSelectFilterValues)="getSelectedFilterValues($event)" (onCloseMatChipsValues)="getRemainingChipValues($event)"
+      ></app-search-result-panel>  
+
+    <!-- Jobs Search Results -->
+    <app-search-result-panel [title]="jobsPanelConfig.title" [isLoading]="jobsPanelConfig.isLoading"
+      [displayedColumns]="jobsPanelConfig.displayedColumns" [columns]="jobsPanelConfig.columns"
+      [tableData]="jobsPanelConfig.tableData" [totalRows]="jobsPanelConfig.totalRows" [type]="jobsPanelConfig.type"    
+      [searchText]="searchText" [expanded]="jobsPanelConfig.title===panelName"
+      (paginatorClicked)="getNextRecords($event)" (sortClicked)="sortData($event)" 
+      (onSelectFilterValues)="getSelectedFilterValues($event)" (onCloseMatChipsValues)="getRemainingChipValues($event)"   
+     ></app-search-result-panel>
+
+    <!-- Organizations Search Results -->
+    <app-search-result-panel [title]="organizationsPanelConfig.title" [isLoading]="organizationsPanelConfig.isLoading"
+      [displayedColumns]="organizationsPanelConfig.displayedColumns" [columns]="organizationsPanelConfig.columns"
+      [tableData]="organizationsPanelConfig.tableData" [totalRows]="organizationsPanelConfig.totalRows" [type]="organizationsPanelConfig.type"
+      [searchText]="searchText" [expanded]="organizationsPanelConfig.title===panelName"
+      (paginatorClicked)="getNextRecords($event)" (sortClicked)="sortData($event)"
+      (onSelectFilterValues)="getSelectedFilterValues($event)" (onCloseMatChipsValues)="getRemainingChipValues($event)"
+     ></app-search-result-panel>
+  </mat-accordion>
+</div>

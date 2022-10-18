@@ -1,0 +1,110 @@
+<mat-expansion-panel (afterExpand)="getComments()" class="accordion-parent">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            <div class="accordion-header">
+                <img src="./assets/svg/HR Verify Icons/Emp-compen.svg" width="40px" alt="" />
+                <h3>Employment & Compensation Information</h3>
+            </div>
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="form-l-group__header-hr">
+        <h3><b>Employment</b></h3>
+        <hr>
+    </div>
+    <div class="form-l-group disable">
+        <div class="form-l-group__form">
+            <label for="">Job Title</label>
+            <p>{{employmentCompensationInfoResult?.employmentInfo?.jobTitle}}</p>            
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Department</label>
+            <p>{{employmentCompensationInfoResult?.employmentInfo?.department}}</p>            
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Employment type</label>
+            <p>{{employmentCompensationInfoResult?.employmentInfo?.employmentType}}</p>            
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Employment category</label>
+            <p>{{employmentCompensationInfoResult?.employmentInfo?.employmentCategory}}</p>           
+        </div>
+        <div class="form-l-group__form">
+            <label for="">HR Manager</label>
+            <p>{{employmentCompensationInfoResult?.employmentInfo?.hrManager}}</p>           
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Recruiter</label>
+            <p>{{employmentCompensationInfoResult?.employmentInfo?.recruiter}}</p>            
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Reporting Manager </label>
+            <p>{{employmentCompensationInfoResult?.employmentInfo?.reportingManager}}</p>           
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Work location</label>
+            <p>{{employmentCompensationInfoResult?.employmentInfo?.workLocation}} </p>            
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Start date</label>
+            <p>{{employmentCompensationInfoResult?.employmentInfo?.startDate | date:'MM/dd/yyyy'}} </p>
+        </div>
+    </div>
+    <div class="form-l-group__header-hr">
+        <h3><b>Compensation</b></h3>
+        <hr>
+    </div>
+    <div class="form-l-group disable">
+        <div class="form-l-group__form">
+            <label for="">Compensation type</label>
+            <p>{{employmentCompensationInfoResult?.compensationInfo?.compensationType}}</p>
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Calculated By</label>
+            <p>{{employmentCompensationInfoResult?.compensationInfo?.calculatedBy}}</p>            
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Payment Frequency</label>
+            <p>{{employmentCompensationInfoResult?.compensationInfo?.paymentFrequency}}</p>           
+        </div>
+        <div class="form-l-group__form amountFont">
+            <label for="">Amount</label>
+            <p><span matPrefix>$&nbsp;</span>{{employmentCompensationInfoResult?.compensationInfo?.amount}}</p>                     
+        </div>     
+    </div>  
+    <div class="form-l-group__header-hr">
+        <h3><b>Additional Earnings</b></h3>
+        <hr>
+    </div>
+    <div class="form-l-group disable"  *ngFor="let additionalEarnings of employmentCompensationInfoResult?.compensationInfo?.additionalEarnings; let i = index">
+        <div class="form-l-group__form">
+            <label for="">Compensation Name</label>
+            <p>{{additionalEarnings?.compensationType}}</p>          
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Calculated By</label>
+            <p>{{additionalEarnings?.calculatedBy}}</p>            
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Payment</label>
+            <p>{{additionalEarnings?.paymentFrequency}}</p>            
+        </div>
+        <div class="form-l-group__form amountFont">
+            <label for="">Amount</label>
+            <p><span matPrefix>$&nbsp;</span>{{additionalEarnings?.amount}}</p>
+        </div>        
+    </div>
+    <div class="form-l-group__header-hr">
+        <h3><b>FLSA</b></h3>
+        <hr>
+    </div>
+    <div class="form-l-group disable">
+        <div class="form-l-group__form">
+            <label for="">FLSA Classification</label>
+            <p>{{employmentCompensationInfoResult?.compensationInfo?.flsaClassification ? 'Exempt' : 'Non Exempt'}}</p>            
+        </div>
+        <div class="form-l-group__form">
+            <label for="">Overtime Pay Info</label>
+            <p>{{employmentCompensationInfoResult?.compensationInfo?.overTimePayInfo}}</p>           
+        </div>      
+    </div>   
+</mat-expansion-panel>

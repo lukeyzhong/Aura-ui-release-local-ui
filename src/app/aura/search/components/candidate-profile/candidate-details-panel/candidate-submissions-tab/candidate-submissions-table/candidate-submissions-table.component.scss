@@ -1,0 +1,89 @@
+.sr-panel {
+  border: solid 1px #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  height: auto !important;
+
+  table {
+    tr {
+      &:hover {
+        td {
+          background-color: #ebf9ff;
+          .link-icons {
+            visibility: visible;
+          }
+        }
+      }
+      td.rtrCol {
+        min-width: 104px;
+      }
+    }
+    border-radius: 15px;
+    th {
+      font-weight: 400;
+    }
+    th,
+    td {
+      padding: 10px;
+      overflow: hidden;
+      max-width: 140px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    td:last-child,
+    th:last-child {
+      text-align: center;
+    }
+  }
+}
+
+.sr-table {
+  height: auto;
+  overflow: auto;
+  position: relative;
+}
+
+.spinner {
+  height: 250px;
+}
+
+.no-data-display {
+  text-align: center;
+  padding: 20px 0 !important;
+  color: rgba(0, 0, 0, 0.54);
+  border-bottom: 1px solid #ccc;
+}
+
+.mat-table {
+  width: 100%;
+  th,
+  td {
+    padding: 10px 5px;
+  }
+}
+
+a {
+  color: rgb(0, 153, 255);
+}
+
+a:hover {
+  color: blue;
+  cursor: pointer;
+}
+::ng-deep .mat-paginator-container {
+  justify-content: space-between !important;
+}
+::ng-deep .mat-paginator-range-actions {
+  button {
+    background-color: transparent !important;
+    border: transparent !important;
+  }
+}
+
+.jobTitle .vendorName .endClientName {
+  color: #0182c1;
+  cursor: pointer;
+}
+.pdf-icons-table {
+  cursor: default !important;
+}

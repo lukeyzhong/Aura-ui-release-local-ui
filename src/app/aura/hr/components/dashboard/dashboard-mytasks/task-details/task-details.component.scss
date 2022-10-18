@@ -1,0 +1,211 @@
+@import '../../../../../../styles/utilities/variables';
+
+.modal-popup {
+  width: 80%;
+
+  &__content {
+    padding: 15px;
+  }
+}
+
+.tasks {
+  &__control {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #9f9f9f;
+    display: flex;
+    align-items: center;
+
+    &--search {
+      position: relative;
+
+      mat-icon {
+        font-size: 22px;
+        color: #9f9f9f;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+      }
+
+      input {
+        min-width: 265px;
+        border: 1px solid #9f9f9f;
+        border-radius: 15px;
+        padding: 6px 10px 6px 30px;
+      }
+    }
+
+    ::ng-deep .mat-form-field-appearance-outline {
+      margin-left: 10px;
+      width: 130px;
+
+      .mat-form-field-infix {
+        padding: 5px 0 !important;
+      }
+
+      .mat-form-field-wrapper {
+        padding-bottom: 0;
+      }
+    }
+
+    ::ng-deep .mat-form-field-appearance-outline .mat-form-field-label {
+      top: 15px;
+    }
+
+    ::ng-deep .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+      transform: translateY(-12px) scale(0.75);
+    }
+  }
+
+  &__tbl {
+    max-height: Calc(100vh - 254px);
+    min-height: Calc(100vh - 254px);
+    overflow: auto;
+    padding: 0 10px;
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 15px;
+      box-shadow: none;
+
+      .mat-header-row {
+        box-shadow: none;
+      }
+
+      .mat-row {
+        box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%),
+          0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
+        margin: 0 20px;
+        border-radius: 10px;
+        &.due-date{
+          td{
+            background-color: #ffeded !important;
+          }
+        }
+        td {
+          padding: 15px 10px;
+          
+          &:first-child {
+            border-top-left-radius: 10px !important;
+            border-bottom-left-radius: 10px !important;
+          }
+
+          &:last-child {
+            border-top-right-radius: 10px !important;
+            border-bottom-right-radius: 10px !important;
+          }
+
+          a {
+            color: $primary;
+            text-decoration: none;
+
+            &.unassigned {
+              color: #ef6b6b !important;
+            }
+          }
+
+          button {
+            padding: 5px 20px;
+            background-color: whitesmoke;
+            color: $primary;
+            border: none;
+            border-radius: 15px;
+            font-size: 10px;
+
+            &.open {
+              background-color: #ddf4ff;
+              color: $primary;
+            }
+
+            &.Progress {
+              background-color: #fff3d3;
+              color: #cd9d24;
+            }
+
+            &.overdue {
+              background-color: #ef6b6b;
+              color: #fff;
+            }
+          }
+        }
+      }
+
+      th {
+        background-color: #fff !important;
+        color: #646464;
+        border: none;
+        padding: 10px 10px;
+        font-weight: 400;
+      }
+
+      td {
+        background-color: transparent !important;
+        color: #000;
+        border: none;
+        background-color: #fff !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:first-child {
+          max-width: 100px;
+        }
+
+        &:nth-child(2) {
+          max-width: 200px;
+        }
+
+        &:nth-child(3) {
+          max-width: 150px;
+        }
+
+        &:nth-child(4) {
+          max-width: 150px;
+        }
+
+        &:nth-child(5) {
+          max-width: 150px;
+        }
+
+        &:nth-child(6) {
+          max-width: 150px;
+        }
+      }
+    }
+  }
+}
+
+.no-data-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(0, 0, 0, 0.54);
+  border-radius: 0 0 10px 10px;
+  min-height: Calc(100vh - 354px);
+}
+
+.spinner {
+  top: 190px;
+  position: relative;
+}
+
+.error_message-chart {
+  color: red;
+  font-size: 10px;
+  display: flex;
+  margin-left: 10px;
+
+  .material-icons {
+    font-size: 12px;
+    margin-top: 5px;
+    margin-right: 3px;
+  }
+}
+
+.taskTitleLink {
+  cursor: pointer;
+}
+
+.taskTitleNoLink {
+  cursor: none;
+}

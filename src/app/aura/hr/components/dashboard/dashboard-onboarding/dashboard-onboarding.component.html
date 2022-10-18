@@ -1,0 +1,51 @@
+<div class="card">
+  <div
+    [ngClass]="{ 'snack-bar': snackBarNotification }"
+    *ngIf="snackBarNotification"
+  >
+    <div class="snack-bar--icon">
+      <mat-icon>done</mat-icon>
+    </div>
+    <p>{{ notificationMessage }}</p>
+  </div>
+  <div class="card__header">
+    <div class="card__header--left">
+      <h3 class="card-title">Onboarding</h3>
+    </div>
+    <div class="card__header--right">
+      <button
+        class="primary my-task__header--open-new"
+        mat-button
+        (click)="onboadingDetails('all')"
+      >
+        <span class="material-icons">open_in_new</span>
+      </button>
+    </div>
+  </div>
+  <div *ngIf="isLoadSpinner" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <div class="onbd-list">
+    <div class="onbd-list__cards">
+      <div
+        class="onbd-list__card"
+        [ngClass]="{ disable: list.count === 0 }"
+        [class]="list.class"
+        (click)="onCardClick(list.code, list.status, list.count, 'single')"
+        *ngFor="let list of onboardStatus"
+      >
+        <div class="onbd-list__card--top">
+          <h1>{{ list.count }}</h1>
+        </div>
+        <div class="onbd-list__card--icon-area">
+          <img
+            src="./assets/svg/onboarding statuses icons/{{ list.icon }}.svg"
+          />
+        </div>
+        <div class="onbd-list__card--bottom">
+          <p>{{ list.status }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

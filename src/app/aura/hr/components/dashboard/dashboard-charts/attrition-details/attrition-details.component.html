@@ -1,0 +1,190 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <div class="modal-popup__header">
+      <h3>Attrition</h3>
+      <button (click)="onCancel($event)" mat-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-popup__content">
+      <div class="g-card">
+        <div class="g-card__box g-card__box--30">
+          <div *ngIf="isLoadCountSpinner" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div class="g-card__box--header">
+            <h3 class="card-title">{{ ChartTypeDesc.AttritionCount }}</h3>
+            <div class="g-card__box--export">
+              <div [matMenuTriggerFor]="downloadOptions" aria-expanded="false" (click)="
+                  exportToCsvAllCharts(
+                    ChartTypeDesc.AttritionCount,
+                    'chartWidget'
+                  )
+                ">
+                <button mat-button class="btn-excel">
+                  <img src="./assets/svg/ua-download.svg" alt="" width="30px
+                              " />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="g-card__box--control">
+            <mat-form-field appearance="outline" class="year-select">
+              <mat-label>Year</mat-label>
+              <mat-select [formControl]="countYear" (selectionChange)="countYearSelection()">
+                <mat-option *ngFor="let yr of year" [value]="yr">{{
+                  yr
+                  }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span class="t-count">
+              Total Count - {{ attritionCountResponseData?.totalCount }}
+            </span>
+          </div>
+          <div class="g-card__box--chart">
+            <div style="display: flex; flex-grow: 1">
+              <canvas style="height: 230px; width: 230px" baseChart [datasets]="attritionCountChartData"
+                [labels]="attritionCountChartLabels" [options]="attritionCountChartOptions"
+                [colors]="attritionCountChartColors" [legend]="attritionCountChartLegend"
+                [chartType]="attritionCountChartType">
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="g-card__box g-card__box--30">
+          <div *ngIf="isLoadAuthWorkSpinner" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div class="g-card__box--header">
+            <h3 class="card-title">{{ ChartTypeDesc.AttritionByWorkAuth }}</h3>
+            <div class="g-card__box--export">
+              <div [matMenuTriggerFor]="downloadOptions" aria-expanded="false" (click)="
+                  exportToCsvAllCharts(
+                    ChartTypeDesc.AttritionByWorkAuth,
+                    'chartWidget'
+                  )
+                ">
+                <button mat-button class="btn-excel">
+                  <img src="./assets/svg/ua-download.svg" alt="" width="30px
+                              " />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="g-card__box--control">
+            <mat-form-field appearance="outline" class="year-select">
+              <mat-label>Year</mat-label>
+              <mat-select [formControl]="authWorkYear" (selectionChange)="authWorkYearSelection()">
+                <mat-option *ngFor="let yr of year" [value]="yr">{{
+                  yr
+                  }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span class="t-count">
+              Total Count - {{ attritionAuthWorkResponseData?.totalCount }}
+            </span>
+          </div>
+          <div class="g-card__box--chart">
+            <div style="display: flex; flex-grow: 1">
+              <canvas style="height: 230px; width: 230px" baseChart [datasets]="authWorkReasonChartData"
+                [labels]="attritionAuthWorkChartLabels" [options]="attritionAuthWorkChartOptions"
+                [colors]="attritionAuthWorkChartColors" [legend]="attritionAuthWorkChartLegend"
+                [chartType]="attritionAuthWorkChartType">
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="g-card__box g-card__box--30">
+          <div *ngIf="isLoadHourWorkSpinner" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div class="g-card__box--header">
+            <h3 class="card-title">{{ ChartTypeDesc.AttritionByHoursWorked }}</h3>
+            <div class="g-card__box--export">
+              <div [matMenuTriggerFor]="downloadOptions" aria-expanded="false" (click)="
+                  exportToCsvAllCharts(
+                    ChartTypeDesc.AttritionByHoursWorked,
+                    'chartWidget'
+                  )
+                ">
+                <button mat-button class="btn-excel">
+                  <img src="./assets/svg/ua-download.svg" alt="" width="30px
+                              " />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="g-card__box--control">
+            <mat-form-field appearance="outline" class="year-select">
+              <mat-label>Year</mat-label>
+              <mat-select [formControl]="hourWorkYear" (selectionChange)="hourWorkYearSelection()">
+                <mat-option *ngFor="let yr of year" [value]="yr">{{
+                  yr
+                  }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span class="t-count">
+              Total Count - {{ attritionHourWorkResponseData?.totalCount }}
+            </span>
+          </div>
+          <div class="g-card__box--chart">
+            <div style="display: flex; flex-grow: 1">
+              <canvas style="height: 230px; width: 230px" baseChart [datasets]="hourWorkReasonChartData"
+                [labels]="attritionHourWorkChartLabels" [options]="attritionHourWorkChartOptions"
+                [colors]="attritionHourWorkChartColors" [legend]="attritionHourWorkChartLegend"
+                [chartType]="attritionHourWorkChartType">
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="g-card__box g-card__box--100">
+          <div class="g-card__box--header">
+            <div class="total-ae-tbl">
+              <input type="text" #search (keyup)="performSearch(search?.value!)" placeholder="Search...."
+                matTooltip="Search...." />
+              <h3 class="card-title">Total Attrition</h3>
+              <div class="g-card__box--control total-ae-tbl--c">
+                <div class="g-card__box--control--f">
+                  <mat-form-field appearance="outline" class="year-select">
+                    <mat-label>Year</mat-label>
+                    <mat-select [formControl]="attritionEmpYear" (selectionChange)="attritionEmpYearSelection()">
+                      <mat-option *ngFor="let yr of year" [value]="yr">{{
+                        yr
+                        }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div [matMenuTriggerFor]="downloadOptions" aria-expanded="false"
+                  (click)="exportToCsvAttritionTable('chartTable')">
+                  <button mat-button class="btn-excel">
+                    <img src="./assets/svg/ua-download.svg" alt="" width="30px
+                                " />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <app-emp-table-details [isLoading]="attritionEmployeePanelConfig.isLoading"
+            [displayedColumns]="attritionEmployeePanelConfig.displayedColumns"
+            [columns]="attritionEmployeePanelConfig.columns" [tableData]="attritionEmployeePanelConfig.tableData"
+            [totalRows]="attritionEmployeePanelConfig.totalRows" (paginatorClicked)="getNextRecords($event)">
+          </app-emp-table-details>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <mat-menu #downloadOptions="matMenu">
+    <mat-selection-list class="d-format" [multiple]="false">
+      <mat-list-option (click)="download('xlsx')">
+        <img src="./assets/svg/excel.svg" alt="" width="24px" /> Download as
+        Excel
+      </mat-list-option>
+      <mat-list-option (click)="download('csv')">
+        <img src="./assets/svg/csv.svg" alt="" width="24px" />Download as
+        CSV
+      </mat-list-option>
+    </mat-selection-list>
+  </mat-menu>
+</div>

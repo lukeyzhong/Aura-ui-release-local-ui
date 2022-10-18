@@ -1,0 +1,532 @@
+<div class="employee-details-parent">
+  <div class="employee-details">
+    <div class="employee-details__tabs-content">
+      <div class="employee-details__content-header">
+        <h3>
+          <B>Purchase Orders</B>
+        </h3>
+      </div>
+      <div class="card-parent">
+        <div class="card" *ngIf="isLoading; else poData">
+          <div class="spinner">
+            <app-spinner diameter="25"></app-spinner>
+          </div>
+        </div>
+
+        <ng-template #poData>
+          <div class="card card-no-data" *ngIf="employeePOResult?.length === 0; else poDocs">
+            <div class="no-data">
+              <mat-icon> find_in_page </mat-icon>
+              <h4>Information Not Added</h4>
+            </div>
+          </div>
+          <ng-template #poDocs>
+            <div *ngFor="let filteredPO of filteredPOList; let i = index">
+              <div *ngFor="let purchaseOrder of filteredPO?.poList | slice: 0:1">
+                <div class="card">
+                  <div *ngIf="purchaseOrder?.status === 'Active'" class="card__status-active">
+                    ACTIVE
+                  </div>
+                  <div *ngIf="purchaseOrder?.status === 'Closed'" class="card__status-inactive">
+                    CLOSED
+                  </div>
+
+                  <div class="card-fields">
+                    <ul>
+                      <li>
+                        <p class="card-fields__label">Client Name</p>
+                        <p class="card-fields__title">
+                          {{ purchaseOrder?.clientName }}
+                        </p>
+                      </li>
+                      <li>
+                        <p class="card-fields__label">End Client</p>
+                        <p class="card-fields__title">
+                          {{ purchaseOrder?.endClientName }}
+                        </p>
+                      </li>
+                      <li>
+                        <p class="card-fields__label">Work Location</p>
+                        <p class="card-fields__value">
+                          {{ purchaseOrder?.workLocation }}
+                        </p>
+                      </li>
+                      <li>
+                        <p class="card-fields__label">BDM</p>
+                        <p class="card-fields__value">
+                          {{ purchaseOrder?.salesPersonName }}
+                        </p>
+                      </li>
+                      <li>
+                        <p class="card-fields__label">Bill Rate</p>
+                        <p class="card-fields__value">
+                          {{ purchaseOrder?.billRate | currency: 'USD' }}/Hr
+                        </p>
+                      </li>
+                      <li>
+                        <p class="card-fields__label">Start Date</p>
+                        <p class="card-fields__value">
+                          {{
+                          purchaseOrder?.poStartDate
+                          | date: 'MM-dd-yyyy h:mm a'
+                          }}
+                        </p>
+                      </li>
+                      <li class="more-info">
+                        <button [mdePopoverTriggerFor]="poContent">
+                          <span></span><span></span><span></span>
+                        </button>
+                        <mde-popover #poContent="mdePopover" mdePopoverPositionX="after" [mdeFocusTrapEnabled]="false"
+                          [mdeFocusTrapAutoCaptureEnabled]="false" [mdePopoverOffsetX]="0" [mdePopoverOffsetY]="30">
+                          <!-- <div class="popover-arrow" id="popover-arrow"></div> -->
+                          <div class="gs-moreinfo">
+                            <div class="gs-moreinfo__row">
+                              <div>
+                                <div class="gs-moreinfo__title">
+                                  <b>More Info</b>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="gs-moreinfo__row">
+                              <div>
+                                <div class="gs-moreinfo__lable">PO Status</div>
+                                <div class="gs-moreinfo__value">
+                                  {{ purchaseOrder?.status }}
+                                </div>
+                              </div>
+                              <div>
+                                <div class="gs-moreinfo__lable">
+                                  PO End Date
+                                </div>
+                                <div class="gs-moreinfo__value">
+                                  {{
+                                  purchaseOrder?.poEndDate
+                                  | date: 'MM-dd-yyyy'
+                                  }}
+                                </div>
+                              </div>
+                            </div>
+                            <div class="gs-moreinfo__row" *ngIf="purchaseOrder?.status === 'Closed'">
+                              <div>
+                                <div class="gs-moreinfo__lable">
+                                  PO Closed Date
+                                </div>
+                                <div class="gs-moreinfo__value">
+                                  {{
+                                  purchaseOrder?.closedOnDate
+                                  | date: 'MM-dd-yyyy'
+                                  }}
+                                </div>
+                              </div>
+                            </div>
+                            <hr />
+                            <div class="gs-moreinfo__row">
+                              <div>
+                                <div class="gs-moreinfo__title">
+                                  Submission Details
+                                </div>
+                              </div>
+                            </div>
+                            <div class="gs-moreinfo__row">
+                              <div>
+                                <div class="gs-moreinfo__lable">
+                                  Submission Date
+                                </div>
+                                <div class="gs-moreinfo__value">
+                                  {{
+                                  purchaseOrder?.submissionData?.submittedOn
+                                  | date: 'MM-dd-yyyy'
+                                  }}
+                                </div>
+                              </div>
+                              <div>
+                                <div class="gs-moreinfo__lable">Job Title</div>
+                                <div class="gs-moreinfo__value">
+                                  <a class="link">
+                                    {{ purchaseOrder?.clientSignatoryTitle }}
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="gs-moreinfo__row">
+                              <div>
+                                <div class="gs-moreinfo__lable">
+                                  Interview Date
+                                </div>
+                                <div class="gs-moreinfo__value">
+                                  {{
+                                  purchaseOrder?.interviewDate
+                                  | date: 'MM-dd-yyyy'
+                                  }}
+                                </div>
+                              </div>
+                              <div>
+                                <div class="gs-moreinfo__lable">
+                                  Confirmation Date
+                                </div>
+                                <div class="gs-moreinfo__value">
+                                  {{
+                                  purchaseOrder?.confirmationDate
+                                  | date: 'MM-dd-yyyy'
+                                  }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </mde-popover>
+                      </li>
+                    </ul>
+
+                    <div class="file-area">
+                      <div class="document-table" [ngClass]="{ 'rows-collapse': toggleMoreLess[i] }"
+                        *ngIf="purchaseOrder?.documents?.length! > 0">
+                        <table cellspacing="0">
+                          <tr>
+                            <th>Document Name</th>
+                            <th>Description</th>
+                            <th>Uploaded On</th>
+                            <th>Uploaded By</th>
+                          </tr>
+                          <tr *ngFor="let poDoc of purchaseOrder?.documents">
+                            <td class="file-name">
+                              <div *ngIf="poDoc?.fileExtension === '.pdf'">
+                                <img width="24px" src="./assets/svg/icn-pdf.svg" alt="" />
+                              </div>
+                              <div *ngIf="fileExt.includes(poDoc?.fileExtension!)">
+                                <img width="24px" src="./assets/svg/icn-image.svg" alt="" />
+                              </div>
+                              <p>{{ poDoc.displayName }}</p>
+                              <span>
+                                <mat-icon matTooltip="Preview" (click)="previewDocument(poDoc)">remove_red_eye
+                                </mat-icon>
+                              </span><span>
+                                <mat-icon matTooltip="Download" (click)="downloadDocument(poDoc)">get_app</mat-icon>
+                              </span>
+                            </td>
+                            <td>
+                              {{
+                              poDoc?.fileDescription === 'null'
+                              ? ''
+                              : poDoc?.fileDescription
+                              }}
+                            </td>
+                            <td>
+                              {{
+                              poDoc?.createdDateTime | date: 'M-d-yyyy h:mm a'
+                              }}
+                            </td>
+                            <td>
+                              {{ personName }}
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                      <div class="min-rows" *ngIf="purchaseOrder?.documents?.length! > 1">
+                        <button class="show-more-btn" (click)="
+                            toggleMoreLess[i] = !toggleMoreLess[i];
+                            showMoreLess(i)
+                          ">
+                          {{ btnMoreLessText[i] }}
+                          <mat-icon [ngClass]="{ less: btnMoreLessText[i] === 'Less' }">expand_more</mat-icon>
+                        </button>
+                      </div>
+
+                      <div class="no-files" *ngIf="purchaseOrder.documents?.length === 0">
+                        <mat-icon>find_in_page</mat-icon>
+                        <h4>Documents Not Uploaded</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="other-degrees" *ngIf="
+                    filteredPO.poList?.length! > 0 &&
+                    filteredPO.poList?.length! - 1 !== 0
+                  ">
+                  <mat-accordion>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <h4>
+                          <i class="fas fa-xs fa-info-circle"></i> Previous
+                          Purchase Orders
+                          <span class="previous-document-count">{{
+                            filteredPO.poList?.length! - 1
+                            }}</span>
+                        </h4>
+                      </mat-expansion-panel-header>
+                      <ng-template matExpansionPanelContent>
+                        <div>
+                          <div *ngFor="
+                              let purchaseOrder of filteredPO.poList
+                                | slice: 1:filteredPO.poList.length;
+                              let i = index
+                            ">
+                            <div class="card">
+                              <div *ngIf="purchaseOrder?.status === 'Active'" class="card__status-active">
+                                ACTIVE
+                              </div>
+                              <div *ngIf="purchaseOrder?.status === 'Closed'" class="card__status-inactive">
+                                CLOSED
+                              </div>
+
+                              <div class="card-fields">
+                                <ul>
+                                  <li>
+                                    <p class="card-fields__label">
+                                      Client Name
+                                    </p>
+                                    <p class="card-fields__value">
+                                      {{ purchaseOrder?.clientName }}
+                                    </p>
+                                  </li>
+                                  <li>
+                                    <p class="card-fields__label">End Client</p>
+                                    <p class="card-fields__value">
+                                      {{ purchaseOrder?.endClientName }}
+                                    </p>
+                                  </li>
+                                  <li>
+                                    <p class="card-fields__label">
+                                      Work Location
+                                    </p>
+                                    <p class="card-fields__value">
+                                      {{ purchaseOrder?.workLocation }}
+                                    </p>
+                                  </li>
+                                  <li>
+                                    <p class="card-fields__label">BDM</p>
+                                    <p class="card-fields__value">
+                                      {{ purchaseOrder?.salesPersonName }}
+                                    </p>
+                                  </li>
+                                  <li>
+                                    <p class="card-fields__label">Bill Rate</p>
+                                    <p class="card-fields__value">
+                                      {{
+                                      purchaseOrder?.billRate
+                                      | currency: 'USD'
+                                      }}/Hr
+                                    </p>
+                                  </li>
+                                  <li>
+                                    <p class="card-fields__label">Start Date</p>
+                                    <p class="card-fields__value">
+                                      {{
+                                      purchaseOrder?.poStartDate
+                                      | date: 'MM-dd-yyyy h:mm a'
+                                      }}
+                                    </p>
+                                  </li>
+                                  <li class="more-info">
+                                    <button [mdePopoverTriggerFor]="poContent">
+                                      <span></span><span></span><span></span>
+                                    </button>
+                                    <mde-popover #poContent="mdePopover" mdePopoverPositionX="after"
+                                      [mdeFocusTrapEnabled]="false" [mdeFocusTrapAutoCaptureEnabled]="false"
+                                      [mdePopoverOffsetX]="155" [mdePopoverOffsetY]="30">
+                                      <div class="popover-arrow" id="popover-arrow"></div>
+                                      <div class="gs-moreinfo">
+                                        <div class="gs-moreinfo__row">
+                                          <div>
+                                            <div class="gs-moreinfo__title">
+                                              <b>More Info</b>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="gs-moreinfo__row">
+                                          <div>
+                                            <div class="gs-moreinfo__lable">
+                                              PO Status
+                                            </div>
+                                            <div class="gs-moreinfo__value">
+                                              {{ purchaseOrder?.status }}
+                                            </div>
+                                          </div>
+                                          <div>
+                                            <div class="gs-moreinfo__lable">
+                                              PO End Date
+                                            </div>
+                                            <div class="gs-moreinfo__value">
+                                              {{
+                                              purchaseOrder?.poEndDate
+                                              | date: 'MM-dd-yyyy'
+                                              }}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="gs-moreinfo__row" *ngIf="
+                                            purchaseOrder?.status === 'Closed'
+                                          ">
+                                          <div>
+                                            <div class="gs-moreinfo__lable">
+                                              PO Closed Date
+                                            </div>
+                                            <div class="gs-moreinfo__value">
+                                              {{
+                                              purchaseOrder?.closedOnDate
+                                              | date: 'MM-dd-yyyy'
+                                              }}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <hr />
+                                        <div class="gs-moreinfo__row">
+                                          <div>
+                                            <div class="gs-moreinfo__title">
+                                              Submission Details
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="gs-moreinfo__row">
+                                          <div>
+                                            <div class="gs-moreinfo__lable">
+                                              Submission Date
+                                            </div>
+                                            <div class="gs-moreinfo__value">
+                                              {{
+                                              purchaseOrder?.submissionData
+                                              ?.submittedOn
+                                              | date: 'MM-dd-yyyy'
+                                              }}
+                                            </div>
+                                          </div>
+                                          <div>
+                                            <div class="gs-moreinfo__lable">
+                                              Job Title
+                                            </div>
+                                            <div class="gs-moreinfo__value">
+                                              <a class="link">
+                                                {{
+                                                purchaseOrder?.clientSignatoryTitle
+                                                }}
+                                              </a>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <div class="gs-moreinfo__row">
+                                          <div>
+                                            <div class="gs-moreinfo__lable">
+                                              Interview Date
+                                            </div>
+                                            <div class="gs-moreinfo__value">
+                                              {{
+                                              purchaseOrder?.interviewDate
+                                              | date: 'MM-dd-yyyy'
+                                              }}
+                                            </div>
+                                          </div>
+                                          <div>
+                                            <div class="gs-moreinfo__lable">
+                                              Confirmation Date
+                                            </div>
+                                            <div class="gs-moreinfo__value">
+                                              {{
+                                              purchaseOrder?.confirmationDate
+                                              | date: 'MM-dd-yyyy'
+                                              }}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </mde-popover>
+                                  </li>
+                                </ul>
+
+                                <div class="file-area">
+                                  <div class="document-table" [ngClass]="{
+                                      'rows-collapse': contractsMoreOrLess[i]
+                                    }" *ngIf="
+                                      purchaseOrder?.documents?.length! > 0
+                                    ">
+                                    <table cellspacing="0">
+                                      <tr>
+                                        <th>Document Name</th>
+                                        <th>Description</th>
+                                        <th>Uploaded On</th>
+                                        <th>Uploaded By</th>
+                                      </tr>
+                                      <tr *ngFor="
+                                          let poDoc of purchaseOrder?.documents
+                                        ">
+                                        <td class="file-name">
+                                          <div *ngIf="
+                                              poDoc?.fileExtension === '.pdf'
+                                            ">
+                                            <img width="24px" src="./assets/svg/icn-pdf.svg" alt="" />
+                                          </div>
+                                          <div *ngIf="
+                                              fileExt.includes(
+                                                poDoc?.fileExtension!
+                                              )
+                                            ">
+                                            <img width="24px" src="./assets/svg/icn-image.svg" alt="" />
+                                          </div>
+                                          <p>{{ poDoc.displayName }}</p>
+                                          <span>
+                                            <mat-icon matTooltip="Preview" (click)="previewDocument(poDoc)">
+                                              remove_red_eye</mat-icon>
+                                          </span><span>
+                                            <mat-icon matTooltip="Download" (click)="downloadDocument(poDoc)">get_app
+                                            </mat-icon>
+                                          </span>
+                                        </td>
+                                        <td>
+                                          {{
+                                          poDoc?.fileDescription === 'null'
+                                          ? ''
+                                          : poDoc?.fileDescription
+                                          }}
+                                        </td>
+                                        <td>
+                                          {{
+                                          poDoc?.createdDateTime
+                                          | date: 'M-d-yyyy h:mm a'
+                                          }}
+                                        </td>
+                                        <td>
+                                          {{ personName }}
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </div>
+                                  <div class="min-rows" *ngIf="
+                                      purchaseOrder?.documents?.length! > 1
+                                    ">
+                                    <button class="show-more-btn" (click)="
+                                        contractsMoreOrLess[i] =
+                                          !contractsMoreOrLess[i];
+                                        showMoreLessContracts(i)
+                                      ">
+                                      {{ btnMoreLessContractsText[i] }}
+                                      <mat-icon [ngClass]="{
+                                          less:
+                                            btnMoreLessContractsText[i] ===
+                                            'Less'
+                                        }">expand_more</mat-icon>
+                                    </button>
+                                  </div>
+
+                                  <div class="no-files" *ngIf="
+                                      purchaseOrder.documents?.length === 0
+                                    ">
+                                    <mat-icon>find_in_page</mat-icon>
+                                    <h4>Documents Not Uploaded</h4>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

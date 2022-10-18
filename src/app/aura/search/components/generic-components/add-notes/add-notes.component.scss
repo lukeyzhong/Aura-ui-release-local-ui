@@ -1,0 +1,15 @@
+@import '../../../../../styles/utilities/form-group';
+
+::ng-deep .ck-editor__editable {
+  min-height: 200px !important;
+}
+::ng-deep .ck-content {
+  padding: 10px !important;
+  ul,
+  ol {
+    padding: 10px 0px 0px 30px !important;
+  }
+  ul {
+    list-style-type: disc !important;
+  }
+}

@@ -1,0 +1,632 @@
+<mat-expansion-panel [expanded]="isExpanded" (afterExpand)="getTitleCode(titleCode)" [disabled]="isDisabled"
+  *ngIf="titleCode !== 2 && titleCode !== 4 && titleCode !== 7 && titleCode !== 9">
+  <mat-expansion-panel-header class="gs-accordian">
+    <mat-panel-title>
+      <span>{{ title }}</span>
+      <span class="gs-accordian__count"> {{ counts ? counts : 0 }} </span>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="sr-panel">
+    <div *ngIf="titleCode === expandedPanelCode" class="sr-table">
+      <div *ngIf="isLoading; else data" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <ng-template #data>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- Candidate Code Column -->
+          <ng-container matColumnDef="candidateCode" class="due-date">
+            <th mat-header-cell *matHeaderCellDef>Candidate ID</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="can-id">
+                <div class="candidate" *ngIf="
+                    element.displayPictureBase64 !== null;
+                    else noDisplayPic
+                  ">
+                  <img src="{{ element.displayPictureBase64 }}" width="32px" alt="" />
+                </div>
+                <ng-template #noDisplayPic>
+                  <div class="candidate">
+                    <img *ngIf="element.displayPictureBase64 === null" src="./assets/svg/profile-empty.svg" width="32px"
+                      alt="" />
+                  </div>
+                </ng-template>
+                <a class="onboarding-link" matTooltip="{{ element.candidateCode }}">{{ element.candidateCode }}</a>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- First Name Column -->
+          <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef>First Name</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.firstName }}
+            </td>
+          </ng-container>
+
+          <!-- Last Name Column -->
+          <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef>Last Name</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.lastName }}
+            </td>
+          </ng-container>
+
+          <!-- Email Column -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let element" matTooltip="{{ element.email }}">
+              {{ element.email }}
+            </td>
+          </ng-container>
+
+          <!-- Job Role Column -->
+          <ng-container matColumnDef="jobTitle">
+            <th mat-header-cell *matHeaderCellDef>Job Role</th>
+            <td mat-cell *matCellDef="let element" matTooltip=" {{ element.jobTitle }}">
+              {{ element.jobTitle }}
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="can-id">
+                <div class="candidate">
+                  <antra-progress-spinner [percentage]="element.progress" [radius]="14"
+                    class="customized circle-border new">
+                  </antra-progress-spinner>
+                </div>
+                {{ element.status }}
+              </div>
+              <div class="status-actions">
+                <button *ngIf="
+                    element?.statusCode === 1 ||
+                    (element?.statusCode === 8 && element?.inviteDate === null)
+                  " mat-button (click)="redirectToSendInvite(element)" class="primary" mat-button
+                  matTooltip="Send Invite">
+                  <mat-icon>mail_outline</mat-icon>
+                </button>
+                <button *ngIf="
+                    element?.statusCode === 3 ||
+                    element?.statusCode === 11 ||
+                    element?.statusCode === 12 ||
+                    (element?.statusCode === 8 && element?.inviteDate)
+                  " mat-button (click)="redirectToSendInvite(element)" class="primary" mat-button>
+                  <img src="./assets/svg/Resend.svg" width="16px" style="fill: red" matTooltip="Resend Offer" />
+                </button>
+
+                <button *ngIf="
+                    element?.statusCode === 1 ||
+                    element?.statusCode === 3 ||
+                    element?.statusCode === 5
+                  " mat-button class="primary" (click)="openOnboardingStatusDialog(element, 'On Hold')"
+                  matTooltip="On Hold">
+                  <mat-icon> back_hand </mat-icon>
+                </button>
+
+                <button *ngIf="element?.statusCode === 6" mat-button class="primary"
+                  (click)="redirectToHRVerify(element)">
+                  <mat-icon matTooltip="Verify">
+                    admin_panel_settings
+                  </mat-icon>
+                </button>
+
+                <button [mdePopoverTriggerFor]="popContent"
+                  *ngIf="element?.statusCode === 3 || element?.statusCode === 8" mat-button class="primary">
+                  <mat-icon> info </mat-icon>
+
+                  <!-- mat-popover -->
+                  <mde-popover #popContent="mdePopover" mdePopoverPositionX="after" [mdePopoverOffsetX]="-320"
+                    [mdePopoverOffsetY]="-50" class="testpopover" [mdeFocusTrapEnabled]="false"
+                    [mdeFocusTrapAutoCaptureEnabled]="false" id="asdf">
+                    <div class="status-reason">
+                      <div class="status-reason__body">
+                        <div class="status-reason__header">
+                          <h4>{{ element?.status }} Reason</h4>
+                          <button *ngIf="element?.statusCode === 8" (click)="
+                              openOnboardingStatusDialog(
+                                element,
+                                element?.status,
+                                'Edit'
+                              )
+                            " mat-button color="primary" matTooltip="Edit Reason">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </div>
+                        <div class="status-reason__container" *ngIf="element?.statusCode === 8">
+                          {{ getComment(element?.comments) }}
+                        </div>
+                        <div class="status-reason__container" *ngIf="element?.statusCode === 3">
+                          <label>Offer Rejection Reasons:</label><br />
+                          {{ getRejectionReason(element?.comments) }}
+                          <br /><br />
+                          <label>Reason:</label> <br />{{
+                          getComment(element?.comments)
+                          }}
+                        </div>
+                      </div>
+                      <div class="status-reason__footer">
+                        <div class="status-reason__footer--form">
+                          <label for="">Updated By</label>
+                          <p>{{ element?.actionBy }}</p>
+                        </div>
+                        <div class="status-reason__footer--form">
+                          <label for="">Updated On</label>
+                          <p>{{ element?.actionDate | date: 'medium' }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </mde-popover>
+                </button>
+                <button *ngIf="element?.statusCode === 5 || element?.statusCode === 8" mat-button class="primary"
+                  mat-button (click)="
+                    openOnboardingStatusDialog(element, 'Rollback Offer')
+                  " matTooltip="Roll Back Offer">
+                  <mat-icon>restart_alt</mat-icon>
+                </button>
+
+                <button mat-button class="primary" mat-button
+                  *ngIf="element?.statusCode === 1 || element?.statusCode === 3"
+                  (click)="openOnboardingStatusDialog(element, 'Delete')" matTooltip="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Invite Sent Date Column -->
+          <ng-container matColumnDef="inviteDate">
+            <th mat-header-cell *matHeaderCellDef  [hidden]="titleCode === 1 || titleCode === 6 || titleCode === 10 || titleCode === 8">Invite Sent Date</th>
+            <td mat-cell *matCellDef="let element"  [hidden]="titleCode === 1 || titleCode === 6 || titleCode === 10 || titleCode === 8">
+              {{
+              element.inviteDate === null
+              ? '-'
+              : (element.inviteDate | date: 'MM/dd/yyyy')
+              }}
+            </td>
+          </ng-container>
+
+          <!-- Due Date Column -->
+          <ng-container matColumnDef="dueDate">
+            <th mat-header-cell *matHeaderCellDef [hidden]="titleCode === 1 || titleCode === 3 || titleCode === 6 || titleCode === 10 || titleCode === 8 || titleCode === 11 || titleCode === 12">Due Date</th>
+            <td mat-cell *matCellDef="let element" [hidden]="titleCode === 1 || titleCode === 3 || titleCode === 6 || titleCode === 10 || titleCode === 8 || titleCode === 11 || titleCode === 12">
+              <div class="status-actions-no">
+                {{
+                element.dueDate === null
+                ? '-'
+                : (element.dueDate | date: 'MM/dd/yyyy')
+                }}
+              </div>
+              <div class="status-actions">
+                <button *ngIf="
+                    element?.statusCode === 1 ||
+                    (element?.statusCode === 8 && element?.inviteDate === null)
+                  " mat-button (click)="redirectToSendInvite(element)" class="primary" mat-button
+                  matTooltip="Send Invite">
+                  <mat-icon>mail_outline</mat-icon>
+                </button>
+                <button *ngIf="
+                    element?.statusCode === 3 ||
+                    element?.statusCode === 11 ||
+                    element?.statusCode === 12 ||
+                    (element?.statusCode === 8 && element?.inviteDate)
+                  " mat-button (click)="redirectToSendInvite(element)" class="primary" mat-button>
+                  <img src="./assets/svg/Resend.svg" width="16px" style="fill: red" matTooltip="Resend Offer" />
+                </button>
+
+                <button *ngIf="
+                    element?.statusCode === 1 ||
+                    element?.statusCode === 3 ||
+                    element?.statusCode === 5
+                  " mat-button class="primary" (click)="openOnboardingStatusDialog(element, 'On Hold')"
+                  matTooltip="On Hold">
+                  <mat-icon> back_hand </mat-icon>
+                </button>
+
+                <button *ngIf="element?.statusCode === 6" mat-button class="primary"
+                  (click)="redirectToHRVerify(element)">
+                  <mat-icon matTooltip="Verify">
+                    admin_panel_settings
+                  </mat-icon>
+                </button>
+
+                <button [mdePopoverTriggerFor]="popContent"
+                  *ngIf="element?.statusCode === 3 || element?.statusCode === 8" mat-button class="primary">
+                  <mat-icon> info </mat-icon>
+
+                  <!-- mat-popover -->
+                  <mde-popover #popContent="mdePopover" mdePopoverPositionX="after" [mdePopoverOffsetX]="-320"
+                    [mdePopoverOffsetY]="-50" class="testpopover" [mdeFocusTrapEnabled]="false"
+                    [mdeFocusTrapAutoCaptureEnabled]="false" id="asdf">
+                    <div class="status-reason">
+                      <div class="status-reason__body">
+                        <div class="status-reason__header">
+                          <h4>{{ element?.status }} Reason</h4>
+                          <button *ngIf="element?.statusCode === 8" (click)="
+                              openOnboardingStatusDialog(
+                                element,
+                                element?.status,
+                                'Edit'
+                              )
+                            " mat-button color="primary" matTooltip="Edit Reason">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </div>
+                        <div class="status-reason__container" *ngIf="element?.statusCode === 8">
+                          {{ getComment(element?.comments) }}
+                        </div>
+                        <div class="status-reason__container" *ngIf="element?.statusCode === 3">
+                          <label>Offer Rejection Reasons:</label><br />
+                          {{ getRejectionReason(element?.comments) }}
+                          <br /><br />
+                          <label>Reason:</label> <br />{{
+                          getComment(element?.comments)
+                          }}
+                        </div>
+                      </div>
+                      <div class="status-reason__footer">
+                        <div class="status-reason__footer--form">
+                          <label for="">Updated By</label>
+                          <p>{{ element?.actionBy }}</p>
+                        </div>
+                        <div class="status-reason__footer--form">
+                          <label for="">Updated On</label>
+                          <p>{{ element?.actionDate | date: 'medium' }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </mde-popover>
+                </button>
+                <button *ngIf="element?.statusCode === 5 || element?.statusCode === 8" mat-button class="primary"
+                  mat-button (click)="
+                    openOnboardingStatusDialog(element, 'Rollback Offer')
+                  " matTooltip="Roll Back Offer">
+                  <mat-icon>restart_alt</mat-icon>
+                </button>
+
+                <button mat-button class="primary" mat-button
+                  *ngIf="element?.statusCode === 1 || element?.statusCode === 3"
+                  (click)="openOnboardingStatusDialog(element, 'Delete')" matTooltip="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container> 
+
+          <!-- Declined Date Column -->
+          <ng-container matColumnDef="actionDate">
+            <th mat-header-cell *matHeaderCellDef [hidden]="titleCode === 1 || titleCode === 5 || titleCode === 6 || titleCode === 10 || titleCode === 8 || titleCode === 11">Declined Date</th>
+            <td mat-cell *matCellDef="let element" [hidden]="titleCode === 1 || titleCode === 5 || titleCode === 6 || titleCode === 10 || titleCode === 8 || titleCode === 11">
+              <div class="status-actions-no">
+                {{
+                element.actionDate === null
+                ? '-'
+                : (element.actionDate | date: 'MM/dd/yyyy')
+                }}
+              </div>
+              <div class="status-actions">
+                <button *ngIf="
+                    element?.statusCode === 1 ||
+                    (element?.statusCode === 8 && element?.inviteDate === null)
+                  " mat-button (click)="redirectToSendInvite(element)" class="primary" mat-button
+                  matTooltip="Send Invite">
+                  <mat-icon>mail_outline</mat-icon>
+                </button>
+                <button *ngIf="
+                    element?.statusCode === 3 ||
+                    element?.statusCode === 11 ||
+                    element?.statusCode === 12 ||
+                    (element?.statusCode === 8 && element?.inviteDate)
+                  " mat-button (click)="redirectToSendInvite(element)" class="primary" mat-button>
+                  <img src="./assets/svg/Resend.svg" width="16px" style="fill: red" matTooltip="Resend Offer" />
+                </button>
+
+                <button *ngIf="
+                    element?.statusCode === 1 ||
+                    element?.statusCode === 3 ||
+                    element?.statusCode === 5
+                  " mat-button class="primary" (click)="openOnboardingStatusDialog(element, 'On Hold')"
+                  matTooltip="On Hold">
+                  <mat-icon> back_hand </mat-icon>
+                </button>
+
+                <button *ngIf="element?.statusCode === 6" mat-button class="primary"
+                  (click)="redirectToHRVerify(element)">
+                  <mat-icon matTooltip="Verify">
+                    admin_panel_settings
+                  </mat-icon>
+                </button>
+
+                <button [mdePopoverTriggerFor]="popContent"
+                  *ngIf="element?.statusCode === 3 || element?.statusCode === 8" mat-button class="primary">
+                  <mat-icon> info </mat-icon>
+
+                  <!-- mat-popover -->
+                  <mde-popover #popContent="mdePopover" mdePopoverPositionX="after" [mdePopoverOffsetX]="-320"
+                    [mdePopoverOffsetY]="-50" class="testpopover" [mdeFocusTrapEnabled]="false"
+                    [mdeFocusTrapAutoCaptureEnabled]="false" id="asdf">
+                    <div class="status-reason">
+                      <div class="status-reason__body">
+                        <div class="status-reason__header">
+                          <h4>{{ element?.status }} Reason</h4>
+                          <button *ngIf="element?.statusCode === 8" (click)="
+                              openOnboardingStatusDialog(
+                                element,
+                                element?.status,
+                                'Edit'
+                              )
+                            " mat-button color="primary" matTooltip="Edit Reason">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </div>
+                        <div class="status-reason__container" *ngIf="element?.statusCode === 8">
+                          {{ getComment(element?.comments) }}
+                        </div>
+                        <div class="status-reason__container" *ngIf="element?.statusCode === 3">
+                          <label>Offer Rejection Reasons:</label><br />
+                          {{ getRejectionReason(element?.comments) }}
+                          <br /><br />
+                          <label>Reason:</label> <br />{{
+                          getComment(element?.comments)
+                          }}
+                        </div>
+                      </div>
+                      <div class="status-reason__footer">
+                        <div class="status-reason__footer--form">
+                          <label for="">Updated By</label>
+                          <p>{{ element?.actionBy }}</p>
+                        </div>
+                        <div class="status-reason__footer--form">
+                          <label for="">Updated On</label>
+                          <p>{{ element?.actionDate | date: 'medium' }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </mde-popover>
+                </button>
+                <button *ngIf="element?.statusCode === 5 || element?.statusCode === 8" mat-button class="primary"
+                  mat-button (click)="
+                    openOnboardingStatusDialog(element, 'Rollback Offer')
+                  " matTooltip="Roll Back Offer">
+                  <mat-icon>restart_alt</mat-icon>
+                </button>
+
+                <button mat-button class="primary" mat-button
+                  *ngIf="element?.statusCode === 1 || element?.statusCode === 3"
+                  (click)="openOnboardingStatusDialog(element, 'Delete')" matTooltip="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container> 
+
+          <!-- Form submitted Date Column -->
+          <ng-container matColumnDef="submittedDate">
+            <th mat-header-cell *matHeaderCellDef [hidden]="titleCode === 1 || titleCode === 3 || titleCode === 5 || titleCode === 8 || titleCode === 11 || titleCode === 12">Submitted Date</th>
+            <td mat-cell *matCellDef="let element" [hidden]="titleCode === 1 || titleCode === 3 || titleCode === 5 || titleCode === 8 || titleCode === 11 || titleCode === 12">
+              <div class="status-actions-no">
+                {{
+                element.actionDate === null
+                ? '-'
+                : (element.actionDate | date: 'MM/dd/yyyy')
+                }}
+              </div>
+              <div class="status-actions">
+                <button *ngIf="
+                    element?.statusCode === 1 ||
+                    (element?.statusCode === 8 && element?.inviteDate === null)
+                  " mat-button (click)="redirectToSendInvite(element)" class="primary" mat-button
+                  matTooltip="Send Invite">
+                  <mat-icon>mail_outline</mat-icon>
+                </button>
+                <button *ngIf="
+                    element?.statusCode === 3 ||
+                    element?.statusCode === 11 ||
+                    element?.statusCode === 12 ||
+                    (element?.statusCode === 8 && element?.inviteDate)
+                  " mat-button (click)="redirectToSendInvite(element)" class="primary" mat-button>
+                  <img src="./assets/svg/Resend.svg" width="16px" style="fill: red" matTooltip="Resend Offer" />
+                </button>
+
+                <button *ngIf="
+                    element?.statusCode === 1 ||
+                    element?.statusCode === 3 ||
+                    element?.statusCode === 5
+                  " mat-button class="primary" (click)="openOnboardingStatusDialog(element, 'On Hold')"
+                  matTooltip="On Hold">
+                  <mat-icon> back_hand </mat-icon>
+                </button>
+
+                <button *ngIf="element?.statusCode === 6" mat-button class="primary"
+                  (click)="redirectToHRVerify(element)">
+                  <mat-icon matTooltip="Verify">
+                    admin_panel_settings
+                  </mat-icon>
+                </button>
+
+                <button [mdePopoverTriggerFor]="popContent"
+                  *ngIf="element?.statusCode === 3 || element?.statusCode === 8" mat-button class="primary">
+                  <mat-icon> info </mat-icon>
+
+                  <!-- mat-popover -->
+                  <mde-popover #popContent="mdePopover" mdePopoverPositionX="after" [mdePopoverOffsetX]="-320"
+                    [mdePopoverOffsetY]="-50" class="testpopover" [mdeFocusTrapEnabled]="false"
+                    [mdeFocusTrapAutoCaptureEnabled]="false" id="asdf">
+                    <div class="status-reason">
+                      <div class="status-reason__body">
+                        <div class="status-reason__header">
+                          <h4>{{ element?.status }} Reason</h4>
+                          <button *ngIf="element?.statusCode === 8" (click)="
+                              openOnboardingStatusDialog(
+                                element,
+                                element?.status,
+                                'Edit'
+                              )
+                            " mat-button color="primary" matTooltip="Edit Reason">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </div>
+                        <div class="status-reason__container" *ngIf="element?.statusCode === 8">
+                          {{ getComment(element?.comments) }}
+                        </div>
+                        <div class="status-reason__container" *ngIf="element?.statusCode === 3">
+                          <label>Offer Rejection Reasons:</label><br />
+                          {{ getRejectionReason(element?.comments) }}
+                          <br /><br />
+                          <label>Reason:</label> <br />{{
+                          getComment(element?.comments)
+                          }}
+                        </div>
+                      </div>
+                      <div class="status-reason__footer">
+                        <div class="status-reason__footer--form">
+                          <label for="">Updated By</label>
+                          <p>{{ element?.actionBy }}</p>
+                        </div>
+                        <div class="status-reason__footer--form">
+                          <label for="">Updated On</label>
+                          <p>{{ element?.actionDate | date: 'medium' }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </mde-popover>
+                </button>
+                <button *ngIf="element?.statusCode === 5 || element?.statusCode === 8" mat-button class="primary"
+                  mat-button (click)="
+                    openOnboardingStatusDialog(element, 'Rollback Offer')
+                  " matTooltip="Roll Back Offer">
+                  <mat-icon>restart_alt</mat-icon>
+                </button>
+
+                <button mat-button class="primary" mat-button
+                  *ngIf="element?.statusCode === 1 || element?.statusCode === 3"
+                  (click)="openOnboardingStatusDialog(element, 'Delete')" matTooltip="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container> 
+
+          <!-- Registration Date Column -->
+          <ng-container matColumnDef="registrationDate">
+            <th mat-header-cell *matHeaderCellDef [hidden]="titleCode === 1 || titleCode === 3 || titleCode === 5 || titleCode === 6 || titleCode === 10 || titleCode === 8 || titleCode === 12">Registration Date</th>
+            <td mat-cell *matCellDef="let element" [hidden]="titleCode === 1 || titleCode === 3 || titleCode === 5 || titleCode === 6 || titleCode === 10 || titleCode === 8 || titleCode === 12">
+              <div class="status-actions-no">
+                {{
+                element.actionDate === null
+                ? '-'
+                : (element.actionDate | date: 'MM/dd/yyyy')
+                }}
+              </div>
+              <div class="status-actions">
+                <button *ngIf="
+                    element?.statusCode === 1 ||
+                    (element?.statusCode === 8 && element?.inviteDate === null)
+                  " mat-button (click)="redirectToSendInvite(element)" class="primary" mat-button
+                  matTooltip="Send Invite">
+                  <mat-icon>mail_outline</mat-icon>
+                </button>
+                <button *ngIf="
+                    element?.statusCode === 3 ||
+                    element?.statusCode === 11 ||
+                    element?.statusCode === 12 ||
+                    (element?.statusCode === 8 && element?.inviteDate)
+                  " mat-button (click)="redirectToSendInvite(element)" class="primary" mat-button>
+                  <img src="./assets/svg/Resend.svg" width="16px" style="fill: red" matTooltip="Resend Offer" />
+                </button>
+
+                <button *ngIf="
+                    element?.statusCode === 1 ||
+                    element?.statusCode === 3 ||
+                    element?.statusCode === 5
+                  " mat-button class="primary" (click)="openOnboardingStatusDialog(element, 'On Hold')"
+                  matTooltip="On Hold">
+                  <mat-icon> back_hand </mat-icon>
+                </button>
+
+                <button *ngIf="element?.statusCode === 6" mat-button class="primary"
+                  (click)="redirectToHRVerify(element)">
+                  <mat-icon matTooltip="Verify">
+                    admin_panel_settings
+                  </mat-icon>
+                </button>
+
+                <button [mdePopoverTriggerFor]="popContent"
+                  *ngIf="element?.statusCode === 3 || element?.statusCode === 8" mat-button class="primary">
+                  <mat-icon> info </mat-icon>
+
+                  <!-- mat-popover -->
+                  <mde-popover #popContent="mdePopover" mdePopoverPositionX="after" [mdePopoverOffsetX]="-320"
+                    [mdePopoverOffsetY]="-50" class="testpopover" [mdeFocusTrapEnabled]="false"
+                    [mdeFocusTrapAutoCaptureEnabled]="false" id="asdf">
+                    <div class="status-reason">
+                      <div class="status-reason__body">
+                        <div class="status-reason__header">
+                          <h4>{{ element?.status }} Reason</h4>
+                          <button *ngIf="element?.statusCode === 8" (click)="
+                              openOnboardingStatusDialog(
+                                element,
+                                element?.status,
+                                'Edit'
+                              )
+                            " mat-button color="primary" matTooltip="Edit Reason">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                        </div>
+                        <div class="status-reason__container" *ngIf="element?.statusCode === 8">
+                          {{ getComment(element?.comments) }}
+                        </div>
+                        <div class="status-reason__container" *ngIf="element?.statusCode === 3">
+                          <label>Offer Rejection Reasons:</label><br />
+                          {{ getRejectionReason(element?.comments) }}
+                          <br /><br />
+                          <label>Reason:</label> <br />{{
+                          getComment(element?.comments)
+                          }}
+                        </div>
+                      </div>
+                      <div class="status-reason__footer">
+                        <div class="status-reason__footer--form">
+                          <label for="">Updated By</label>
+                          <p>{{ element?.actionBy }}</p>
+                        </div>
+                        <div class="status-reason__footer--form">
+                          <label for="">Updated On</label>
+                          <p>{{ element?.actionDate | date: 'medium' }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </mde-popover>
+                </button>
+                <button *ngIf="element?.statusCode === 5 || element?.statusCode === 8" mat-button class="primary"
+                  mat-button (click)="
+                    openOnboardingStatusDialog(element, 'Rollback Offer')
+                  " matTooltip="Roll Back Offer">
+                  <mat-icon>restart_alt</mat-icon>
+                </button>
+
+                <button mat-button class="primary" mat-button
+                  *ngIf="element?.statusCode === 1 || element?.statusCode === 3"
+                  (click)="openOnboardingStatusDialog(element, 'Delete')" matTooltip="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container> 
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row [ngClass]="{'due-date': (row.dueDate < currentDate) && (cardStatusCode === 5 || titleCode === 5) }" *matRowDef="let row; columns: displayedColumns">
+            <div class="tbl-hover">dsjhafgdsahkf</div>
+          </tr>
+        </table>
+        <h4 class="no-data-display" *ngIf="!isLoading && dataSource?.data?.length === 0">
+          No Data to Display
+        </h4>
+      </ng-template>
+      <div></div>
+    </div>
+  </div>
+  <mat-paginator [length]="resultsLength" (page)="pageChanged($event)" [pageSizeOptions]="pageSizeOptions"
+    showFirstLastButtons>
+  </mat-paginator>
+</mat-expansion-panel>

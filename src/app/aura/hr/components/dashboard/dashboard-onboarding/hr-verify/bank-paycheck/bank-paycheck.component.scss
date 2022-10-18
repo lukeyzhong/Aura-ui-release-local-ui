@@ -1,0 +1,16 @@
+@import '../personal-info/personal-info.component.scss';
+@import '../../../../../../../styles/component/accordions';
+.page-note {
+  color: $primary;
+  padding-bottom: 10px;
+}
+
+.mat-menu-parent {
+  ::ng-deep .mat-menu-panel {
+    .mat-menu-content:not(:empty) {
+      padding: 5px;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+}

@@ -1,0 +1,515 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <div class="modal-popup__header">
+      <h3>Active Employees</h3>
+      <button (click)="onCancel($event)" mat-button>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-popup__content">
+      <div class="g-card">
+        <div class="g-card__box g-card__box--30">
+          <div *ngIf="isLoadTypeEmpSpinner" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div class="g-card__box--header">
+            <h3 class="card-title">{{ ChartTypeDesc.TypeOfEmployment }}</h3>
+            <div class="g-card__box--export">
+              <div
+                [matMenuTriggerFor]="downloadOptions"
+                aria-expanded="false"
+                (click)="
+                  exportToCsvAllCharts(
+                    ChartTypeDesc.TypeOfEmployment,
+                    'chartWidget'
+                  )
+                "
+              >
+                <button mat-button class="btn-excel">
+                  <img
+                    src="./assets/svg/ua-download.svg"
+                    alt=""
+                    width="30px
+                  "
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="g-card__box--control">
+            <mat-form-field appearance="outline" class="year-select">
+              <mat-label>Year</mat-label>
+              <mat-select
+                [formControl]="typeOfEmpYear"
+                (selectionChange)="typeOfEmpYearSelection()"
+              >
+                <mat-option *ngFor="let yr of year" [value]="yr">{{
+                  yr
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span class="t-count">
+              Total Count - {{ typeOfEmploymentResponseData?.totalCount }}
+            </span>
+          </div>
+          <div class="g-card__box--chart">
+            <div style="display: flex; flex-grow: 1">
+              <canvas
+                style="width: 230px; height: 230px"
+                baseChart
+                [datasets]="typeOfEmploymentDoughnutChartData"
+                [labels]="typeOfEmploymentDoughnutChartLabels"
+                [options]="typeOfEmploymentDoughnutChartOptions"
+                [colors]="typeOfEmploymentDoughnutChartColors"
+                [legend]="typeOfEmploymentDoughnutChartLegend"
+                [chartType]="typeOfEmploymentDoughnutChart"
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="g-card__box g-card__box--30">
+          <div *ngIf="isLoadGenderSpinner" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div class="g-card__box--header">
+            <h3 class="card-title">{{ ChartTypeDesc.EmployeeGender }}</h3>
+            <div class="g-card__box--export">
+              <div
+                [matMenuTriggerFor]="downloadOptions"
+                aria-expanded="false"
+                (click)="
+                  exportToCsvAllCharts(
+                    ChartTypeDesc.EmployeeGender,
+                    'chartWidget'
+                  )
+                "
+              >
+                <button mat-button class="btn-excel">
+                  <img
+                    src="./assets/svg/ua-download.svg"
+                    alt=""
+                    width="30px
+                "
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="g-card__box--control">
+            <div class="g-card__box--control">
+              <mat-form-field appearance="outline" class="year-select">
+                <mat-label>Year</mat-label>
+                <mat-select
+                  [formControl]="genderEmpYear"
+                  (selectionChange)="genderEmpYearSelection()"
+                >
+                  <mat-option *ngFor="let yr of year" [value]="yr">{{
+                    yr
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>            
+            </div>
+            <span class="t-count">
+              Total Count - {{ empByGenderResponseData?.totalCount }}
+            </span>
+          </div>
+          <div class="g-card__box--chart">
+            <div style="display: flex; flex-grow: 1">
+              <canvas
+                style="width: 230px; height: 230px"
+                baseChart
+                [datasets]="genderChartData"
+                [labels]="genderChartLabels"
+                [options]="genderChartOptions"
+                [colors]="genderChartColors"
+                [legend]="genderChartLegend"
+                [chartType]="genderChartType"
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="g-card__box g-card__box--30">
+          <div
+            *ngIf="isLoadEthnicitySpinner || isLoadRaceSpinner"
+            class="spinner"
+          >
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div
+            *ngIf="empByEthinicity.value === ChartTypes[6]!"
+            class="g-card__box--header"
+          >
+            <h3 class="card-title">{{ ChartTypeDesc.EmployeeEthnicity }}</h3>
+            <div class="g-card__box--export">
+              <div
+                [matMenuTriggerFor]="downloadOptions"
+                aria-expanded="false"
+                (click)="
+                  exportToCsvAllCharts(
+                    ChartTypeDesc.EmployeeEthnicity,
+                    'chartWidget'
+                  )
+                "
+              >
+                <button mat-button class="btn-excel">
+                  <img
+                    src="./assets/svg/ua-download.svg"
+                    alt=""
+                    width="30px
+                "
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="empByEthinicity.value === ChartTypes[16]!"
+            class="g-card__box--header"
+          >
+            <b>{{ ChartTypeDesc.EmployeeRace }}</b>
+            <div class="g-card__box--export">
+              <div
+                [matMenuTriggerFor]="downloadOptions"
+                aria-expanded="false"
+                (click)="
+                  exportToCsvAllCharts(
+                    ChartTypeDesc.EmployeeRace,
+                    'chartWidget'
+                  )
+                "
+              >
+                <button mat-button class="btn-excel">
+                  <img
+                    src="./assets/svg/ua-download.svg"
+                    alt=""
+                    width="30px
+                  "
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="g-card__box--control">
+            <div class="g-card__box--control--f">
+              <mat-form-field appearance="outline" class="empByNationality">
+                <mat-label>Employee By</mat-label>
+                <mat-select
+                  [formControl]="empByEthinicity"
+                  (selectionChange)="ethinicitySelection()"
+                >
+                  <mat-option *ngFor="let eth of ethinicity" [value]="eth.key"
+                    >{{ eth.value }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="year-select">
+                <mat-label>Year</mat-label>
+                <mat-select
+                  [formControl]="empByEthinicityYear"
+                  (selectionChange)="ethinicityYearSelection()"
+                >
+                  <mat-option *ngFor="let yr of year" [value]="yr">{{
+                    yr
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <span class="t-count" *ngIf="empByEthinicity.value === ChartTypes[6]!">
+                Total Count - {{ empByEthnicityResponseData?.totalCount }}
+              </span>
+              <span class="t-count" *ngIf="empByEthinicity.value === ChartTypes[16]!">
+                Total Count - {{ empByRaceResponseData?.totalCount }}
+              </span>
+            </div>
+          </div>
+          <div class="g-card__box--chart">
+            <div
+              *ngIf="empByEthinicity.value === ChartTypes[6]!"
+              style="display: flex; flex-grow: 1"
+            >
+              <canvas
+                style="width: 230px; height: 230px"
+                baseChart
+                [datasets]="ethnicityChartData"
+                [labels]="ethnicityChartLabels"
+                [options]="ethnicityChartOptions"
+                [colors]="ethnicityChartColors"
+                [legend]="ethnicityChartLegend"
+                [chartType]="ethnicityChartType"
+              >
+              </canvas>
+            </div>
+            <div
+              *ngIf="empByEthinicity.value === ChartTypes[16]!"
+              style="display: flex; flex-grow: 1"
+            >
+              <canvas
+                style="width: 230px; height: 230px"
+                baseChart
+                [datasets]="raceChartData"
+                [labels]="raceChartLabels"
+                [options]="raceChartOptions"
+                [colors]="raceChartColors"
+                [legend]="raceChartLegend"
+                [chartType]="raceChartType"
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="g-card__box g-card__box--30">
+          <div *ngIf="isLoadNationalitySpinner" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div class="g-card__box--header">
+            <h3 class="card-title">{{ ChartTypeDesc.EmployeeNationality }}</h3>
+            <div class="g-card__box--export">
+              <div
+                [matMenuTriggerFor]="downloadOptions"
+                aria-expanded="false"
+                (click)="
+                  exportToCsvAllCharts(
+                    ChartTypeDesc.EmployeeNationality,
+                    'chartWidget'
+                  )
+                "
+              >
+                <button mat-button class="btn-excel">
+                  <img
+                    src="./assets/svg/ua-download.svg"
+                    alt=""
+                    width="30px
+                "
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="g-card__box--control">
+            <div class="g-card__box--control">
+              <mat-form-field appearance="outline" class="year-select">
+                <mat-label>Year</mat-label>
+                <mat-select
+                  [formControl]="empByNationalityYear"
+                  (selectionChange)="nationalityYearSelection()"
+                >
+                  <mat-option *ngFor="let yr of year" [value]="yr">{{
+                    yr
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>            
+            </div>
+            <span class="t-count">
+              Total Count - {{ empByNationalityResponseData?.totalCount }}
+            </span>
+          </div>
+          <div class="g-card__box--chart">
+            <div style="display: flex; flex-grow: 1">
+              <canvas
+                style="height: 230px; width: 230px"
+                baseChart
+                [datasets]="nationalityChartData"
+                [labels]="nationalityChartLabels"
+                [options]="nationalityChartOptions"
+                [colors]="nationalityChartColors"
+                [legend]="nationalityChartLegend"
+                [chartType]="nationalityChartType"
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="g-card__box g-card__box--30">
+          <div *ngIf="isLoadWorkAuthSpinner" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div class="g-card__box--header">
+            <h3 class="card-title">
+              {{ ChartTypeDesc.EmployeeWorkAuthorization }}
+            </h3>
+            <div class="g-card__box--export">
+              <div
+                [matMenuTriggerFor]="downloadOptions"
+                aria-expanded="false"
+                (click)="
+                  exportToCsvAllCharts(
+                    ChartTypeDesc.EmployeeWorkAuthorization,
+                    'chartWidget'
+                  )
+                "
+              >
+                <button mat-button class="btn-excel">
+                  <img
+                    src="./assets/svg/ua-download.svg"
+                    alt=""
+                    width="30px
+                "
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="g-card__box--control">
+            <mat-form-field appearance="outline" class="year-select">
+              <mat-label>Year</mat-label>
+              <mat-select
+                [formControl]="workAuthYear"
+                (selectionChange)="workAuthYearSelection()"
+              >
+                <mat-option *ngFor="let yr of year" [value]="yr">{{
+                  yr
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span class="t-count">
+              Total Count - {{ workAuthorizationResponseData?.totalCount }}
+            </span>
+          </div>
+          <div class="g-card__box--chart">
+            <div style="display: flex; flex-grow: 1">
+              <canvas
+                style="height: 230px; width: 230px"
+                baseChart
+                [datasets]="workAuthorizationChartData"
+                [labels]="workAuthorizationChartLabels"
+                [options]="workAuthorizationChartOptions"
+                [colors]="workAuthorizationChartColors"
+                [legend]="workAuthorizationChartLegend"
+                [chartType]="workAuthorizationChartType"
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="g-card__box g-card__box--30">
+          <div *ngIf="isLoadEmpLocationSpinner" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div class="g-card__box--header">
+            <h3 class="card-title">{{ ChartTypeDesc.EmployeeLocation }}</h3>
+            <div class="g-card__box--export">
+              <div
+                [matMenuTriggerFor]="downloadOptions"
+                aria-expanded="false"
+                (click)="
+                  exportToCsvAllCharts(
+                    ChartTypeDesc.EmployeeLocation,
+                    'chartWidget'
+                  )
+                "
+              >
+                <button mat-button class="btn-excel">
+                  <img
+                    src="./assets/svg/ua-download.svg"
+                    alt=""
+                    width="30px
+                "
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="g-card__box--control">
+            <mat-form-field appearance="outline" class="year-select">
+              <mat-label>Year</mat-label>
+              <mat-select
+                [formControl]="empLocationYear"
+                (selectionChange)="empLocationYearSelection()"
+              >
+                <mat-option *ngFor="let yr of year" [value]="yr">{{
+                  yr
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <span class="t-count">
+              Total Count - {{ empLocationResponseData?.totalCount }}
+            </span>
+          </div>
+          <div class="g-card__box--chart">
+            <div style="display: flex; flex-grow: 1">
+              <canvas
+                style="height: 230px; width: 230px"
+                baseChart
+                [datasets]="empByLocationChartData"
+                [labels]="empByLocationChartLabels"
+                [options]="empByLocationChartOptions"
+                [colors]="empByLocationChartColors"
+                [legend]="empByLocationChartLegend"
+                [chartType]="empByLocationChartType"
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+        <div class="g-card__box g-card__box--100">
+          <div class="g-card__box--header">
+            <div class="total-ae-tbl">
+              <div class="total-ae-tbl__header">
+                <input
+                  type="text"
+                  #search
+                  (keyup)="performSearch(search?.value!)"
+                  placeholder="Search...."
+                />
+              </div>
+              <h3 class="card-title">Total Active Employees</h3>
+              <div class="g-card__box--control total-ae-tbl--c">
+                <div class="g-card__box--control--f">
+                  <mat-form-field appearance="outline" class="year-select">
+                    <mat-label>Year</mat-label>
+                    <mat-select
+                      [formControl]="allActEmpYear"
+                      (selectionChange)="allActEmpYearSelection()"
+                    >
+                      <mat-option *ngFor="let yr of year" [value]="yr">{{
+                        yr
+                      }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div
+                  [matMenuTriggerFor]="downloadOptions"
+                  aria-expanded="false"
+                  (click)="exportToCsvAllActiveEmpTable('chartTable')"
+                >
+                  <button mat-button class="btn-excel">
+                    <img
+                      src="./assets/svg/ua-download.svg"
+                      alt=""
+                      width="30px
+                  "
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <app-emp-table-details
+            [isLoading]="activeEmployeePanelConfig.isLoading"
+            [displayedColumns]="activeEmployeePanelConfig.displayedColumns"
+            [columns]="activeEmployeePanelConfig.columns"
+            [tableData]="activeEmployeePanelConfig.tableData"
+            [totalRows]="activeEmployeePanelConfig.totalRows"
+            (paginatorClicked)="getNextRecords($event)"
+          >
+          </app-emp-table-details>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <mat-menu #downloadOptions="matMenu">
+    <mat-selection-list class="d-format" [multiple]="false">
+      <mat-list-option (click)="download('xlsx')">
+        <img src="./assets/svg/excel.svg" alt="" width="24px" /> Download as
+        Excel</mat-list-option
+      >
+      <mat-list-option (click)="download('csv')">
+        <img src="./assets/svg/csv.svg" alt="" width="24px" />Download as
+        CSV</mat-list-option
+      >
+    </mat-selection-list>
+  </mat-menu>
+</div>

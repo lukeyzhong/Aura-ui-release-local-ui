@@ -1,0 +1,249 @@
+// MONTH VIEW
+@import '../../../../../../../app/styles/utilities/variables';
+// payroll calendar tabs
+.payroll-calendar {
+  position: relative;
+  .download-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    z-index: 999;
+  }
+  .payroll-tabs {
+    ::ng-deep .mat-tab-body-wrapper {
+      border: none !important;
+      border-radius: 10px;
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+      -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+      -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25);
+      @media (max-width: 1366px) {
+        min-height: 80vh !important;
+      }
+      @media (max-width: 1920px) {
+        min-height: 77vh;
+        max-height: 77vh;
+      }
+      min-height: 72vh;
+      max-height: 72vh;
+
+      .mat-tab-body-content {
+        position: relative;
+        overflow: auto !important;
+        border: none;
+        background-color: #fff !important;
+      }
+    }
+    ::ng-deep .mat-tab-labels {
+      margin-left: 15px;
+      .mat-tab-label {
+        background-color: transparent;
+        border-radius: 0 !important;
+        &::before,
+        &::after {
+          display: none;
+        }
+      }
+
+      .mat-tab-label-active {
+        background: rgb(0, 130, 193);
+        background: linear-gradient(
+          0deg,
+          rgb(207, 239, 255) 0%,
+          rgba(255, 255, 255, 1) 100%
+        );
+        .mat-tab-label-content {
+          color: #000;
+        }
+        color: red;
+        &::after {
+          position: absolute;
+          content: '';
+          display: block;
+          bottom: 0 !important;
+          width: 100%;
+          height: 5px;
+          border-radius: 10px !important;
+          background-color: #0182c1;
+          left: 0;
+          right: 0;
+        }
+      }
+    }
+  }
+}
+
+.y-proll {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 111;
+  background-color: #fff;
+  animation: dropdown 550ms ease-in-out;
+}
+.p-roll__clndr {
+  display: grid;
+  padding: 10px;
+  gap: 10px;
+  grid-template-columns: 65% 1fr;
+  @media (max-width: 700px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+.p-days {
+  display: flex;
+  &__cards {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    // overflow: auto;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  &__card {
+    background-color: #f4fbff;
+    display: grid;
+    width: 100%;
+
+    grid-template-columns: repeat(2, 1fr);
+    padding: 5px 10px;
+    .date {
+      h2 {
+        font-size: 26px;
+        font-family: 'ProximaNova-semibold' !important;
+      }
+      p {
+        color: $primary;
+        font-size: 12px;
+      }
+    }
+    &--day {
+      padding-top: 10px;
+      font-size: 12px;
+      grid-column: span 2;
+      display: flex;
+      align-items: center;
+      P {
+        margin-left: 5px !important;
+        font-family: 'ProximaNova-semibold' !important;
+      }
+    }
+    &--form {
+      font-style: 14px;
+      display: flex;
+      justify-content: flex-end;
+      label {
+        color: #a0a0a0;
+        font-size: 14px;
+      }
+      p {
+        font-size: 14px;
+        margin-left: 5px !important;
+      }
+    }
+    &--lbls {
+      display: grid;
+      font-style: 14px;
+      grid-template-columns: repeat (2, 1fr);
+    }
+  }
+}
+.payrolldate {
+  .mat-card {
+    border-radius: 10px;
+    padding: 0;
+    overflow: hidden;
+  }
+  ::ng-deep .mat-calendar {
+    .mat-calendar-controls {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      margin: 0 0 10px 0;
+
+      .nextHide,
+      .previousHide {
+        cursor: not-allowed;
+        pointer-events: none;
+        &::after {
+          color: #ccc;
+        }
+      }
+
+      .mat-calendar-spacer {
+        display: none;
+      }
+      & :nth-child(1) {
+        order: 2;
+        pointer-events: none;
+      }
+      & :nth-child(2) {
+        order: 3;
+      }
+      & :nth-child(3) {
+        order: 1;
+      }
+      & :nth-child(4) {
+        order: 4;
+      }
+      .mat-calendar-arrow {
+        display: none;
+      }
+      button {
+        &::after {
+          color: $primary;
+        }
+      }
+    }
+    .mat-calendar-content {
+      padding: 0;
+      .mat-calendar-table {
+        .mat-calendar-table-header-divider {
+          display: none;
+        }
+        tr {
+          th {
+            color: #a3a3a3;
+          }
+          td {
+            border: 1px solid #d7ebf7 !important;
+            border-radius: 10px;
+            .mat-calendar-body-cell-content {
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              border-radius: 5px;
+            }
+            .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+              border: 1px solid $primary;
+              background-color: #f4fbff;
+              border-radius: 10px;
+            }
+            &.mat-calendar-body-label {
+              visibility: hidden;
+            }
+            &.my-date {
+              background-color: $primary;
+              .mat-calendar-body-cell-content {
+                color: #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes dropdown {
+  0% {
+    opacity: 0;
+    width: 100px;
+  }
+
+  100% {
+    opacity: 1;
+    width: 100%;
+  }
+}

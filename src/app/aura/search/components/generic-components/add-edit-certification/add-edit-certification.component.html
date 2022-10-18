@@ -1,0 +1,325 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <form
+      class="pop-inner"
+      [formGroup]="certificateForm"
+      (ngSubmit)="saveCertificate()"
+    >
+      <div class="modal-popup__header">
+        <h3>{{ headerTitle }}</h3>
+        <button
+          (click)="onCancel($event, certificateForm)"
+          mat-button
+          color="primary"
+          type="button"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-popup__content">
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div class="form-fld-group certification">
+          <mat-form-field appearance="outline">
+            <mat-label>Certification Name</mat-label>
+            <input
+              required
+              matInput
+              formControlName="certificationName"
+              placeholder="Certification Name"
+              maxlength="200"
+            />
+            <mat-error
+              *ngIf="
+                certificateForm.controls['certificationName'].errors?.required
+              "
+              >This field is mandatory.</mat-error
+            >
+            <mat-error
+              *ngIf="
+                certificateForm.controls['certificationName'].errors?.pattern
+              "
+              >Invalid Certification Name.</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Certification Code</mat-label>
+            <input
+              matInput
+              formControlName="certificationCode"
+              placeholder="Certification Code"
+              maxlength="15"
+            />
+            <mat-error
+              *ngIf="
+                certificateForm.controls['certificationCode'].errors?.pattern
+              "
+              >Invalid Certificate Code.</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Certificate Number</mat-label>
+            <input
+              required
+              matInput
+              formControlName="certificateSerialNumber"
+              placeholder="ABC12345678"
+              maxlength="15"
+            />
+            <mat-error
+              *ngIf="
+                certificateForm.controls['certificateSerialNumber'].errors
+                  ?.pattern
+              "
+              >Invalid Certificate Number.</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field
+            class="certifyi-agency"
+            *ngIf="!hideDomain"
+            appearance="outline"
+          >
+            <mat-label>Certifying Organization</mat-label>
+            <input
+              matInput
+              [formControl]="certifyingAgency"
+              [matAutocomplete]="certificationAgencyAuto"
+              placeholder="Certifying Agency"
+              maxlength="100"
+            />
+            <mat-autocomplete
+              (optionSelected)="optionSelected($event)"
+              #certificationAgencyAuto="matAutocomplete"
+            >
+              <mat-option
+                *ngFor="let entry of mapCertificationAgencyName | keyvalue"
+                [value]="entry.value"
+                >{{ entry.value }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="certifyingAgency.errors?.isFoundInList"
+              ><span class="material-icons"> error_outline </span> Organization
+              does not exist
+              <button type="button" (click)="showDomainField()">
+                + Add New
+              </button>
+            </mat-error>
+          </mat-form-field>
+          <div class="new-agency" *ngIf="hideDomain">
+            <h4>Add New Organization</h4>
+            <div class="close-domain">
+              <mat-icon (click)="showDomainField()">cancel</mat-icon>
+            </div>
+            <div class="new-agency__domain">
+              <mat-form-field class="certifyi-agency" appearance="outline">
+                <mat-label>Certifying Organization</mat-label>
+                <input
+                  matInput
+                  [formControl]="certifyingAgency"
+                  [matAutocomplete]="certificationAgencyAuto"
+                  placeholder="Certifying Agency"
+                  maxlength="100"
+                />
+                <mat-autocomplete
+                  (optionSelected)="optionSelected($event)"
+                  #certificationAgencyAuto="matAutocomplete"
+                >
+                  <mat-option
+                    *ngFor="let entry of mapCertificationAgencyName | keyvalue"
+                    [value]="entry.value"
+                    >{{ entry.value }}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error
+                  class="new__item-found"
+                  *ngIf="certifyingAgency.errors?.isFoundInList"
+                  ><span class="material-icons"> error_outline </span>
+                  Organization does not exist</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="domain">
+                <mat-label>Domain</mat-label>
+                <input
+                  matTooltip="Please Provide Domain Name"
+                  matInput
+                  formControlName="certifyingAgencyDomain"
+                  placeholder="https://www.domain.com"
+                />
+                <mat-error
+                  *ngIf="
+                    certificateForm.controls['certifyingAgencyDomain'].errors
+                      ?.pattern
+                  "
+                  >Invalid Domain Name.</mat-error
+                >
+              </mat-form-field>
+            </div>
+          </div>
+
+          <mat-form-field
+            appearance="outline"
+            class="date-error"
+            [ngClass]="{ 'new-orgn': isDomain }"
+          >
+            <mat-label>Date Of Issue</mat-label>
+            <input
+              matInput
+              formControlName="issuedDate"
+              #issuedDate
+              min="{{ minDate }}"
+              max="{{ issueMaxDate }}"
+              [matDatepicker]="certifcationStartDate"
+              placeholder="MM/DD/YYYY"
+              (dateInput)="
+                checkForValidExpiryDate(issuedDate.value, expiryDate.value)
+              "
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="certifcationStartDate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #certifcationStartDate></mat-datepicker>
+            <small
+              class="error_message-date"
+              *ngIf="certificateForm.hasError('certificationDatesNotValid')"
+            >
+              <span class="material-icons"> error_outline </span> Issue Date
+              should be before Expiry Date
+            </small>
+            <small class="error_message-date" *ngIf="issueDateIsBig">
+              <span class="material-icons"> error_outline </span> Issue Date
+              should be before Expiry Date
+            </small>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Expiration Date</mat-label>
+            <input
+              matInput
+              formControlName="expiryDate"
+              #expiryDate
+              min="{{ minDate }}"
+              max="{{ expiryMaxDate }}"
+              [matDatepicker]="certificationExpiryDate"
+              placeholder="MM/DD/YYYY"
+              (dateInput)="
+                checkForValidExpiryDate(issuedDate.value, expiryDate.value)
+              "
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="certificationExpiryDate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #certificationExpiryDate></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="certificationStatus">
+              <mat-option
+                *ngFor="let entry of mapCertificationStatus | keyvalue"
+                [value]="entry.key"
+                >{{ entry.value }}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="
+                certificateForm.controls['certificationStatus'].errors?.required
+              "
+              >This field is mandatory.</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="totalFiles > 0" class="width-100 full-width form-fld-group">
+          <div
+            formArrayName="docProperty"
+            class="modal-popup__uploaded-file"
+            *ngFor="let doc of docProperty.controls; let i = index"
+          >
+            <div [formGroupName]="i" class="width-100 flex-between">
+              <mat-form-field
+                *ngIf="actionType !== 'Add' && actionType !== 'Edit'"
+                appearance="outline"
+                class="file-name"
+              >
+                <mat-label>Document ID</mat-label>
+                <input
+                  matInput
+                  formControlName="documentId"
+                  placeholder="File Name"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="file-name">
+                <mat-label>Change File Name</mat-label>
+                <input
+                  required
+                  matInput
+                  formControlName="displayName"
+                  placeholder="File Name"
+                />
+                <div class="file-format">
+                  {{ doc?.get('fileExtension')?.value }}
+                </div>
+                <mat-error *ngIf="doc?.get('displayName')?.errors?.maxlength"
+                  >Maximum 100 characters allowed.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="description">
+                <mat-label> Description</mat-label>
+                <input
+                  matInput
+                  formControlName="fileDescription"
+                  placeholder="File Description"
+                />
+                <mat-error
+                  *ngIf="doc?.get('fileDescription')?.errors?.maxlength"
+                  >Maximum 500 characters allowed.
+                </mat-error>
+              </mat-form-field>
+              <mat-icon (click)="deleteFile(doc, i)">delete</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-fld-group">
+          <div class="modal-popup__file-upload m-0">
+            <input
+              type="file"
+              title=" "
+              accept="image/*,.pdf"
+              multiple="multiple"
+              formControlName="documentInfo"
+              (change)="uploadfiles($event)"
+            />
+            <button class="btn">BROWSE FILE</button>
+            <P>Drag & Drop File here</P>
+            <P class="file-format-msg"
+              >*Supported File Format (.pdf, .jpg, .jpeg, .png, .bmp)</P
+            >
+          </div>
+        </div>
+      </div>
+      <div class="modal-popup__footer">
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="onCancel($event, certificateForm)"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="certificateForm.invalid || issueDateIsBig"
+        >
+          Save
+        </button>
+      </div>
+      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+    </form>
+  </div>
+  <div class="overlay"></div>
+</div>

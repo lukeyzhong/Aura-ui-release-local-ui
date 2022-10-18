@@ -1,0 +1,189 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <div class="modal-popup__header">
+      <h3>Project Onboarding</h3>
+      <div>
+        <button mat-button (click)="onCancel($event)" color="primary">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="modal-popup__content">
+      <div class="tbl-header">
+        <div class="tbl-header__controls">
+          <form [formGroup]="dateFilter">
+            <div class="form-fld-group">
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  [disabled]="!enableSearch"
+                  #search
+                  (keyup)="projectOnboardingSearch(search.value)"
+                  (keydown.enter)="refreshDataSource()"
+                  matTooltipPosition="above"
+                  placeholder="Search"
+                />
+
+                <mat-icon *ngIf="!enableSearch" matSuffix>search</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  [matDatepicker]="startDate"
+                  placeholder="Project Start Date"
+                  matTooltip="Date Format: MM/DD/YYYY"
+                  matTooltipPosition="above"
+                  name="projStartDate"
+                  formControlName="projStartDate"
+                  (dateInput)="updateProjectOnboardingTable('start')"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="startDate"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #startDate></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  [matDatepicker]="endDate"
+                  placeholder="Project End Date"
+                  matTooltip="Date Format: MM/DD/YYYY"
+                  matTooltipPosition="above"
+                  name="projEndDate"
+                  formControlName="projEndDate"
+                  (dateInput)="updateProjectOnboardingTable('end')"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="endDate"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #endDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <small
+              class="error_message"
+              *ngIf="dateFilter.hasError('notValid')"
+            >
+              <span class="material-icons"> error_outline </span> Start Date
+              must be less than End Date
+            </small>
+          </form>
+        </div>
+
+        <!-- Download to Excel or CSV -->
+        <app-download-icon
+          (downloadBtnClicked)="download($event)"
+        ></app-download-icon>
+      </div>
+      <div
+        *ngIf="projectOnboardingPanelConfig.isLoading; else projdata"
+        class="spinner"
+      >
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <ng-template #projdata>
+        <div class="tbl-responsive">
+          <table
+            cellspacing="0"
+            rowspacing="0"
+            mat-table
+            [dataSource]="dataSource"
+            class="mat-elevation-z8 project-onboarding-table"
+          >
+            <ng-container
+              *ngFor="let col of projectOnboardingPanelConfig.columns"
+              [matColumnDef]="col.key"
+            >
+              <th mat-header-cell *matHeaderCellDef>
+                {{ col.headerDisplay }}
+              </th>
+
+              <td mat-cell *matCellDef="let element">
+                <div
+                  class="employee"
+                  *ngIf="
+                    element[col.key] !== null &&
+                      isFloat(element[col.key]) === 2;
+                    else noDisplayPic
+                  "
+                >
+                  <img
+                    src="{{ element[col.key] }}"
+                    width="25px"
+                    class="employee__profile"
+                    alt=""
+                  />
+                </div>
+                <ng-template #noDisplayPic>
+                  <div class="employee">
+                    <img
+                      *ngIf="element[col.key] === null"
+                      src="./assets/svg/profile-empty.svg"
+                      class="employee__profile"
+                      width="25px"
+                      alt=""
+                    />
+                  </div>
+                </ng-template>
+                <div matTooltip="{{ element[col.key] }}">
+                  <span
+                    *ngIf="
+                      isFloat(element[col.key]) !== 2 ||
+                      isFloat(element[col.key]) === null
+                    "
+                  >
+                    {{
+                      element[col.key] === null || element[col.key] === ''
+                        ? ''
+                        : isFloat(element[col.key]) === 1
+                        ? element[col.key]
+                        : isFloat(element[col.key]) === 0
+                        ? (element[col.key] | date: 'MM/dd/yyyy')
+                        : col.key === 'billRate'
+                        ? '$' + element[col.key]
+                        : element[col.key]
+                    }}
+                  </span>
+                </div>
+              </td>
+            </ng-container>
+            <tr
+              mat-header-row
+              *matHeaderRowDef="
+                projectOnboardingPanelConfig.displayedColumns;
+                sticky: true
+              "
+            ></tr>
+            <tr
+              mat-row
+              *matRowDef="
+                let row;
+                columns: projectOnboardingPanelConfig.displayedColumns
+              "
+            ></tr>
+          </table>
+        </div>
+        <h4
+          class="no-data-display"
+          *ngIf="
+            !projectOnboardingPanelConfig.isLoading &&
+            dataSource.data.length === 0
+          "
+        >
+          No Data to Display
+        </h4>
+      </ng-template>
+      <mat-paginator
+        [length]="virtualCount"
+        (page)="pageChanged($event)"
+        [pageSizeOptions]="pageSizeOptions"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+@import '../../../aura/components/aura.component.scss';
+.can-db {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ededed;
+}
+.rout-cnt {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}

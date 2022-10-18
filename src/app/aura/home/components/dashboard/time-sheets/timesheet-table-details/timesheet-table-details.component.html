@@ -1,0 +1,34 @@
+<div class="tbl-responsive">
+  <div *ngIf="isLoading; else data" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <ng-template #data>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows>
+      <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
+        <th mat-header-cell *matHeaderCellDef>{{ col.headerDisplay }}</th>
+        <td mat-cell *matCellDef="let element">
+          <span>
+            {{
+            element[col.key] === null || element[col.key] === ''
+            ? '-'
+            : isFloat(element[col.key]) === 1
+            ? element[col.key]
+            : isFloat(element[col.key]) === 0
+            ? (element[col.key] | date: 'MM/dd/yyyy')
+            : element[col.key]
+            }}
+          </span>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div class="no-data-display" *ngIf="!isLoading && dataSource?.data?.length === 0">
+      <img src="./assets/svg/employee-dashboard/No time sheets.svg"  alt="" />
+      <h3>No Data To Display</h3>
+    </div>
+  </ng-template>
+  <mat-paginator *ngIf="dataSource?.data?.length !== 0" [length]="resultsLength" (page)="pageChanged($event)"
+    [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+  </mat-paginator>
+</div>

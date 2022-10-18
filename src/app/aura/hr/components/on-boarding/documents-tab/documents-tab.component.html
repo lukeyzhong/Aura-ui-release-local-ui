@@ -1,0 +1,286 @@
+<div class="si__content">
+  <div class="si__content--doc-parent">
+    <div class="si__content--documents">
+      <div class="si__form">
+        <div class="si__form--header flex-between">
+          <div class="cnd-details">
+            <ul>
+              <li>
+                <label for="">Package Type :</label>
+                <p>{{ pkgTypeValue }}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="onb-doc">
+          <mat-accordion class="doc-marent-ardn aura-accordion">
+            <mat-expansion-panel
+              (opened)="webFormPanelOpenState = true"
+              (closed)="webFormPanelOpenState = false"
+              [expanded]="webFormPanelOpenState"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title> Onboarding Documents </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-accordion class="doc-marent-ardn-child">
+                <mat-expansion-panel
+                  (opened)="innerWebFormPanelOpenState = true"
+                  (closed)="innerWebFormPanelOpenState = false"
+                  [expanded]="innerWebFormPanelOpenState"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title> Web Forms </mat-panel-title>
+                    <hr />
+                  </mat-expansion-panel-header>
+                  <mat-list role="list" class="mat-list">
+                    <mat-list-item
+                      class="mat-list__doc"
+                      color="primary"
+                      *ngFor="
+                        let webForm of webFormAllDocumentsInfoResultByCode;
+                        let i = index
+                      "
+                    >
+                      <span>{{ webForm?.webformName }}</span>
+                      <div class="flex-m">
+                        <button
+                          type="button"
+                          (click)="previewDocument(webForm)"
+                        >
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                      </div>
+                    </mat-list-item>
+                  </mat-list>
+                </mat-expansion-panel>
+                <mat-expansion-panel
+                  (opened)="documentsPanelOpenState = true"
+                  (closed)="documentsPanelOpenState = false"
+                  [expanded]="documentsPanelOpenState"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title> Documents </mat-panel-title>
+
+                    <hr />
+                  </mat-expansion-panel-header>
+
+                  <mat-list role="list" class="mat-list">
+                    <mat-list-item
+                      color="primary"
+                      class="mat-list__doc"
+                      *ngFor="
+                        let doc of allOnboardingDocumentsInfoResultByCode;
+                        let i = index
+                      "
+                    >
+                      <span>{{ doc?.templateName }}</span>
+                      <div class="flex-m">
+                        <button type="button" (click)="previewDocument(doc)">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                      </div>
+                    </mat-list-item>
+                  </mat-list>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+          <mat-accordion class="doc-marent-ardn aura-accordion">
+            <mat-expansion-panel
+              (opened)="additionalWebFormPanelOpenState = true"
+              (closed)="additionalWebFormPanelOpenState = false"
+              [expanded]="additionalWebFormPanelOpenState"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title> Additional Documents </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-accordion class="doc-marent-ardn-child">
+                <mat-expansion-panel
+                  (opened)="innerAdditionalWebFormPanelOpenState = true"
+                  (closed)="innerAdditionalWebFormPanelOpenState = false"
+                  [expanded]="innerAdditionalWebFormPanelOpenState"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title> WebForms </mat-panel-title>
+
+                    <hr />
+                  </mat-expansion-panel-header>
+
+                  <mat-list role="list" class="mat-list">
+                    <mat-list-item
+                      color="primary"
+                      class="mat-list__doc"
+                      *ngFor="
+                        let doc of additionalWebFormAllDocumentsInfoResultByCode;
+                        let i = index
+                      "
+                    >
+                      <span>{{ doc?.webformName }}</span>
+                      <div class="flex-m">
+                        <button type="button" (click)="previewDocument(doc)">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button type="button" (click)="deleteWebForm(doc)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </mat-list-item>
+                  </mat-list>
+                </mat-expansion-panel>
+                <mat-expansion-panel
+                  (opened)="additionalDocumentsPanelOpenState = true"
+                  (closed)="additionalDocumentsPanelOpenState = false"
+                  [expanded]="additionalDocumentsPanelOpenState"
+                >
+                  <mat-expansion-panel-header>
+                    <mat-panel-title> Documents </mat-panel-title>
+
+                    <hr />
+                  </mat-expansion-panel-header>
+
+                  <mat-list role="list" class="mat-list">
+                    <mat-list-item
+                      color="primary"
+                      class="mat-list__doc"
+                      *ngFor="
+                        let doc of additionalAllOnboardingDocumentsInfoResultByCode;
+                        let i = index
+                      "
+                    >
+                      <span>{{ doc?.templateName }}</span>
+                      <div class="flex-m">
+                        <button type="button" (click)="previewDocument(doc)">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button type="button" (click)="deleteDoc(doc)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                    </mat-list-item>
+                  </mat-list>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+      </div>
+    </div>
+    <div class="si__content--tabs">
+      <mat-tab-group mat-align-tabs="start">
+        <mat-tab label="Web Forms">
+          <div class="doc-tabs">
+            <div class="doc-tabs--search">
+              <mat-icon>search</mat-icon>
+              <input
+                type="text"
+                (keydown.enter)="searchWebForms(searchWebForm.value)"
+                placeholder="Search...."
+                maxlength="25"
+                #searchWebForm
+              />
+            </div>
+            <div class="doc-tabs__overflow">
+              <section
+                class="mat-check-list"
+                *ngFor="
+                  let webForm of webFormAllDocumentsInfoResult;
+                  let i = index
+                "
+              >
+                <mat-checkbox
+                  *ngIf="
+                    this.webFormAllDocumentsInfoResult &&
+                    this.webFormAllDocumentsInfoResultByCode
+                  "
+                  [disabled]="
+                    isWebFormExistsInDefaultPkgList(webForm) ||
+                    isWebFormExists(webForm)
+                  "
+                  [checked]="
+                    isWebFormExistsInDefaultPkgList(webForm) ||
+                    isWebFormExists(webForm)
+                  "
+                  class="mat-list__doc"
+                  (change)="addWebFormToSave($event, webForm)"
+                  color="primary"
+                >
+                  <span>{{ webForm?.webformName }}</span>
+                  <button (click)="previewDocument(webForm)">
+                    <mat-icon> visibility </mat-icon>
+                  </button>
+                </mat-checkbox>
+              </section>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Documents">
+          <div class="doc-tabs">
+            <div class="doc-tabs--search">
+              <mat-icon>search</mat-icon>
+              <input
+                maxlength="25"
+                type="text"
+                (keydown.enter)="searchDocuments(searchDoc.value)"
+                placeholder="Search...."
+                #searchDoc
+              />
+            </div>
+            <div>
+              <section
+                class="mat-check-list"
+                *ngFor="
+                  let doc of allOnboardingDocumentsInfoResult;
+                  let i = index
+                "
+              >
+                <mat-checkbox
+                  *ngIf="
+                    this.allOnboardingDocumentsInfoResult &&
+                    this.allOnboardingDocumentsInfoResultByCode
+                  "
+                  [disabled]="
+                    isDocumentsExistsInDefaultPkgList(doc) || isDocExists(doc)
+                  "
+                  [checked]="
+                    isDocumentsExistsInDefaultPkgList(doc) || isDocExists(doc)
+                  "
+                  color="primary"
+                  (change)="addDocumentsToSave($event, doc)"
+                  class="mat-list__doc"
+                >
+                  <span class="check-text">{{ doc?.templateName }}</span>
+                  <button (click)="previewDocument(doc)">
+                    <mat-icon> visibility </mat-icon>
+                  </button>
+                </mat-checkbox>
+              </section>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>
+<div class="card__footer">
+  <button mat-stroked-button type="button" color="primary" matStepperPrevious>
+    Previous
+  </button>
+
+  <button
+    type="button"
+    (click)="goToHrDashboard()"
+    mat-stroked-button
+    color="primary"
+  >
+    Close
+  </button>
+
+  <button
+    mat-raised-button
+    type="button"
+    color="primary"
+    (click)="onSaveDocumentsInfo()"
+  >
+    Continue
+  </button>
+</div>

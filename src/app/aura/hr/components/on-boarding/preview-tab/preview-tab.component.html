@@ -1,0 +1,423 @@
+<div class="si__content">
+  <mat-accordion class="aura-accordion">
+    <mat-expansion-panel
+      (afterExpand)="setPreviewInformation()"
+      (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="preview-icon">
+            <img src="./assets/svg/preview-user.svg" width="40px" alt="" />
+            Personal Information
+          </span>
+
+          <button
+            type="button"
+            (click)="redirectTo(0)"
+            mat-mini-fab
+            class="preview-edit-btn"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="p-container">
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">First Name</label>
+            <p>{{ personalInformationResult?.firstName }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Last Name</label>
+            <p>{{ personalInformationResult?.lastName }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Alias Name</label>
+            <p>{{ personalInformationResult?.aliasName }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Date Of Birth</label>
+            <p>
+              {{ personalInformationResult?.dateOfBirth | date: 'MM/dd/yyyy' }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Gender</label>
+            <p>{{ personalInformationResult?.gender }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Marital Status</label>
+            <p>{{ personalInformationResult?.maritalStatus }}</p>
+          </div>
+
+          <div class="form-l-group__form">
+            <label for="">SSN Number</label>
+            <p>
+              {{ personalInformationResult?.socialSecurityNumber }}
+              <br />
+              <span *ngIf="personalInformationResult?.ssnApplied"
+                >*Applied for SSN</span
+              >
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Work Authorization</label>
+            <p>{{ personalInformationResult?.workAuthorizationStatus }}</p>
+          </div>
+        </div>
+        <div class="form-l-group__header-hr">
+          <h3>Contact Details</h3>
+          <hr />
+        </div>
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">Cell Phone</label>
+            <p>{{ cellPhone }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Home Phone</label>
+            <p>{{ homePhone }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Office Phone</label>
+            <p>{{ officePhone }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Email Address</label>
+            <p>{{ email }}</p>
+          </div>
+        </div>
+        <div class="form-l-group__header-hr">
+          <h3>Address</h3>
+          <hr />
+        </div>
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">Address Line1</label>
+            <p>{{ livingAddress?.addressLine1 }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Address Line2</label>
+            <p>{{ livingAddress?.addressLine2 }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Country</label>
+            <p>{{ livingAddrCountryName }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">State</label>
+            <p>{{ livingAddrStateName }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">City</label>
+            <p>{{ livingAddress?.city }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">ZIP code</label>
+            <p>{{ livingAddress?.postalCode }}</p>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel
+      (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="preview-icon">
+            <img src="./assets/svg/preview-briefcase.svg" width="40px" alt="" />
+            Employment Details
+          </span>
+          <mat-panel-description>
+            <button
+              type="button"
+              (click)="redirectTo(1)"
+              mat-mini-fab
+              class="preview-edit-btn"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </mat-panel-description>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="p-container">
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">Job Title</label>
+            <p>{{ employmentInformationResult?.jobTitle }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for=""> Department</label>
+            <p>{{ employmentInformationResult?.department }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Employment Type</label>
+            <p>{{ employmentInformationResult?.employmentType }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Employment Category </label>
+            <p>{{ employmentInformationResult?.employmentCategory }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Hire Date </label>
+            <p>
+              {{ employmentInformationResult?.hireDate | date: 'mediumDate' }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Start Date </label>
+            <p>
+              {{ employmentInformationResult?.startDate | date: 'mediumDate' }}
+            </p>
+          </div>
+
+          <div class="form-l-group__form">
+            <label for="">HR Manager</label>
+            <p>{{ employmentInformationResult?.hrManager }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Reporting Manager</label>
+            <p>{{ employmentInformationResult?.reportingManager }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Work Location</label>
+            <p>{{ employmentInformationResult?.workLocation }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Business Unit</label>
+            <p>{{ employmentInformationResult?.businessUnit }}</p>
+          </div>
+        </div>
+
+        <div class="form-l-group__header-hr">
+          <h3>Background Verification</h3>
+          <hr />
+        </div>
+
+        <div class="form-l-group employment-details">
+          <div class="form-l-group__form">
+            <label for="">BGC Verification Status</label>
+            <p>
+              {{ employmentInformationResult?.backgroundVerificationStatus }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">BGC Company Name</label>
+            <p>
+              {{
+                employmentInformationResult?.backgroundVerificationCompanyName
+              }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">BGC Result </label>
+            <p>
+              {{ employmentInformationResult?.backgroundVerificationResult }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">BGC Initiated Date </label>
+            <p>
+              {{
+                employmentInformationResult?.backgroundVerificationInitiationDate
+                  | date: 'mediumDate'
+              }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel
+      (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="preview-icon">
+            <img src="./assets/svg/preview-earn.svg" width="40px" alt="" />
+            Compensation
+          </span>
+          <mat-panel-description>
+            <button
+              type="button"
+              (click)="redirectTo(2)"
+              mat-mini-fab
+              class="preview-edit-btn"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </mat-panel-description>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="p-container">
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">Compensation Type</label>
+            <p>{{ compensationInformationResult?.compensationType }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Calculated By</label>
+            <p>{{ compensationInformationResult?.calculatedBy }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Payment Frequency</label>
+            <p>{{ compensationInformationResult?.paymentFrequency }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Amount</label>
+            <p>{{ compensationInformationResult?.amount | currency: 'USD' }}</p>
+          </div>
+        </div>
+        <div class="form-l-group__header-hr">
+          <h3>Additional Earnings</h3>
+          <hr />
+        </div>
+
+        <div
+          class="form-l-group"
+          *ngFor="
+            let earning of compensationInformationResult?.additionalEarnings
+          "
+        >
+          <div class="form-l-group__form">
+            <label for="">Compensation Name</label>
+            <p>{{ earning?.compensationType }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Calculated By</label>
+            <p>{{ earning?.calculatedBy }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Payment Frequency</label>
+            <p>{{ earning?.paymentFrequency }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Amount</label>
+            <p>{{ earning?.amount | currency: 'USD' }}</p>
+          </div>
+        </div>
+
+        <div class="form-l-group__header-hr">
+          <h3>FLSA</h3>
+          <hr />
+        </div>
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">FLSA Classification </label>
+            <p>
+              {{
+                compensationInformationResult?.flsaClassification === true
+                  ? 'Exempt'
+                  : 'Non-Exempt'
+              }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">OverTime Pay Info</label>
+            <p>
+              {{
+                compensationInformationResult?.overTimePayInfo === 0
+                  ? 'N/A'
+                  : (compensationInformationResult?.overTimePayInfo
+                    | currency: 'USD')
+              }}
+            </p>
+          </div>
+          <div></div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel
+      (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="preview-icon">
+            <img src="./assets/svg/preview-task.svg" width="40px" alt="" />
+            Documents
+          </span>
+          <mat-panel-description>
+            <button
+              type="button"
+              (click)="redirectTo(3)"
+              mat-mini-fab
+              class="preview-edit-btn"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          </mat-panel-description>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="p-container">
+        <div class="form-l-group__header-hr">
+          <h3>Web Forms</h3>
+          <hr />
+        </div>
+        <div class="form-docs">
+          <ul>
+            <li *ngFor="let webForm of webForms">
+              {{ webForm?.webformName }}
+            </li>
+          </ul>
+        </div>
+        <div class="form-l-group__header-hr">
+          <h3>Documents</h3>
+          <hr />
+        </div>
+        <div class="form-docs">
+          <ul>
+            <li *ngFor="let doc of documents">
+              {{ doc?.templateName }}
+            </li>
+          </ul>
+        </div>
+        <div class="form-l-group__header-hr">
+          <h3>Additional Web Forms</h3>
+          <hr />
+        </div>
+        <div class="form-docs">
+          <ul>
+            <li *ngFor="let webForm of additionalWebForms">
+              {{ webForm?.webformName }}
+            </li>
+          </ul>
+        </div>
+        <div class="form-l-group__header-hr">
+          <h3>Additional Documents</h3>
+          <hr />
+        </div>
+        <div class="form-docs">
+          <ul>
+            <li *ngFor="let doc of additionalDocuments">
+              {{ doc?.templateName }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+<div class="card__footer">
+  <button mat-stroked-button type="button" color="primary" matStepperPrevious>
+    Previous
+  </button>
+  <button
+    type="button"
+    (click)="goToHrDashboard()"
+    mat-stroked-button
+    color="primary"
+  >
+    Close
+  </button>
+
+  <button type="button" mat-raised-button (click)="continue()" color="primary">
+    Continue
+  </button>
+</div>
+<div class="error-Message" *ngIf="errorMessage">
+  <img src="./assets/svg/data-error.svg" width="100px" />
+  <p>{{ errorMessage }}</p>
+</div>

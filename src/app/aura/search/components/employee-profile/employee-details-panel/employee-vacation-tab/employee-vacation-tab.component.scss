@@ -1,0 +1,332 @@
+@import '../../../../../.../../../../app/styles/utilities/variables';
+@import '../../../../../.../../../../app/styles/utilities/mixins';
+.vocation-page {
+  padding: 15px;
+  .vocation-page-head {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    grid-gap: 1em;
+    padding-bottom: 15px;
+  }
+}
+.paid-leaves {
+  @include mix-widget(10px, 10px);
+
+  &__lable {
+    font-size: 13px;
+    font-weight: normal;
+    color: #4a4a4a;
+  }
+  &__value {
+    font-size: 13px;
+    font-weight: bold;
+    &--available {
+      color: $success;
+    }
+    &--accrued {
+      color: $primary;
+    }
+    &--consumed {
+      color: $darkgrey;
+    }
+    &--pending {
+      color: $warning;
+    }
+  }
+
+  h4 {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    span {
+      color: #8e8e8e;
+    }
+  }
+  .paid-leaves-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    li {
+      list-style: none;
+      flex: 1 1 40%;
+      margin-bottom: 10px;
+    }
+    p {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+.vo-timesheet {
+  @include mix-widget(10px, 10px);
+  h4 {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    span {
+      color: #8e8e8e;
+      padding-left: 10px;
+      font-weight: 500;
+    }
+  }
+  .timesheet-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 10px;
+    height: 102px;
+    @media (max-width: 1370px) {
+      height: 84px;
+    }
+    &__arrow {
+      border: 2px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+      border-radius: 20px;
+      padding: 3px;
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      box-sizing: border-box;
+      mat-icon {
+        color: #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px !important;
+      }
+      &:hover {
+        border-color: #898989;
+        mat-icon {
+          color: #898989;
+        }
+      }
+    }
+  }
+  &__week {
+    min-width: 88%;
+    @media (max-width: 1370px) {
+      min-width: 89%;
+    }
+    &--empty {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      //min-height: 100px;
+      justify-content: center;
+      align-items: center;
+      mat-icon {
+        color: #d3d3d3;
+      }
+      p {
+        color: #868686;
+      }
+    }
+  }
+
+  &__box {
+    @media (min-width: 1400px) {
+      width: 102px;
+      height: 102px;
+      margin: 0 5px;
+    }
+    @media (max-width: 1370px) {
+      padding: 5px 10px;
+      height: 84px;
+      width: 84px;
+    }
+    background: #efefef;
+    color: #9d9d9d;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 10px;
+    margin-right: 5px;
+    text-align: center;
+    position: relative;
+    &--pto {
+      background: white;
+      border: solid 1px #b2b2b2;
+    }
+    &--pending {
+      border: solid 1px $warning;
+    }
+    &--approved {
+      border: solid 1px $success;
+    }
+  }
+  &__date {
+    font-size: 14px;
+    font-weight: normal;
+    margin: 0;
+    color: #333;
+  }
+  &__day {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 0;
+    @media (max-width: 1370px) {
+      line-height: 12px;
+      line-height: 17px;
+    }
+  }
+  &__hrs {
+    font-weight: normal;
+    margin: 0;
+    color: #333;
+    @media (max-width: 1370px) {
+      line-height: 17px;
+    }
+  }
+  &__label {
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    span {
+      width: 10px;
+      height: 10px;
+      border-radius: 10px;
+      display: block;
+      margin-right: 5px;
+      background-color: #ccc;
+    }
+    &--pto {
+      color: #83c576;
+      span {
+        background-color: #83c576;
+      }
+    }
+    &--worked {
+      color: #55b1e2;
+      span {
+        background-color: #55b1e2;
+      }
+    }
+    &--unpaid {
+      color: #f07e7e;
+      span {
+        background-color: #f07e7e;
+      }
+    }
+    &--holiday {
+      position: absolute;
+      top: 0;
+      right: 0;
+      border-top: 32px solid #d0a74d;
+      border-left: 32px solid transparent;
+      mat-icon {
+        position: absolute;
+        top: -31px;
+        left: -18px;
+        font-size: 16px;
+        color: #fff;
+      }
+    }
+  }
+}
+.sub-header {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.relative {
+  position: relative;
+  canvas {
+    width: 200px !important;
+    height: 100px !important;
+    @media (max-width: 1370px) {
+      width: 180px !important;
+      height: 90px !important;
+    }
+    position: relative;
+    z-index: 111;
+  }
+}
+
+.absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.text-center {
+  text-align: center;
+  p {
+    color: green;
+    font-size: 12px;
+  }
+}
+.calendar-parent {
+  background-color: $primary;
+  width: 24px;
+  height: 24px;
+  border-radius: 25px;
+  padding: 3.5px;
+  margin-left: 15px;
+  cursor: pointer;
+  position: relative;
+  mat-icon {
+    font-size: 16px;
+    color: #fff;
+  }
+}
+::ng-deep .date-picker-week {
+  position: absolute !important;
+  top: -5px;
+  right: -7px;
+  .mat-form-field-infix {
+    padding: 0 !important;
+  }
+  .mat-form-field-wrapper {
+    padding: 0 !important;
+  }
+  .mat-form-field-outline {
+    opacity: 0;
+  }
+  .mat-input-element {
+    opacity: 0;
+  }
+  .mat-form-field-flex:hover .mat-form-field-outline {
+    outline: none !important;
+    opacity: 0 !important;
+  }
+}
+
+.close-icon {
+  color: $primary;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.timesheet_holiday {
+  visibility: hidden;
+}
+
+.spinner {
+  top: 72px;
+  position: relative;
+}
+
+.calendar-parent {
+  display: flex;
+  align-items: center;
+  ::ng-deep .mat-form-field-outline-thick {
+    display: none !important;
+  }
+}

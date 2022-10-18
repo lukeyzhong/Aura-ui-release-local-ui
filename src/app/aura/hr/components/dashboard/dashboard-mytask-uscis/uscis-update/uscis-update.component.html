@@ -1,0 +1,43 @@
+<form [formGroup]="updateUSCISGroup">
+<div class="adp-update">
+    <div class="modal-popup">
+        <div class="modal-popup__header">
+            <h3>Update USCIS</h3>
+            <button mat-button (click)="onCancel($event)">
+                <mat-icon> close </mat-icon>
+            </button>
+        </div>
+        <div class="modal-popup__content">
+            <div class="modal-popup__fields">
+                <div class="form-fld-group">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Employee ID</mat-label>
+                        <input matInput formControlName="employeeCode"/>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Full Name</mat-label>
+                        <input matInput formControlName="fullName"/>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Hire Date</mat-label>
+                        <input matInput type="date" formControlName="hireDate" />                       
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Case Number</mat-label>
+                        <input matInput formControlName="caseNumber" maxlength="15"/>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Submitted On</mat-label>
+                        <input matInput type="date" formControlName="submittedOn"/>                      
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="modal-popup__footer">
+            <button mat-raised-button color="primary" 
+            [disabled]="updateUSCISGroup.invalid"
+            (click)="updateUSCISRecord()">Submit</button>
+        </div>
+    </div>
+</div>
+</form>

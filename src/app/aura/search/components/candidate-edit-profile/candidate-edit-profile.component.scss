@@ -1,0 +1,179 @@
+@import '../../components/employee-edit-profile/employee-edit-profile.component.scss';
+.candidate {
+  padding: 15px;
+  display: flex;
+  &__profile {
+    padding: 10px;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    &--pic {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+    }
+    &__widget {
+      border-radius: 20px;
+      box-shadow: 1px 1px 6px rgb(0 0 0 / 16%);
+      padding: 0;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 99%;
+      }
+    }
+    &--info {
+      margin: 0;
+      color: #959595;
+      margin-top: 20px;
+    }
+    &__edit {
+      position: absolute;
+      top: -2px;
+      right: 15px;
+      width: 35px;
+      height: 35px;
+      border-radius: 100px;
+      border: solid 2px #f5f5f5;
+      background: white;
+      text-align: center;
+      line-height: 28px;
+      overflow: hidden;
+      .material-icons {
+        font-size: 25px;
+        color: #008acc;
+        margin-left: -31px;
+        margin-top: -9px;
+      }
+    }
+    p {
+      color: #ccc;
+      margin: 20px 0 !important;
+    }
+  }
+  &__primary {
+    padding: 10px;
+    width: 570px;
+    border-left: 1px solid #ccc;
+    h4 {
+      color: #040404;
+      font-size: 15px;
+      margin-bottom: 15px !important;
+    }
+    ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0 10px;
+      li {
+        .mat-form-field {
+          width: 100%;
+        }
+      }
+    }
+  }
+  &__details {
+    padding: 10px;
+    width: 570px;
+    border-left: 1px solid #ccc;
+    h4 {
+      color: #040404;
+      font-size: 15px;
+      margin-bottom: 15px !important;
+    }
+    ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0 10px;
+      li {
+        .mat-form-field {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+.dialog-actions {
+  padding: 15px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #ccc;
+  button {
+    margin-left: 15px;
+  }
+}
+
+.phone-code-number {
+  display: flex;
+  .country-code {
+    width: 30% !important;
+  }
+  .c-phone {
+    width: 70% !important;
+  }
+}
+.office-ph {
+  display: flex;
+  grid-column-start: 2;
+  grid-column-end: 4;
+  &__code {
+    width: 20% !important;
+  }
+  &__number {
+    width: 50% !important;
+  }
+  &__ext {
+    width: 30% !important;
+  }
+}
+.work-experience {
+  display: flex;
+  &__years {
+    width: 60% !important;
+  }
+  &__months {
+    width: 40% !important;
+  }
+}
+
+.edit-profilepic__edit {
+  top: 15px;
+}
+
+.candidate {
+  ::ng-deep .mat-form-field-disabled {
+    .mat-form-field-outline {
+      background-color: #f0f0f0;
+      border-radius: 5px;
+    }
+  }
+  ::ng-deep .mat-form-field-appearance-outline {
+    .mat-form-field-infix {
+      padding: 5px 0 5px 0 !important;
+    }
+  }
+  ::ng-deep
+    .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+    .mat-form-field-label,
+  .mat-form-field-appearance-outline.mat-form-field-can-float
+    .mat-input-server:focus
+    + .mat-form-field-label-wrapper
+    .mat-form-field-label {
+    transform: translateY(-13px) scale(0.75) !important;
+    width: 133.3333333333%;
+  }
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-label {
+    top: 1.84375em;
+    margin-top: -13px;
+  }
+
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-prefix,
+  .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: 0 !important;
+  }
+
+  ::ng-deep .mat-form-field-subscript-wrapper {
+    margin-top: 2px;
+  }
+}

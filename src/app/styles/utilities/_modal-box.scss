@@ -1,0 +1,219 @@
+@import 'variables';
+.modal-popup {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  height: max-content;
+  width: fit-content;
+  background-color: #fff;
+  z-index: 121;
+  width: 60%;
+  @media (max-width: 1000px) {
+    width: 90%;
+  }
+  border-radius: 10px;
+  max-height: 98%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &__cnt {
+    max-height: calc(100vh - 450px);
+    overflow: auto;
+  }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    background-color: $primary;
+    padding: 10px 15px;
+    border-radius: 9px 9px 0 0;
+    h3 {
+      color: #fff;
+      font-size: 18px;
+      margin-right: 10px;
+    }
+    button {
+      min-width: 32px;
+      line-height: 32px;
+      height: 32px;
+      width: 32px;
+      padding: 0;
+      span.mat-button-wrapper {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+      &:hover {
+        background-color: #0472adbf;
+        border-radius: 20px;
+      }
+      mat-icon {
+        color: #fff;
+        cursor: pointer;
+      }
+    }
+  }
+  &__content {
+    padding: 10px;
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+  }
+  &__fields {
+    padding: 20px 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    margin-bottom: 15px;
+    @media (min-width: 1400px) {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    @media (max-width: 1030px) {
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    }
+    grid-gap: 15px;
+    max-height: 75vh;
+    overflow: auto;
+    .full-width {
+      margin: 0 !important;
+      grid-column-start: 1;
+      grid-column-end: 4;
+    }
+  }
+  &__fields-col {
+    padding: 20px 25px;
+
+    overflow: auto;
+    .full-width {
+      margin: 0 !important;
+      grid-column-start: 1;
+      grid-column-end: 4;
+    }
+  }
+  &__area {
+    padding: 20px 25px;
+    .vo-timesheet {
+      box-shadow: none !important;
+    }
+  }
+  &__item.desscription {
+    border: 1px solid red;
+  }
+  &__file-upload {
+    grid-column-start: 1;
+    grid-column-end: 4;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    height: 100px;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #efefef;
+    margin-bottom: 25px;
+    input {
+      opacity: 2;
+      border: 1px solid red;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      position: absolute;
+      opacity: 0;
+    }
+    button {
+      background-color: $primary;
+      color: #fff;
+      padding: 5px 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      width: auto;
+      font-size: 14px;
+      font-weight: 300;
+    }
+    p {
+      color: #7c7c7c;
+      margin: 0;
+    }
+
+    &__fullWidth {
+      width: 100%;
+      margin: 0;
+    }
+  }
+  &__uploaded-file {
+    border: 1px solid #d4d4d4;
+    width: 100%;
+    position: relative;
+    border-radius: 10px;
+    padding: 10px 10px 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    .file-name {
+      width: calc(40% - 15px);
+      padding-bottom: 0;
+      margin-right: 15px;
+    }
+    mat-icon {
+      cursor: pointer;
+      color: #6f6f6f;
+    }
+    .description {
+      width: 55%;
+    }
+  }
+  &__footer {
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding: 10px 25px;
+    justify-content: flex-end;
+    button {
+      margin-left: 15px;
+    }
+  }
+}
+
+.error-msg {
+  color: red;
+  font-size: small;
+  margin-left: 320px;
+}
+
+.file-name {
+  position: relative;
+  ::ng-deep .mat-form-field-infix {
+    padding: 7px 3em 1em 0 !important;
+  }
+}
+.file-format {
+  position: absolute;
+  margin: 0 auto;
+  top: 4px;
+  right: 4px;
+  color: #adadad;
+  font-size: 16px;
+}
+.flex-between {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  .mat-icon {
+    margin-top: 12px;
+  }
+}
+.m-0 {
+  margin: 0 !important;
+}
+.pop-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}

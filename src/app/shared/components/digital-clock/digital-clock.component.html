@@ -1,0 +1,4 @@
+<div class="current-time">
+  {{ time | async | date: 'dd MMMM yyyy |' }}
+  <p>{{ time | async | date: 'hh:mm:ss a' }}</p>
+</div>

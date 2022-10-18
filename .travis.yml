@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+  - 12
+directories:
+  - node_modules
+env:
+  - CI=true
+install: npm ci
+script: skip
+
+jobs:
+  include:
+    - stage: test & lint
+      script: npm run test-ci && npm run lint-ci
+
+    - stage: Github Pages release
+      script: npm run build-pages && cd docs && cp index.html 404.html
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        github_token: $aura_token
+        local_dir: docs
+        on:
+          branch: main

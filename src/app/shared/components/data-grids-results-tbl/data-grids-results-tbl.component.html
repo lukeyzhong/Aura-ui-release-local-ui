@@ -1,0 +1,52 @@
+<div class="adp__tbl">
+  <div *ngIf="isLoading; else data" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <ng-template #data>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows>
+      <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
+        <th mat-header-cell *matHeaderCellDef>{{ col.headerDisplay }}</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="employee" *ngIf="
+                    element[col.key] !== null &&
+                      isFloat(element[col.key]) !== 2;
+                    else noDisplayPic
+                  ">
+            <img src="{{ element[col.key] }}" width="25px" class="employee__profile" alt="" />
+          </div>
+          <ng-template #noDisplayPic>
+            <div class="employee">
+              <img *ngIf="element[col.key] === null" src="./assets/svg/profile-empty.svg" class="employee__profile"
+                width="25px" alt="" />
+            </div>
+          </ng-template>
+          <div matTooltip="{{ element[col.key] }}">
+            <span *ngIf="
+                        isFloat(element[col.key]) !== 2 &&
+                        isFloat(element[col.key]) !== null &&
+                        col.key !== 'displayPicture'
+                      ">
+              {{
+              element[col.key] === null || element[col.key] === ''
+              ? ''
+              : isFloat(element[col.key]) === 1
+              ? element[col.key]
+              : isFloat(element[col.key]) === 0
+              ? (element[col.key] | date: 'MM/dd/yyyy')
+              : element[col.key]
+              }}
+            </span>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div class="no-data-display" *ngIf="!isLoading && dataSource?.data?.length === 0">
+      <h3>No Data To Display</h3>
+    </div>
+  </ng-template>
+  <mat-paginator *ngIf="dataSource?.data?.length !== 0" [length]="resultsLength" (page)="pageChanged($event)"
+    [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+  </mat-paginator>
+</div>

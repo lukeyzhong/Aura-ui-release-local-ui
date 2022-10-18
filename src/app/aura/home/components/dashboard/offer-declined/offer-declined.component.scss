@@ -1,0 +1,72 @@
+@import '../../../../../styles/utilities/form-group';
+
+.offer-dcld {
+    padding: 10px 15px;
+    flex: 1;
+
+    height: Calc(100vh - 162px);
+
+    h2 {
+        font-size: 20px;
+        font-family: 'ProximaNova-bold' !important;
+    }
+
+    .text-area {
+        min-width: 50%;
+        margin-top: 10px;
+    }
+
+    &__footer {
+        padding: 10px 15px;
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+            margin-left: 15px;
+        }
+    }
+}
+
+.card {
+    padding: 0;
+    border-radius: 10px;
+    overflow: hidden;
+
+    &__header {
+        padding: 10px 15px;
+        background-color: #d8eefa;
+        display: grid;
+        align-items: center;
+        grid-template-columns: 40% 60%;
+        gap: 10px;
+
+        &--profile {
+            padding: 10px;
+
+            h2 {
+                font-style: 18px;
+                font-family: 'ProximaNova-semibold' !important;
+            }
+        }
+
+        &--fields {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    &__cnt {
+        padding: 10px;
+    }
+}
+
+.form-l-group {
+    display: grid;
+    padding: 10px 15px;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    gap: 20px 30px;
+
+    &.small-form {
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+}

@@ -1,0 +1,13 @@
+<svg id="Component_6_2" data-name="Component 6 – 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="28" height="27" viewBox="0 0 28 27">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_732" data-name="Rectangle 732" width="20.118" height="20.12" fill="#fff"/>
+    </clipPath>
+  </defs>
+  <rect id="Rectangle_2280" data-name="Rectangle 2280" width="28" height="27" rx="5" fill="#518cc6" opacity="0"/>
+  <g id="Group_3921" data-name="Group 3921" transform="translate(3.882 3)">
+    <g id="Group_1886" data-name="Group 1886" clip-path="url(#clip-path)">
+      <path id="Path_4042" data-name="Path 4042" d="M19.578,8.751h0L11.369.542a1.852,1.852,0,0,0-2.62,0l-8.2,8.2-.008.009A1.852,1.852,0,0,0,1.771,11.91a.529.529,0,0,0,.057,0h.328v6.039A2.17,2.17,0,0,0,4.323,20.12H7.534a.589.589,0,0,0,.59-.589V14.8a.99.99,0,0,1,.989-.989h1.894A.99.99,0,0,1,12,14.8v4.735a.589.589,0,0,0,.59.589H15.8a2.17,2.17,0,0,0,2.168-2.168V11.913h.3a1.853,1.853,0,0,0,1.311-3.162m-.835,1.786a.67.67,0,0,1-.476.2h-.893a.589.589,0,0,0-.589.589v6.629a.99.99,0,0,1-.989.99H13.174V14.8a2.17,2.17,0,0,0-2.168-2.168H9.113A2.171,2.171,0,0,0,6.944,14.8v4.146H4.323a.99.99,0,0,1-.99-.99V11.323a.589.589,0,0,0-.59-.589h-.9a.667.667,0,0,1-.463-.2.674.674,0,0,1,0-.953h0L9.583,1.376a.675.675,0,0,1,.953,0l8.2,8.2,0,0a.674.674,0,0,1,0,.951" transform="translate(0 0)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

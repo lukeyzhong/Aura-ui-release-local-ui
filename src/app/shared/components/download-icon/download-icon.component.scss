@@ -1,0 +1,16 @@
+.btn-excel {
+  padding-top: 4px;
+}
+
+.d-format {
+  ::ng-deep .mat-list-text {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    font-size: 14px;
+    img {
+      margin-right: 10px;
+    }
+  }
+}

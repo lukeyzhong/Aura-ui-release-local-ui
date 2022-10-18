@@ -1,0 +1,49 @@
+<div class="preview">
+  <div class="overlay"></div>
+  <div class="modal-popup">
+    <div class="modal-popup__header">
+      <h3>{{ displayName }}</h3>
+      <button (click)="closePreview()" mat-button color='primary'>
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-popup__content">
+      <div class="file-controls">
+        <div class="page-rotate">
+          Rotate Page
+          <button mat-button (click)="rotateZoom('rotate')">
+            <mat-icon>rotate_90_degrees_cw</mat-icon>
+          </button>
+        </div>
+        <div class="page-zoom">
+          <button mat-button (click)="rotateZoom('zoomout')" [disabled]="zoomValueOnUI === 0">
+            <mat-icon>remove_circle</mat-icon>
+          </button>
+          <div class="page-zoom--percentage">
+            {{zoomValueOnUI}}%
+          </div>
+          <button mat-button (click)="rotateZoom('zoomin')" [disabled]="zoomValueOnUI === 100">
+            <mat-icon>add_circle</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="red">
+        <div class="spinner" *ngIf="isLoading">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div id="imgDiv" *ngIf="isImage">
+          <img [src]="docURL" />
+        </div>
+        <div *ngIf="isPdf">
+          <pdf-viewer [src]="docURL" [rotation]="pdfRotation" [zoom]="pdfZoom"></pdf-viewer>
+        </div>
+        <div class="error-Message" *ngIf="errorMessage">
+          <img src="./assets/svg/data-error.svg" width="100px" />
+          <p>{{ errorMessage }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+@import '../../../../../../styles/utilities/form-group';
+.modal-popup {
+  width: 60%;
+}
+.modal-popup__fields {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}

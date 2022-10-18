@@ -1,0 +1,53 @@
+<div class="adp__tbl">
+  <div *ngIf="isLoading; else data" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <ng-template #data>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" multiTemplateDataRows>
+      <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
+        <th mat-header-cell *matHeaderCellDef>{{ col.headerDisplay }}</th>
+        <td mat-cell *matCellDef="let element">
+          <span>
+            {{
+            element[col.key] === null || element[col.key] === ''
+            ? '-'
+            : isFloat(element[col.key]) === 1
+            ? element[col.key]
+            : isFloat(element[col.key]) === 0
+            ? (element[col.key] | date: 'MM/dd/yyyy')
+            : element[col.key]
+            }}
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actionEdit">
+        <th mat-header-cell class="actions-col" *matHeaderCellDef>Actions</th>
+        <td class="actions-col" mat-cell *matCellDef="let row">
+        <div class="btnprnt">
+          <button mat-button color="primary" class="edit-icon" (click)="editRecord(row)">
+            <mat-icon matTooltip="Mark as Complete">done</mat-icon>
+          </button>         
+        </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actionView">
+        <th mat-header-cell class="actions-col" *matHeaderCellDef>Actions</th>
+        <td class="actions-col" mat-cell *matCellDef="let row">
+        <div class="btnprnt">       
+          <button mat-button color="primary" class="edit-icon" (click)="viewRecord(row)">
+            <mat-icon matTooltip="View">visibility</mat-icon>
+          </button>
+        </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div class="no-data-display" *ngIf="!isLoading && dataSource?.data?.length === 0">
+      <h3>No Data To Display</h3>
+    </div>
+  </ng-template>
+  <mat-paginator *ngIf="dataSource?.data?.length !== 0" [length]="resultsLength" (page)="pageChanged($event)"
+    [pageSizeOptions]="pageSizeOptions" showFirstLastButtons>
+  </mat-paginator>
+</div>

@@ -1,0 +1,677 @@
+<div class="emergency-cont">
+  <div *ngIf="isLoading" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <form [formGroup]="emergencyContactForm">
+    <div class="emergency-contacts">
+      <div class="form-l-group__header-hr">
+        <h3><b>Emergency Contacts</b></h3>
+        <div
+          *ngIf="
+            countKeysContactsInfo !== undefined && countKeysContactsInfo > 0
+          "
+          class="comment"
+        >
+          HR Comments
+          <div class="count">
+            <p>{{ countKeysContactsInfo }}</p>
+          </div>
+        </div>
+        <hr />
+      </div>
+
+      <div
+        formArrayName="emergencyContactsDetails"
+        *ngFor="
+          let emContact of emergencyContactsDetails?.controls;
+          let emContactIndex = index;
+          let first = first
+        "
+      >
+        <div class="emergency-contacts-cnt" [formGroupName]="emContactIndex">
+          <div class="form-l-group__header-hr">
+            <h3 *ngIf="emContactIndex === 0 && first">
+              <b>Primary Contact </b>
+            </h3>
+            <h3 *ngIf="!first"><b>Secondary Contact </b></h3>
+            <hr />
+          </div>
+          <div class="form-fld-group">
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'emergencyContacts.firstName' + emContactIndex
+                )
+              }"
+            >
+              <mat-label>First Name</mat-label>
+              <input
+                required
+                matInput
+                placeholder="First Name"
+                formControlName="firstName"
+                maxlength="50"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'emergencyContacts.firstName' + emContactIndex
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('emergencyContacts.firstName' + emContactIndex)
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error *ngIf="emContact?.get('firstName')?.errors?.required"
+                >This field is mandatory.
+              </mat-error>
+              <mat-error *ngIf="emContact?.get('firstName')?.errors?.pattern"
+                >Only alphabets are allowed.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'emergencyContacts.lastName' + emContactIndex
+                )
+              }"
+            >
+              <mat-label>Last Name</mat-label>
+              <input
+                matInput
+                required
+                placeholder="Last Name"
+                formControlName="lastName"
+                maxlength="50"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'emergencyContacts.lastName' + emContactIndex
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('emergencyContacts.lastName' + emContactIndex)
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error *ngIf="emContact?.get('lastName')?.errors?.required"
+                >This field is mandatory.
+              </mat-error>
+              <mat-error *ngIf="emContact?.get('lastName')?.errors?.pattern"
+                >Only alphabets are allowed.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'emergencyContacts.relationShipType' + emContactIndex
+                )
+              }"
+            >
+              <mat-label>Relationship </mat-label>
+              <mat-select required formControlName="relationShipType">
+                <mat-option
+                  *ngFor="let entry of mapRelationTypes | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'emergencyContacts.relationShipType' + emContactIndex
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment(
+                    'emergencyContacts.relationShipType' + emContactIndex
+                  )
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="emContact?.get('relationShipType')?.errors?.required"
+                >This field is mandatory.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-l-group__header-hr">
+            <h3><b>Mailing Address</b></h3>
+            <hr />
+          </div>
+          <div class="form-fld-group">
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'emergencyContacts.addressOne' + emContactIndex
+                )
+              }"
+            >
+              <mat-label>Address 1</mat-label>
+              <input
+                matInput
+                placeholder="Address 1"
+                formControlName="addressLine1"
+                maxlength="200"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'emergencyContacts.addressOne' + emContactIndex
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('emergencyContacts.addressOne' + emContactIndex)
+                "
+              >
+                info</mat-icon
+              >
+
+              <mat-error
+                *ngIf="emContact?.get('addressLine1')?.errors?.maxlength"
+                >Maximum 200 charactors allowed.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'emergencyContacts.addressTwo' + emContactIndex
+                )
+              }"
+            >
+              <mat-label>Address 2</mat-label>
+              <input
+                matInput
+                placeholder="Address 2"
+                formControlName="addressLine2"
+                maxlength="200"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'emergencyContacts.addressTwo' + emContactIndex
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('emergencyContacts.addressTwo' + emContactIndex)
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="emContact?.get('addressLine2')?.errors?.maxlength"
+                >Maximum 200 charactors allowed.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'emergencyContacts.city' + emContactIndex
+                )
+              }"
+            >
+              <mat-label>City </mat-label>
+              <input
+                matInput
+                placeholder="City"
+                formControlName="city"
+                maxlength="50"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has('emergencyContacts.city' + emContactIndex)
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('emergencyContacts.city' + emContactIndex)
+                "
+              >
+                info</mat-icon
+              >
+
+              <mat-error *ngIf="emContact?.get('city')?.errors?.pattern"
+                >Only alphabets are allowed.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'emergencyContacts.state' + emContactIndex
+                )
+              }"
+            >
+              <mat-label>State </mat-label>
+              <mat-select formControlName="state">
+                <mat-option
+                  *ngFor="let entry of mapState | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has('emergencyContacts.state' + emContactIndex)
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('emergencyContacts.state' + emContactIndex)
+                "
+              >
+                info</mat-icon
+              >
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'emergencyContacts.country' + emContactIndex
+                )
+              }"
+            >
+              <mat-label>Country </mat-label>
+              <mat-select formControlName="country">
+                <mat-option
+                  *ngFor="let entry of mapCountry | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'emergencyContacts.country' + emContactIndex
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('emergencyContacts.country' + emContactIndex)
+                "
+              >
+                info</mat-icon
+              >
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'emergencyContacts.postalCode' + emContactIndex
+                )
+              }"
+            >
+              <mat-label>Zip Code </mat-label>
+              <input
+                matInput
+                placeholder="Zip Code"
+                formControlName="postalCode"
+                maxlength="5"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'emergencyContacts.postalCode' + emContactIndex
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('emergencyContacts.postalCode' + emContactIndex)
+                "
+              >
+                info</mat-icon
+              >
+
+              <mat-error *ngIf="emContact?.get('postalCode')?.errors?.pattern"
+                >Invalid Postal Code e.g. 50234
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-l-group__header-hr">
+            <h3><b>Contact Details</b></h3>
+            <hr />
+          </div>
+          <div class="form-fld-group">
+            <div class="phone-code">
+              <mat-form-field
+                appearance="outline"
+                class="phone-code--code"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'emergencyContacts.cellPhoneNumber' + emContactIndex
+                  )
+                }"
+              >
+                <mat-label>Code</mat-label>
+                <input
+                  required
+                  matInput
+                  placeholder="123"
+                  maxlength="3"
+                  formControlName="cellCountryCode"
+                />
+                <span matPrefix>+&nbsp;</span>
+                <mat-error
+                  *ngIf="emContact?.get('cellCountryCode')?.errors?.required"
+                  >*
+                </mat-error>
+                <mat-error
+                  *ngIf="emContact?.get('cellCountryCode')?.errors?.pattern"
+                  >E.g: +1
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="phone-code--number"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'emergencyContacts.cellPhoneNumber' + emContactIndex
+                  )
+                }"
+              >
+                <mat-label>Cell Phone</mat-label>
+                <input
+                  required
+                  matInput
+                  formControlName="cellContactAddress"
+                  phoneMask
+                  maxlength="14"
+                  placeholder="(012) 345-6789"
+                  [preValue]="emContact?.get('cellContactAddress')?.value"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'emergencyContacts.cellPhoneNumber' + emContactIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'emergencyContacts.cellPhoneNumber' + emContactIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="emContact?.get('cellContactAddress')?.errors?.required"
+                  >This field is mandatory.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    emContact?.get('cellContactAddress')?.errors?.minlength
+                  "
+                  >Should be of 10 digits.
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="phone-code">
+              <mat-form-field
+                appearance="outline"
+                class="phone-code--code"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'emergencyContacts.homePhoneNumber' + emContactIndex
+                  )
+                }"
+              >
+                <mat-label>Code</mat-label>
+                <input
+                  matInput
+                  matInput
+                  placeholder="123"
+                  maxlength="3"
+                  formControlName="homeCountryCode"
+                />
+                <span matPrefix>+&nbsp;</span>
+                <mat-error
+                  *ngIf="emContact?.get('homeCountryCode')?.errors?.pattern"
+                  >E.g: +1
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="phone-code--number"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'emergencyContacts.homePhoneNumber' + emContactIndex
+                  )
+                }"
+              >
+                <mat-label>Home Phone</mat-label>
+                <input
+                  matInput
+                  placeholder="Phone Number "
+                  formControlName="homeContactAddress"
+                  phoneMask
+                  maxlength="14"
+                  placeholder="(012) 345-6789"
+                  [preValue]="emContact?.get('homeContactAddress')?.value"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'emergencyContacts.homePhoneNumber' + emContactIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'emergencyContacts.homePhoneNumber' + emContactIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="
+                    emContact?.get('homeContactAddress')?.errors?.minlength
+                  "
+                  >Should be of 10 digits.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="phone-code__ext">
+              <mat-form-field
+                appearance="outline"
+                class="phone-code--code"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'emergencyContacts.officePhoneNumber' + emContactIndex
+                  )
+                }"
+              >
+                <mat-label>Code</mat-label>
+                <input
+                  matInput
+                  placeholder="123"
+                  maxlength="3"
+                  formControlName="officeCountryCode"
+                />
+                <span matPrefix>+&nbsp;</span>
+                <mat-error
+                  *ngIf="emContact?.get('officeCountryCode')?.errors?.pattern"
+                  >E.g: +1
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="phone-code__ext--number"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'emergencyContacts.officePhoneNumber' + emContactIndex
+                  )
+                }"
+              >
+                <mat-label>Office Phone</mat-label>
+                <input
+                  matInput
+                  placeholder="Office Number"
+                  formControlName="officeContactAddress"
+                  phoneMask
+                  maxlength="14"
+                  placeholder="(012) 345-6789"
+                  [preValue]="emContact?.get('officeContactAddress')?.value"
+                />
+                <mat-error
+                  *ngIf="
+                    emContact?.get('officeContactAddress')?.errors?.minlength
+                  "
+                  >Should be of 10 digits.</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="phone-code--ext"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'emergencyContacts.officePhoneNumber' + emContactIndex
+                  )
+                }"
+              >
+                <mat-label>Ext</mat-label>
+                <input
+                  matInput
+                  formControlName="officeExt"
+                  placeholder="0123"
+                  maxlength="4"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'emergencyContacts.officePhoneNumber' + emContactIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'emergencyContacts.officePhoneNumber' + emContactIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error *ngIf="emContact?.get('officeExt')?.errors?.pattern"
+                  >Invalid extension number i.e. 0123
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="phone-code">
+              <mat-form-field
+                appearance="outline"
+                class="phone-code--number"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'emergencyContacts.email' + emContactIndex
+                  )
+                }"
+              >
+                <mat-label>Email Address </mat-label>
+                <input
+                  matInput
+                  formControlName="emailContactAddress"
+                  placeholder="Email Address"
+                  maxlength="100"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'emergencyContacts.email' + emContactIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment('emergencyContacts.email' + emContactIndex)
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="emContact?.get('emailContactAddress')?.errors?.email"
+                  >Invalid Email Address.</mat-error
+                >
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <mde-popover
+    #hrCommentPopupContent="mdePopover"
+    mdePopoverPositionX="after"
+    [mdePopoverOffsetX]="0"
+    [mdePopoverOffsetY]="27"
+    [mdeFocusTrapEnabled]="false"
+    [mdeFocusTrapAutoCaptureEnabled]="false"
+  >
+    <div class="hr-comment">
+      <div>{{ commentValue }}</div>
+    </div>
+  </mde-popover>
+</div>
+<div class="emergency-contacts--footer">
+  <button
+    mat-stroked-button
+    color="primary"
+    type="button"
+    (click)="onPrevious()"
+  >
+    Previous
+  </button>
+  <button
+    mat-stroked-button
+    color="primary"
+    type="button"
+    *ngIf="!emergencyContactForm.pristine"
+    (click)="onRestoreEmergencyContactsInfo($event, emergencyContactForm)"
+  >
+    Restore
+  </button>
+  <button mat-stroked-button color="primary" (click)="goToDashboard()">
+    Close
+  </button>
+
+  <button
+    mat-raised-button
+    color="primary"
+    type="button"
+    (click)="saveEmergencyContactsAndContinue(emergencyContactForm)"
+    [disabled]="emergencyContactForm.invalid"
+  >
+    Save & Continue
+  </button>
+</div>

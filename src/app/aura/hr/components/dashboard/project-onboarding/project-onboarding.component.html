@@ -1,0 +1,47 @@
+<div class="card">
+  <div class="card__header">
+    <h4 class="card-title">Project Onboarding</h4>
+    <button
+      mat-button
+      class="card__header--expand"
+      (click)="openProjOnboardingDialog()"
+    >
+      <mat-icon> open_in_new </mat-icon>
+    </button>
+  </div>
+
+  <div class="spinner" *ngIf="isLoading; else projOnboarding">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <ng-template #projOnboarding>
+    <div class="onboarding">
+      <div class="onboarding__employees">
+        <div
+          class="onboarding__employee"
+          *ngFor="let empProject of projectOnBoardingResults | slice: 0:4"
+        >
+          <img
+            *ngIf="empProject.displayPictureBase64; else defaultPic"
+            src="{{ empProject.displayPictureBase64 }}"
+            alt=""
+          />
+          <ng-template #defaultPic>
+            <img src="./assets/svg/profile-empty.svg" alt="" />
+          </ng-template>
+          <h4
+            class="onboarding__empname"
+            matTooltip="{{ empProject.firstName + ' ' + empProject.lastName }}"
+          >
+            {{ empProject.firstName + ' ' + empProject.lastName }}
+          </h4>
+          <p>
+            Start Date
+            <strong>{{
+              empProject.projectStartDate | date: 'MM/dd/yyyy'
+            }}</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

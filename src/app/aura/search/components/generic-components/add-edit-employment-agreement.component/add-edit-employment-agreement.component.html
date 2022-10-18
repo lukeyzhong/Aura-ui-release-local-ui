@@ -1,0 +1,124 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <form  class="pop-inner" [formGroup]="agreeForm" (ngSubmit)="saveAgreement()">
+      <div class="modal-popup__header">
+        <h3>{{ headerTitle }}</h3>
+        <button
+          (click)="onCancel($event, agreeForm)"
+          mat-button
+          color="primary"
+          type="button"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-popup__content">
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div class="form-fld-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Document Type</mat-label>
+            <mat-select required formControlName="documentType">
+              <mat-option *ngFor="let entry of mapDocType | keyvalue" [value]="entry.key">{{ entry.value }}</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="agreeForm.controls['documentType'].errors?.required"
+              >Please Select Document Type.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div *ngIf="totalFiles > 0" class="width-100 full-width form-fld-group">
+          <div
+            formArrayName="docProperty"
+            class="modal-popup__uploaded-file"
+            *ngFor="let doc of docProperty.controls; let i = index"
+          >
+            <div [formGroupName]="i" class="width-100 flex-between">
+              <mat-form-field
+                *ngIf="actionType !== 'Add' && actionType !== 'Edit'"
+                appearance="outline"
+                class="file-name"
+              >
+                <mat-label>Document ID</mat-label>
+                <input
+                  matInput
+                  formControlName="documentId"
+                  placeholder="File Name"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="file-name">
+                <mat-label>Change File Name</mat-label>
+                <input
+                  matInput
+                  formControlName="displayName"
+                  placeholder="File Name"
+                  class="file-formet-text"
+                />
+                <div class="file-format">
+                  {{ doc?.get('fileExtension')?.value }}
+                </div>
+                <mat-error *ngIf="doc?.get('displayName')?.errors?.maxlength"
+                  >Maximum 100 characters allowed.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="description">
+                <mat-label> Description</mat-label>
+                <input
+                  matInput
+                  formControlName="fileDescription"
+                  placeholder="File Description"
+                />
+                <mat-error
+                  *ngIf="doc?.get('fileDescription')?.errors?.maxlength"
+                  >Maximum 500 characters allowed.
+                </mat-error>
+              </mat-form-field>
+              <mat-icon (click)="deleteFile(doc, i)">delete</mat-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-fld-group">
+          <div class="modal-popup__file-upload">
+            <input
+              type="file"
+              title=" "
+              accept="image/*,.pdf"
+              multiple="multiple"
+              formControlName="documentInfo"
+              (change)="uploadAgreementFiles($event)"
+            />
+            <button class="btn">BROWSE FILE</button>
+            <P>Drag & Drop File here</P>
+            <P class="file-format-msg"
+              >*Supported File Format (.pdf, .jpg, .jpeg, .png, .bmp)</P
+            >
+          </div>
+        </div>
+
+       
+      </div>
+      <div class="modal-popup__footer">
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="onCancel($event, agreeForm)"
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            mat-raised-button
+            [disabled]="agreeForm.invalid"
+            color="primary"
+          >
+            Save
+          </button>
+        </div>
+      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+    </form>
+  </div>
+  <div class="overlay"></div>
+</div>

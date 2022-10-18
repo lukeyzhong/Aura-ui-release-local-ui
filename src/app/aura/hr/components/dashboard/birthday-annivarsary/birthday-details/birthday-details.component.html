@@ -1,0 +1,524 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <div class="modal-popup__content">
+      <div class="card">
+        <div class="card__header">
+          <h2>Birthdays</h2>
+          <button
+            class="close-btn"
+            (click)="onCancel($event)"
+            mat-button
+            color="primary"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="cards">
+          <div class="profiles profiles--today">
+            <div class="profiles__title">
+              <p>Today</p>
+            </div>
+            <div
+              *ngIf="todayBirthday.length === 0"
+              class="profiles__today profiles__today--nobirthdays"
+            >
+              <img
+                src="./assets/svg/Anniversaries-v1.svg"
+                width="183px"
+                alt=""
+              />
+              <p>No one is having birthday today</p>
+            </div>
+            <div *ngIf="todayBirthday.length > 0" class="profiles__today">
+              <div class="profiles__today--previous">
+                <button
+                  mat-button
+                  [style.visibility]="
+                    !isTodayBirthdayBackward ? 'hidden' : 'visible'
+                  "
+                  (click)="todayBirthdayBackward()"
+                >
+                  <mat-icon>arrow_back_ios</mat-icon>
+                </button>
+              </div>
+              <div class="profiles__list">
+                <div class="employees">
+                  <div class="employees__profile">
+                    <img
+                      *ngIf="todayBirthday[idx]?.image; else defaultImage"
+                      [src]="todayBirthday[idx]?.image"
+                      alt=""
+                    />
+                    <label
+                      for=""
+                      matTooltip="{{
+                        todayBirthday[idx]?.name +
+                          ' ' +
+                          todayBirthday[idx]?.lname
+                      }}"
+                      matTooltipPosition="right"
+                      >{{ todayBirthday[idx]?.name }}</label
+                    >
+                    <p>
+                      {{ todayBirthday[idx]?.date }}
+                      {{ todayBirthday[idx]?.month }}
+                    </p>
+                  </div>
+                  <div class="employees__profile">
+                    <img
+                      *ngIf="todayBirthday[idx + 1]?.image; else defaultImage"
+                      [src]="todayBirthday[idx + 1]?.image"
+                      alt=""
+                    />
+                    <label
+                      for=""
+                      matTooltip="{{
+                        todayBirthday[idx + 1]?.name +
+                          ' ' +
+                          todayBirthday[idx + 1]?.lname
+                      }}"
+                      matTooltipPosition="right"
+                      >{{ todayBirthday[idx + 1]?.name }}</label
+                    >
+                    <p>
+                      {{ todayBirthday[idx + 1]?.date }}
+                      {{ todayBirthday[idx + 1]?.month }}
+                    </p>
+                  </div>
+                  <div class="employees__profile">
+                    <img
+                      *ngIf="todayBirthday[idx + 2]?.image; else defaultImage"
+                      [src]="todayBirthday[idx + 2]?.image"
+                      alt=""
+                    />
+                    <label
+                      for=""
+                      matTooltip="{{
+                        todayBirthday[idx + 2]?.name +
+                          ' ' +
+                          todayBirthday[idx + 2]?.lname
+                      }}"
+                      matTooltipPosition="right"
+                      >{{ todayBirthday[idx + 2]?.name }}</label
+                    >
+                    <p>
+                      {{ todayBirthday[idx + 2]?.date }}
+                      {{ todayBirthday[idx + 2]?.month }}
+                    </p>
+                  </div>
+                  <div class="employees__profile">
+                    <img
+                      *ngIf="todayBirthday[idx + 3]?.image; else defaultImage"
+                      [src]="todayBirthday[idx + 3]?.image"
+                      alt=""
+                    />
+                    <label
+                      for=""
+                      matTooltip="{{
+                        todayBirthday[idx + 3]?.name +
+                          ' ' +
+                          todayBirthday[idx + 3]?.lname
+                      }}"
+                      matTooltipPosition="right"
+                      >{{ todayBirthday[idx + 3]?.name }}</label
+                    >
+                    <p>
+                      {{ todayBirthday[idx + 3]?.date }}
+                      {{ todayBirthday[idx + 3]?.month }}
+                    </p>
+                  </div>
+                  <div class="employees__profile">
+                    <img
+                      *ngIf="todayBirthday[idx + 4]?.image; else defaultImage"
+                      [src]="todayBirthday[idx + 4]?.image"
+                      alt=""
+                    />
+                    <label
+                      for=""
+                      matTooltip="{{
+                        todayBirthday[idx + 4]?.name +
+                          ' ' +
+                          todayBirthday[idx + 4]?.lname
+                      }}"
+                      matTooltipPosition="right"
+                      >{{ todayBirthday[idx + 4]?.name }}</label
+                    >
+                    <p>
+                      {{ todayBirthday[idx + 4]?.date }}
+                      {{ todayBirthday[idx + 4]?.month }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="profiles__today--next">
+                <button
+                  mat-button
+                  [style.visibility]="
+                    !isTodayBirthdayForward ? 'hidden' : 'visible'
+                  "
+                  (click)="todayBirthdayForward()"
+                >
+                  <mat-icon>arrow_forward_ios</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="profiles profiles--upcoming">
+            <div class="profiles__title">
+              <p>Next 7 Days</p>
+            </div>
+            <div
+              *ngIf="nextWeekBirthdayDates.length === 0"
+              class="profiles__today profiles__today--nobirthdays"
+            >
+              <img
+                src="./assets/svg/Anniversaries-v1.svg"
+                width="183px"
+                alt=""
+              />
+              <p>No one is having birthday in next 7 days</p>
+            </div>
+            <div
+              *ngIf="nextWeekBirthdayDates.length > 0"
+              class="profiles__today"
+            >
+              <div class="profiles__today--previous">
+                <button
+                  mat-button
+                  [style.visibility]="!isMovingBackward ? 'hidden' : 'visible'"
+                  (click)="movingBackward()"
+                >
+                  <mat-icon>arrow_back_ios</mat-icon>
+                </button>
+              </div>
+              <div class="profiles__list">
+                <div class="employees">
+                  <div class="employees__profile">
+                    <img
+                      *ngIf="
+                        nextWeekBirthdayDates[index]?.image;
+                        else defaultImage
+                      "
+                      [src]="nextWeekBirthdayDates[index]?.image"
+                      alt=""
+                    />
+                    <label
+                      for=""
+                      matTooltip="{{
+                        nextWeekBirthdayDates[index]?.name +
+                          ' ' +
+                          nextWeekBirthdayDates[index]?.lname
+                      }}"
+                      matTooltipPosition="right"
+                      >{{ nextWeekBirthdayDates[index]?.name }}</label
+                    >
+                    <p>
+                      {{ nextWeekBirthdayDates[index]?.date }}
+                      {{ nextWeekBirthdayDates[index]?.month }}
+                    </p>
+                  </div>
+                  <div class="employees__profile">
+                    <img
+                      *ngIf="
+                        nextWeekBirthdayDates[index + 1]?.image;
+                        else defaultImage
+                      "
+                      [src]="nextWeekBirthdayDates[index + 1]?.image"
+                      alt=""
+                    />
+                    <label
+                      for=""
+                      matTooltip="{{
+                        nextWeekBirthdayDates[index + 1]?.name +
+                          ' ' +
+                          nextWeekBirthdayDates[index + 1]?.lname
+                      }}"
+                      matTooltipPosition="right"
+                      >{{ nextWeekBirthdayDates[index + 1]?.name }}</label
+                    >
+                    <p>
+                      {{ nextWeekBirthdayDates[index + 1]?.date }}
+                      {{ nextWeekBirthdayDates[index + 1]?.month }}
+                    </p>
+                  </div>
+                  <div class="employees__profile">
+                    <img
+                      *ngIf="
+                        nextWeekBirthdayDates[index + 2]?.image;
+                        else defaultImage
+                      "
+                      [src]="nextWeekBirthdayDates[index + 2]?.image"
+                      alt=""
+                    />
+                    <label
+                      for=""
+                      matTooltip="{{
+                        nextWeekBirthdayDates[index + 2]?.name +
+                          ' ' +
+                          nextWeekBirthdayDates[index + 2]?.lname
+                      }}"
+                      matTooltipPosition="right"
+                      >{{ nextWeekBirthdayDates[index + 2]?.name }}</label
+                    >
+                    <p>
+                      {{ nextWeekBirthdayDates[index + 2]?.date }}
+                      {{ nextWeekBirthdayDates[index + 2]?.month }}
+                    </p>
+                  </div>
+                  <div class="employees__profile">
+                    <img
+                      *ngIf="
+                        nextWeekBirthdayDates[index + 3]?.image;
+                        else defaultImage
+                      "
+                      [src]="nextWeekBirthdayDates[index + 3]?.image"
+                      alt=""
+                    />
+                    <label
+                      for=""
+                      matTooltip="{{
+                        nextWeekBirthdayDates[index + 3]?.name +
+                          ' ' +
+                          nextWeekBirthdayDates[index + 3]?.lname
+                      }}"
+                      matTooltipPosition="right"
+                      >{{ nextWeekBirthdayDates[index + 3]?.name }}</label
+                    >
+                    <p>
+                      {{ nextWeekBirthdayDates[index + 3]?.date }}
+                      {{ nextWeekBirthdayDates[index + 3]?.month }}
+                    </p>
+                  </div>
+                  <div class="employees__profile">
+                    <img
+                      *ngIf="
+                        nextWeekBirthdayDates[index + 4]?.image;
+                        else defaultImage
+                      "
+                      [src]="nextWeekBirthdayDates[index + 4]?.image"
+                      alt=""
+                    />
+                    <label
+                      for=""
+                      matTooltip="{{
+                        nextWeekBirthdayDates[index + 4]?.name +
+                          ' ' +
+                          nextWeekBirthdayDates[index + 4]?.lname
+                      }}"
+                      matTooltipPosition="right"
+                      >{{ nextWeekBirthdayDates[index + 4]?.name }}</label
+                    >
+                    <p>
+                      {{ nextWeekBirthdayDates[index + 4]?.date }}
+                      {{ nextWeekBirthdayDates[index + 4]?.month }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="profiles__today--next">
+                <button
+                  mat-button
+                  [style.visibility]="!isMovingForward ? 'hidden' : 'visible'"
+                  (click)="movingForkward()"
+                >
+                  <mat-icon>arrow_forward_ios</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <ng-template #defaultImage>
+            <img src="./assets/svg/profile-empty.svg" alt="" />
+          </ng-template>
+        </div>
+        <div class="table-parent">
+          <div class="table-parent__header">
+            <div class="table-parent__header--search">
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  [disabled]="!enableSearch"
+                  #search
+                  (keyup)="performSearch(search.value)"
+                  matTooltip="Search....."
+                  matTooltipPosition="above"
+                  placeholder="Search....."
+                />
+                <mat-icon
+                  *ngIf="enableSearch"
+                  id="search-icon"
+                  (click)="performSearch(search.value)"
+                  matSuffix
+                  >search
+                </mat-icon>
+                <mat-icon *ngIf="!enableSearch" id="search-icon" matSuffix
+                  >search</mat-icon
+                >
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Months</mat-label>
+                <mat-select
+                  [formControl]="monthControl"
+                  (selectionChange)="onMonthSelection()"
+                  multiple
+                >
+                  <mat-option *ngFor="let month of monthList" [value]="month">{{
+                    month
+                  }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-select-trigger>
+                <mat-chip-list>
+                  <mat-chip
+                    *ngFor="let month of monthControl.value"
+                    [removable]="true"
+                    (removed)="onMonthRemoved(month)"
+                  >
+                    {{ month }}
+                    <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </mat-chip-list>
+              </mat-select-trigger>
+            </div>
+            <div
+              *ngIf="tableData?.length > 0"
+              class="table-parent__header--export"
+            >
+            <app-download-icon (downloadBtnClicked)="download($event)"></app-download-icon>
+            </div>
+          </div>
+          <div *ngIf="isLoadSpinner" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div class="birthday-tbl">
+            <table
+              *ngIf="!isLoadSpinner"
+              mat-table
+              [dataSource]="dataSource"
+              class="mat-elevation-z8"
+            >
+              <!-- Serial Number -->
+              <ng-container matColumnDef="s.no">
+                <th mat-header-cell *matHeaderCellDef>S.no</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.sno }}
+                </td>
+              </ng-container>
+
+              <!-- Emp Code Column -->
+              <ng-container matColumnDef="employeeCode">
+                <th mat-header-cell *matHeaderCellDef>Emp Code</th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="emp-id">
+                    <div
+                      class="employee"
+                      *ngIf="
+                        element.displayPictureBase64 !== null;
+                        else noDisplayPic
+                      "
+                    >
+                      <img
+                        src="{{ element.displayPictureBase64 }}"
+                        width="32px"
+                        alt=""
+                      />
+                    </div>
+                    <ng-template #noDisplayPic>
+                      <div class="employee">
+                        <img
+                          *ngIf="element.displayPictureBase64 === null"
+                          src="./assets/svg/profile-empty.svg"
+                          width="32px"
+                          alt=""
+                        />
+                      </div>
+                    </ng-template>
+                    {{ element.employeeCode }}
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- First Name Column -->
+              <ng-container matColumnDef="firstName">
+                <th mat-header-cell *matHeaderCellDef>First Name</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.firstName }}
+                </td>
+              </ng-container>
+
+              <!-- Last Name Column -->
+              <ng-container matColumnDef="lastName">
+                <th mat-header-cell *matHeaderCellDef>Last Name</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.lastName }}
+                </td>
+              </ng-container>
+
+              <!-- Alias Name Column -->
+              <ng-container matColumnDef="alias">
+                <th mat-header-cell *matHeaderCellDef>Alias Name</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.alias }}
+                </td>
+              </ng-container>
+
+              <!-- Email Column -->
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>Email</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.email }}
+                </td>
+              </ng-container>
+
+              <!-- Phone Column -->
+              <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef>Cell Phone</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.phone }}
+                </td>
+              </ng-container>
+
+              <!-- Date Of Birth Column -->
+              <ng-container matColumnDef="dateOfBirth">
+                <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.dateOfBirth }}
+                </td>
+              </ng-container>
+
+              <!-- Date Of Joining Column -->
+              <ng-container matColumnDef="startDate">
+                <th mat-header-cell *matHeaderCellDef>Date of Joining</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.startDate }}
+                </td>
+              </ng-container>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="displayedColumns; sticky: true"
+              ></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+              <!-- Group header -->
+              <ng-container matColumnDef="groupHeader">
+                <td colspan="999" mat-cell *matCellDef="let groupBy">
+                  <strong> {{ groupBy.month }}</strong>
+                </td>
+              </ng-container>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: ['groupHeader']; when: isGroup"
+              ></tr>
+            </table>
+          </div>
+          <h4
+            class="no-data-display"
+            *ngIf="!isLoadSpinner && dataSource?.data?.length === 0"
+          >
+            No Data to Display
+          </h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

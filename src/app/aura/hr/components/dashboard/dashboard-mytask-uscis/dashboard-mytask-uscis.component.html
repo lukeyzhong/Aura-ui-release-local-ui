@@ -1,0 +1,103 @@
+<div class="adp">
+  <div class="adp__title">
+    <h3>I9 Management</h3>
+  </div>
+  <div class="adp__cnt">
+    <mat-tab-group (selectedTabChange)="tabChanged($event)">
+      <mat-tab label="Pending Cases">
+        <ng-template mat-tab-label>
+          Pending Cases
+          <span class="count-text pending">{{ pendingTotal }}</span>
+        </ng-template>
+        <div class="adp__header">
+          <div class="adp__header--search">
+            <div class="orm-fld-group">
+              <mat-form-field appearance="outline" floatLabel="always">
+                <input
+                  matInput
+                  matTooltip="Search....."
+                  class="example-right-align"
+                  #searchPending
+                  (keyup)="performUSCISPendingSearch(searchPending.value)"
+                  placeholder="Search....."
+                />
+                <span matPrefix> <mat-icon>search</mat-icon> &nbsp; </span>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="adp__header--filter">
+            <div class="orm-fld-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Year</mat-label>
+                <mat-select [formControl]="pendingYear" (selectionChange)="pendingYearSelection()">
+                  <mat-option *ngFor="let yr of year" [value]="yr">{{
+                    yr
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <app-download-icon (downloadBtnClicked)="downloadPendingCases($event)"></app-download-icon>
+          </div>
+        </div>
+        <app-uscis-table-details [isLoading]="uscisPendingTablePanelConfig.isLoading"
+          [displayedColumns]="uscisPendingTablePanelConfig.displayedColumns"
+          [columns]="uscisPendingTablePanelConfig.columns"
+          [tableData]="uscisPendingTablePanelConfig.tableData"
+          [totalRows]="uscisPendingTablePanelConfig.totalRows"
+          (paginatorClicked)="getNextPendingRecords($event)"
+          (uscisUpdateSuccess)="refreshUSCISPendingList($event)"
+        >
+        </app-uscis-table-details>
+      </mat-tab>
+      <mat-tab label="Closed Cases">
+        <ng-template mat-tab-label>
+          Closed Cases
+          <span class="count-text closed">{{ closedTotal }}</span>
+        </ng-template>
+        <div class="adp__header">
+          <div class="adp__header--search">
+            <div class="orm-fld-group">
+              <mat-form-field appearance="outline" floatLabel="always">
+                <input
+                  matTooltip="Search....."
+                  matInput
+                  class="example-right-align"
+                  #searchClosed
+                  (keyup)="performUSCISClosedSearch(searchClosed.value)"
+                  placeholder="Search....."
+                />
+                <span matPrefix> <mat-icon>search</mat-icon> &nbsp; </span>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="adp__header--filter">
+            <div class="orm-fld-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Year</mat-label>
+                <mat-select [formControl]="closedYear" (selectionChange)="closedYearSelection()">
+                  <mat-option *ngFor="let yr of year" [value]="yr">{{
+                    yr
+                    }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <app-download-icon (downloadBtnClicked)="downloadClosedCases($event)"></app-download-icon>
+          </div>
+        </div>
+        <app-uscis-table-details [isLoading]="uscisClosedTablePanelConfig.isLoading"
+          [displayedColumns]="uscisClosedTablePanelConfig.displayedColumns"
+          [columns]="uscisClosedTablePanelConfig.columns"
+          [tableData]="uscisClosedTablePanelConfig.tableData"
+          [totalRows]="uscisClosedTablePanelConfig.totalRows"
+          (paginatorClicked)="getNextClosedRecords($event)"
+        >
+        </app-uscis-table-details>
+      </mat-tab>
+    </mat-tab-group>
+    <div class="cnd-personal-info__footer">
+      <button mat-raised-button color="primary" (click)="goToDashboard()">
+        Close
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+<div class="intrvw">
+  <div class="intrvw__header">
+    <h2 class="card-title">Interviews</h2>
+    <div class="date-nav">
+      <button mat-button color="primary">
+        <mat-icon>arrow_back_ios</mat-icon>
+      </button>
+      <div class="date-nav__day">Today</div>
+      <button mat-button color="primary">
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </button>
+    </div>
+    <button class="intrvw__open-new" mat-button color="primary">
+      <span class="material-icons">open_in_new</span>
+    </button>
+  </div>
+  <div class="intrvw__cnt">
+    <div class="no-interviews">
+      <img
+        src="./assets/svg/employee-dashboard/No Interviews.svg"
+        width="100px"
+        alt=""
+      />
+      <p>No data to display</p>
+    </div>
+
+    <div class="int-list" style="display: none">
+      <button mat-button color="primary">
+        <mat-icon> arrow_back_ios </mat-icon>
+      </button>
+      <div class="interview">
+        <div class="interview__dtls">
+          <div class="interview__dtls--name">
+            <h2>Peter Cullen</h2>
+            <h4>Java Developer</h4>
+          </div>
+          <div class="interview__type">
+            <h3>Telephonic</h3>
+            <div class="interview__type--timing">
+              <p>From <b>9:00am</b> To <b>10:00am</b></p>
+            </div>
+          </div>
+        </div>
+        <div class="int-list__candi-name--call">
+          <img
+            src="./assets/svg/employee-dashboard/Interview-call.svg"
+            alt=""
+          />
+        </div>
+      </div>
+      <button mat-button color="primary">
+        <mat-icon> arrow_forward_ios </mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

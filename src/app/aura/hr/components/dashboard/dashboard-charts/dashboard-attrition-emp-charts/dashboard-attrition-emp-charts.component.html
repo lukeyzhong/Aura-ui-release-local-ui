@@ -1,0 +1,56 @@
+<div class="dashboard__overview dashboard__overview--attrition aura-widget">
+  <button
+    class="dashboard__overview--open-new"
+    mat-button
+    (click)="attritionDetails()"
+  >
+    <span class="material-icons">open_in_new</span>
+  </button>
+  <div *ngIf="isLoadSpinner; else attritionEmp" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <ng-template #attritionEmp>
+    <div class="dashboard__overview--count">
+      <h1>
+        <span class="chart-count"><b>{{
+          Math.abs(chartResponseData?.totalAttritedEmployeeCount! - chartResultPreviousYearMonth[0]?.attritedEmployeeCount!)
+        }}</b></span>
+        <span *ngIf="attritionUp" class="material-icons arrowcolor">
+          arrow_upward
+        </span>
+        <span *ngIf="attritionDown" class="material-icons">
+          arrow_downward
+        </span>
+        <span class="c-info">
+          <div>
+            <p>
+              {{ monthName?.slice(0, 3) }} {{ previousYear }}
+              -
+              {{ chartResultPreviousYearMonth[0]?.attritedEmployeeCount }}
+            </p>
+            <p>
+              {{ monthName?.slice(0, 3) }} {{ currYear }}
+              -
+              {{ chartResponseData?.totalAttritedEmployeeCount }}
+            </p>
+          </div>
+        </span>
+      </h1>
+      <p>Attrition (YTD)</p>
+    </div>
+    <div [style.height]="getChartHeight()">      
+      <canvas
+        baseChart
+        [datasets]="attritionLineChartData"
+        [labels]="attritionLineChartLabels"
+        [options]="attritionLineChartOptions"
+        [colors]="attritionLineChartColors"
+        [legend]="attritionLineChartLegend"
+        [chartType]="attritionLineChartType"
+        [legend]="false"
+      >
+      </canvas>
+    </div>
+    <div></div>
+  </ng-template>
+</div>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <g id="clock" transform="translate(-1.5 -1.126)">
+    <path id="Ellipse_324" data-name="Ellipse 324" d="M7.5-.5a8,8,0,1,1-8,8A8.009,8.009,0,0,1,7.5-.5Zm0,15a7,7,0,1,0-7-7A7.008,7.008,0,0,0,7.5,14.5Z" transform="translate(2 1.626)" fill="#008acc"/>
+    <path id="Path_15851" data-name="Path 15851" d="M14.925,12.35A.5.5,0,0,1,14.7,12.3l-2.925-1.463a.5.5,0,0,1-.276-.447V6a.5.5,0,0,1,1,0v4.079L15.149,11.4a.5.5,0,0,1-.224.947Z" transform="translate(-2.687 -1.075)" fill="#008acc"/>
+  </g>
+</svg>

@@ -1,0 +1,56 @@
+<div class="my-docs">
+  <mat-card class="my-docs__card">
+    <div class="my-docs__card--header">
+      <h3>My Documents</h3>
+      <hr />
+      <button
+        mat-button
+        color="primary"
+        (click)="downloadAllDocuments()"
+        *ngIf="!noData"
+      >
+        <mat-icon matTooltip="Download All">download</mat-icon>Download all
+      </button>
+    </div>
+    <div class="my-docs__card--content no-document" *ngIf="noData">
+      <img src="./assets/svg/employee-dashboard/no-docs.svg" width="30%" />
+    </div>
+    <div class="my-docs__card--content" *ngIf="!noData">
+      <div class="spinner" *ngIf="isLoading">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+
+      <div class="my-docs__pdf">
+        <div class="my-docs__pdf--header">
+          {{ resourceName }}
+        </div>
+        <div class="my-docs__img--viewer" *ngIf="isImage">
+          <img [src]="docURL" />
+        </div>
+        <div class="my-docs__pdf--viewer" *ngIf="isPdf">
+          <pdf-viewer
+            [src]="docURL"
+            [original-size]="false"
+            [render-text]="false"
+          >
+          </pdf-viewer>
+        </div>
+      </div>
+      <div class="my-docs__pdf-list">
+        <ul>
+          <li
+            *ngFor="let doc of onboardingMyDocumentsResult; let i = index"
+            [ngClass]="{
+              'active-doc': currentDocIndex === i
+            }"
+          >
+            <p (click)="viewDocument(doc, i)">{{ doc.resourceName }}</p>
+            <button mat-button (click)="downloadDocument(doc)">
+              <mat-icon matTooltip="Download">download</mat-icon>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </mat-card>
+</div>

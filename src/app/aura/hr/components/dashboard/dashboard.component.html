@@ -1,0 +1,92 @@
+<div class="dashboard">
+  <div *ngIf="isLoading" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+
+  <div
+    class="dashboard__comp"
+    *ngIf="isVisible(HRDashboardComponents.InnerTAEDataGraph)"
+  >
+    <app-dashboard-active-emp-charts
+      class="chart-can"
+    ></app-dashboard-active-emp-charts>
+  </div>
+  <div
+    class="dashboard__comp"
+    *ngIf="isVisible(HRDashboardComponents.InnerTNHDataGraph)"
+  >
+    <app-dashboard-new-emp-charts
+      class="chart-can"
+    ></app-dashboard-new-emp-charts>
+  </div>
+  <div
+    class="dashboard__comp"
+    *ngIf="isVisible(HRDashboardComponents.InnerATTRDataGraph)"
+  >
+    <app-dashboard-attrition-emp-charts
+      class="chart-can"
+    ></app-dashboard-attrition-emp-charts>
+  </div>
+  <div
+    class="dashboard__comp quick-cards"
+    *ngIf="isVisible(HRDashboardComponents.HRDashQuickLinks)"
+  >
+    <div class="quick-cards__scroll">
+      <!-- PROJECT ONBOARDING -->
+      <div
+        class="dashboard__comp p-on-board"
+        *ngIf="isVisible(HRDashboardComponents.ProjectOnboardings)"
+      >
+        <app-project-onboarding></app-project-onboarding>
+      </div>
+      <!-- BIRTHDAYS AND ANNIVERSARY -->
+      <div
+        class="dashboard__comp b-a"
+        *ngIf="isVisible(HRDashboardComponents.ViewAnniversaries)"
+      >
+        <app-birthday-annivarsary class="p-1"></app-birthday-annivarsary>
+      </div>
+      <!-- PAYROLL CALENDAR -->
+      <div
+        class="dashboard__comp"
+        *ngIf="isVisible(HRDashboardComponents.PayrollCalendar)"
+      >
+        <app-payroll-calendar class="p-1 p-roll"></app-payroll-calendar>
+      </div>
+      <!-- HOLIDAYS -->
+      <div
+        class="dashboard__comp"
+        *ngIf="isVisible(HRDashboardComponents.ViewHolidays)"
+      >
+        <app-dashboard-holidays class="p-1 holidays"></app-dashboard-holidays>
+      </div>
+      <div
+        class="dashboard__comp"
+        *ngIf="isVisible(HRDashboardComponents.HRDashQuickLinks)"
+      >
+        <app-quick-links [infoType]="infoType"></app-quick-links>
+      </div>
+    </div>
+  </div>
+  <div
+    class="dashboard__comp my-tasks"
+    *ngIf="isVisible(HRDashboardComponents.TasksCount)"
+  >
+    <app-dashboard-mytasks class="mytasks"></app-dashboard-mytasks>
+  </div>
+  <div
+    class="dashboard__comp onboard-list"
+    *ngIf="isVisible(HRDashboardComponents.OnboardingList)"
+  >
+    <app-dashboard-onboarding class="onboarding"></app-dashboard-onboarding>
+  </div>
+
+  <div
+    class="dashboard__comp count"
+    *ngIf="isVisible(HRDashboardComponents.TotalCounts)"
+  >
+    <app-dashboard-mytasks-counts
+      class="task-count"
+    ></app-dashboard-mytasks-counts>
+  </div>
+</div>

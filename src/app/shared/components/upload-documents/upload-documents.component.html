@@ -1,0 +1,258 @@
+<div class="employee-details__content-header" *ngIf="formName !== 'HRI9Form'">
+  <div class="modal-popup">
+    <form
+      class="pop-inner"
+      [formGroup]="uploadForm"
+      (ngSubmit)="saveDocuments()"
+    >
+      <div class="modal-popup__header">
+        <h3>Upload {{ entityType }} Documents</h3>
+        <button
+          mat-button
+          color="primary"
+          (click)="onCancel($event, uploadForm)"
+          color="primary"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-popup__content">
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+       
+        <div class="modal-popup__fields-col">
+          <div *ngIf="totalFiles > 0" class="width-100 full-width">
+            <div
+              formArrayName="docProperty"
+              class="modal-popup__uploaded-file"
+              *ngFor="let doc of docProperty.controls; let i = index"
+            >
+              <div [formGroupName]="i" class="width-100 flex-between">
+                <mat-form-field
+                  *ngIf="false"
+                  appearance="outline"
+                  class="file-name"
+                >
+                  <mat-label>Document ID</mat-label>
+                  <input
+                    matInput
+                    formControlName="documentId"
+                    placeholder="File Name"
+                  />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="file-name">
+                  <mat-label>Change File Name</mat-label>
+                  <input
+                    matInput
+                    formControlName="displayName"
+                    placeholder="File Name"
+                  />
+                  <div class="file-format">
+                    {{ doc?.get('fileExtension')?.value }}
+                  </div>
+                  <mat-error *ngIf="doc?.get('displayName')?.errors?.maxlength"
+                    >Maximum 100 characters allowed.
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="description file-name">
+                  <mat-label> Description</mat-label>
+                  <input
+                    matInput
+                    formControlName="fileDescription"
+                    placeholder="File Description"
+                  />
+                  <mat-error
+                    *ngIf="doc?.get('fileDescription')?.errors?.maxlength"
+                    >Maximum 500 characters allowed.
+                  </mat-error>
+                </mat-form-field>
+                <mat-icon (click)="deleteFile(doc, i)">delete</mat-icon>
+              </div>
+            </div>
+          </div>
+          <div class="modal-popup__file-upload">
+            <input
+              type="file"
+              title=""
+              accept="image/*,.pdf"
+              multiple="multiple"
+              formControlName="documentInfo"
+              (change)="uploadFiles($event)"
+            />
+            <button type="button" class="btn">BROWSE FILE</button>
+            <P>Drag & Drop File here</P>
+            <P class="file-format-msg"
+              >*Supported File Format (.pdf, .jpg, .jpeg, .png, .bmp)</P
+            >
+          </div>
+        </div>
+      </div>
+      <div class="modal-popup__footer">
+        <button
+          type="button"
+          mat-stroked-button
+          color="primary"
+          (click)="onCancel($event)"
+        >
+          Cancel
+        </button>
+        <button mat-raised-button color="primary">Save</button>
+      </div>
+      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+    </form>
+  </div>
+  <div class="overlay"></div>
+</div>
+
+<!--HR Verify I-9 Form: Start-->
+<div class="employee-details__content-header" *ngIf="formName === 'HRI9Form'">
+  <div class="modal-popup">
+    <div class="modal-popup__header">
+      <h3>Documents</h3>
+      <button mat-button color="primary" (click)="onCancel($event)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <form
+      class="pop-inner"
+      [formGroup]="uploadForm"
+      (ngSubmit)="saveUploadedPassportDocs()"
+    >
+      <div class="modal-popup__content">
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div class="modal-popup__fields">
+          <div class="width-100 full-width">
+            <div class="i9_card">
+              <div class="i9_card__container">
+                <div class="i9_card__container-content">
+                  <h3 class="title"><b>Upload Passport Picture</b></h3>
+                  <p>
+                    No photo found. Please submit a valid candidate passport
+                    document for a photo match.
+                  </p>
+                </div>
+                <div class="i9_card__container-fiels">
+                  <div *ngIf="uploadedfileNames[0]?.name!" class="file-info">
+                    <div
+                      *ngIf="
+                        uploadedfileNames[0]?.name!.split('.')[1] === 'pdf'
+                      "
+                      class="file-type"
+                    >
+                      <img width="24px" src="./assets/svg/icn-pdf.svg" alt="" />
+                    </div>
+                    <div
+                      *ngIf="
+                        ext?.includes(uploadedfileNames[0]?.name!.split('.')[1])
+                      "
+                      class="file-type"
+                    >
+                      <img
+                        width="24px"
+                        src="./assets/svg/icn-image.svg"
+                        alt=""
+                      />
+                    </div>
+                    <h4>{{ uploadedfileNames[0]?.name }}</h4>
+                    <div class="actions">
+                      <button
+                        type="button"
+                        (click)="previewDocsBeforeUpload(uploadedfileNames[0])"
+                        mat-mini-fab
+                        class="action-btn"
+                      >
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+                      <button
+                        type="button"
+                        (click)="deleteUploadedPassport(0)"
+                        mat-mini-fab
+                        class="action-btn"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div *ngIf="uploadedfileNames[1]?.name!" class="file-info">
+                    <div
+                      *ngIf="
+                        uploadedfileNames[1]?.name!.split('.')[1] === 'pdf'
+                      "
+                      class="file-type"
+                    >
+                      <img width="24px" src="./assets/svg/icn-pdf.svg" alt="" />
+                    </div>
+                    <div
+                      *ngIf="
+                        ext?.includes(uploadedfileNames[1]?.name!.split('.')[1])
+                      "
+                      class="file-type"
+                    >
+                      <img
+                        width="24px"
+                        src="./assets/svg/icn-image.svg"
+                        alt=""
+                      />
+                    </div>
+                    <h4>{{ uploadedfileNames[1]?.name }}</h4>
+                    <div class="actions">
+                      <button
+                        type="button"
+                        (click)="previewDocsBeforeUpload(uploadedfileNames[1])"
+                        mat-mini-fab
+                        class="action-btn"
+                      >
+                        <mat-icon>visibility</mat-icon>
+                      </button>
+                      <button
+                        type="button"
+                        (click)="deleteUploadedPassport(1)"
+                        mat-mini-fab
+                        class="action-btn"
+                      >
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-popup__file-upload">
+            <input
+              type="file"
+              title=""
+              accept="image/*,.pdf"
+              multiple="multiple"
+              formControlName="documentInfo"
+              (change)="uploadPassportFiles($event)"
+            />
+            <button type="button" class="btn">BROWSE FILE</button>
+            <P>Drag & Drop File here</P>
+            <P class="file-format-msg"
+              >*Supported File Format (.pdf, .jpg, .jpeg, .png, .bmp)</P
+            >
+          </div>
+        </div>
+      </div>
+      <div class="modal-popup__footer">
+        <button
+          type="button"
+          mat-stroked-button
+          color="primary"
+          (click)="onCancel($event)"
+        >
+          Cancel
+        </button>
+        <button mat-raised-button color="primary">Save</button>
+      </div>
+      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+    </form>
+  </div>
+  <div class="overlay"></div>
+</div>
+<!--HR Verify I-9 Form: End-->

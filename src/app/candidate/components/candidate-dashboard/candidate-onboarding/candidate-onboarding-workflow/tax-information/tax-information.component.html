@@ -1,0 +1,1529 @@
+<div class="tax-info">
+  <div class="tax-info__content">
+    <div class="tax-info__content--header">
+      <h3>
+        <img src="./assets/svg/HR Verify Icons/tax-info.svg" alt="" />
+        <b>Tax Information</b>
+      </h3>
+      <hr />
+    </div>
+    <form [formGroup]="taxInfoForm" class="tax-info__content--form">
+      <div class="tax-info__forms">
+        <div class="tax-info__forms--tabs">
+          <div class="tax-info__forms--header" *ngIf="!stateTax">
+            <h2>Federal Tax Withholding</h2>
+            <div class="tax-info__forms--files">
+              <div
+                *ngFor="let federalForm of federalTaxWithHoldingFormsList"
+                class="tax-info__forms--file"
+                (click)="openTaxForm(federalForm)"
+              >
+                <p>{{ federalForm.displayName }}</p>
+                <img src="./assets/svg/icn-pdf.svg" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="tax-info__forms--header" *ngIf="stateTax">
+            <h2>State Tax Withholding</h2>
+            <div class="tax-info__forms--files">
+              <div
+                *ngFor="let stateForm of stateTaxWithHoldingFormsList"
+                class="tax-info__forms--file"
+                (click)="openTaxForm(stateForm)"
+              >
+                <p>{{ stateForm.displayName }}</p>
+                <img src="./assets/svg/icn-pdf.svg" alt="" />
+              </div>
+            </div>
+          </div>
+          <div *ngIf="isLoading" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <div *ngIf="docURL === '' && stateTax === false" class="tax-tabs">
+            <!-- (selectedTabChange)="tabChanged($event)" -->
+            <mat-tab-group
+              mat-align-tabs="start"
+              [(selectedIndex)]="selectedIndex"
+            >
+              <mat-tab label="Step 1">
+                <div class="tax-tabs">
+                  <div class="form-l-group__header-hr">
+                    <h3>Step 1: Personal Information</h3>
+                    <hr />
+                  </div>
+                  <div class="form-l-group">
+                    <div class="form-l-group__form">
+                      <label for="">First Name</label>
+                      <p>
+                        {{
+                          piObj?.firstName
+                            ? piObj?.firstName
+                            : taxInformationResult?.firstName
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Last Name</label>
+                      <p>
+                        {{
+                          piObj?.lastName
+                            ? piObj?.lastName
+                            : taxInformationResult?.lastName
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">SSN</label>
+                      <p>{{ ssn ? ssn : taxInformationResult?.ssn }}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">City</label>
+                      <p>
+                        {{
+                          piObj?.city ? piObj?.city : taxInformationResult?.city
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">State</label>
+                      <p>
+                        {{
+                          piObj?.state
+                            ? piObj?.state
+                            : taxInformationResult?.state
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Country</label>
+                      <p>
+                        {{
+                          piObj?.country
+                            ? piObj?.country
+                            : taxInformationResult?.country
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Zip Code</label>
+                      <p>
+                        {{
+                          piObj?.postalCode
+                            ? piObj?.postalCode
+                            : taxInformationResult?.postalCode
+                        }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="form-fld-group">
+                    <div class="filing-status-code">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Filing Status</mat-label>
+                        <mat-select
+                          matInput
+                          required
+                          #filingStatus
+                          formControlName="federalFilingStatus"
+                          (selectionChange)="
+                            chooseFilingStatus(filingStatus.value)
+                          "
+                        >
+                          <mat-option
+                            *ngFor="
+                              let entry of mapFederalFilingStatusCode | keyvalue
+                            "
+                            [value]="entry.key"
+                            >{{ entry.value }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error
+                          *ngIf="
+                            taxInfoForm.controls['federalFilingStatus'].errors
+                              ?.required &&
+                            taxInfoForm.controls['federalFilingStatus'].pristine
+                          "
+                          >This field is mandatory.
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <p class="tax-info--note">
+                    <b>
+                      Complete Steps 2–4 ONLY if they apply to you; otherwise,
+                      skip to Sign. See page 2 in Federal W4 form for more
+                      information on each step, who can claim exemption from
+                      withholding, when to use the estimator at
+                      <a href="https://www.irs.gov/W4App" target="_blank">
+                        www.irs.gov/W4App</a
+                      >
+                      and privacy.</b
+                    >
+                  </p>
+                </div>
+                <div class="tax-info__footer">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    type="button"
+                    [disabled]="disableStep1NextBtn"
+                    (click)="saveFederalFilingStatus()"
+                  >
+                    Next
+                  </button>
+                </div>
+              </mat-tab>
+              <mat-tab label="Step 2">
+                <div class="tax-tabs">
+                  <div class="tax-info__forms--header">
+                    <h2>Federal Tax Withholding</h2>
+                  </div>
+                  <div class="form-l-group__header-hr">
+                    <h3>
+                      Step 2 : Multiple Jobs Or Spouse Works
+                      <small>(Only if applicable)</small>
+                    </h3>
+                    <hr />
+                    <button mat-button color="primary"></button>
+                  </div>
+                  <div class="tax-info__info">
+                    <b>Note :</b> Complete this step if you (1) hold more than
+                    one job at a time, or (2) are married filing jointly and
+                    your spouse also works. The correct amount of withholding
+                    depends on the income earned from all of these jobs
+                  </div>
+                  <mat-radio-group
+                    formControlName="federalTaxStep2RadioBtnAction"
+                    aria-labelledby="example-radio-group-label"
+                    class="example-radio-group"
+                    (change)="
+                      selectFederalTaxStep2RadioBtnActionOption($event.value)
+                    "
+                  >
+                    <mat-radio-button class="example-radio-button" value="1">
+                      Use the estimator at
+                      <a href="http://www.irs.gov/W4App " target="_blank"
+                        >www.irs.gov/W4App
+                      </a>
+                      for most accurate withholding for this step (and Steps
+                      3–4); or
+                    </mat-radio-button>
+                    <mat-radio-button class="example-radio-button" value="2">
+                      Use the Multiple Jobs Worksheet below and enter the result
+                      in Step 4(c) below for roughly accurate withholding; or
+                    </mat-radio-button>
+                    <mat-radio-button class="example-radio-button" value="3">
+                      If there are only two jobs in total, you may check this
+                      box. Do the same on Form W-4 for the other job. This
+                      option is accurate for jobs with similar pay; otherwise,
+                      more tax than necessary may be withheld
+                    </mat-radio-button>
+                  </mat-radio-group>
+                  <section
+                    class="multi-section"
+                    *ngIf="isMultipleJobsOrSpouseWorks"
+                  >
+                    <p class="total-jobs">
+                      <mat-checkbox
+                        formControlName="multipleJobs"
+                        [checked]="isMultipleJobsOrSpouseWorks"
+                        >Multiple Jobs Or Spouse Works</mat-checkbox
+                      >
+                    </p>
+                  </section>
+                  <div class="tax-info__info">
+                    <b>Tip : &nbsp; </b> To be accurate, submit a 2022 Form W-4
+                    for all other jobs. If you (or your spouse) have
+                    self-employment income, including as an independent
+                    contractor, use the estimator.
+                  </div>
+                  <p class="tax-info--note">
+                    <b>Complete Steps 3–4(b) </b> on Form W-4 for only ONE of
+                    these jobs. Leave those steps blank for the other jobs.
+                    (Your withholding will be most accurate if you complete
+                    Steps 3–4(b) on the Form W-4 for the highest paying job.)
+                  </p>
+                  <div class="tax-info__info" *ngIf="isUseMultipleJobsChecked">
+                    <div class="tax-info__info--title">
+                      <h3>
+                        Step 2(b)—Multiple Jobs Worksheet (Keep for your
+                        records.)
+                      </h3>
+                    </div>
+                    <p>
+                      If you choose the option in Step 2(b) on Form W-4,
+                      complete this worksheet (which calculates the total extra
+                      tax for all jobs) on only ONE Form W-4. Withholding will
+                      be most accurate if you complete the worksheet and enter
+                      the result on Form W-4 for the highest paying job.
+                    </p>
+                    <p>
+                      <b> Note: &nbsp;</b> If more than one job has annual wages
+                      of more than $120,000 or there are more than three jobs,
+                      see Pub. 505 for additional tables; or, you can use the
+                      online withholding estimator at
+                      <a href="www.irs.gov/W4App."> www.irs.gov/W4App.</a>
+                    </p>
+                    <p>
+                      <b> 1 Two jobs. &nbsp;</b> If you have two jobs or you’re
+                      married filing jointly and you and your spouse each have
+                      one job, find the amount from the appropriate table on
+                      page 4. Using the “Higher Paying Job” row and the “Lower
+                      Paying Job” column, find the value at the intersection of
+                      the two household salaries and enter that value on line 1.
+                      Then, skip to line 3………………………….. 1
+                    </p>
+                    <mat-form-field appearance="outline" floatLabel="always">
+                      <mat-label>Amount</mat-label>
+                      <input
+                        matInput
+                        formControlName="twoJobsAmount"
+                        class="example-right-align"
+                        placeholder="0"
+                        maxlength="10"
+                      />
+                      <span matPrefix>$&nbsp;</span>
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['twoJobsAmount'].errors?.pattern
+                        "
+                        >Numbers with decimal value are allowed</mat-error
+                      >
+                    </mat-form-field>
+                    <p>
+                      <b>2 Three jobs. &nbsp;</b> If you and/or your spouse have
+                      three jobs at the same time, complete lines 2a, 2b, and 2c
+                      below. Otherwise, skip to line 3.
+                    </p>
+                    <mat-form-field appearance="outline" floatLabel="always">
+                      <mat-label>Amount</mat-label>
+                      <input
+                        matInput
+                        formControlName="threeJobsAmount"
+                        class="example-right-align"
+                        placeholder="0"
+                        maxlength="10"
+                      />
+                      <span matPrefix>$&nbsp;</span>
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['threeJobsAmount'].errors
+                            ?.pattern
+                        "
+                        >Numbers with decimal value are allowed</mat-error
+                      >
+                    </mat-form-field>
+                    <div class="tax-info__sub">
+                      <p class="list">
+                        <b>a) &nbsp;</b> Find the amount from the appropriate
+                        table on page 4 using the annual wages from the highest
+                        paying job in the “Higher Paying Job” row and the annual
+                        wages for your next highest paying job in the “Lower
+                        Paying Job” column. Find the value at the intersection
+                        of the two household salaries and enter that value on
+                        line
+                        <b>2a</b>
+                      </p>
+                      <mat-form-field appearance="outline" floatLabel="always">
+                        <mat-label>Amount</mat-label>
+                        <input
+                          matInput
+                          formControlName="threeJobs2aAmount"
+                          class="example-right-align"
+                          placeholder="0"
+                          maxlength="10"
+                        />
+                        <span matPrefix>$&nbsp;</span>
+                        <mat-error
+                          *ngIf="
+                            taxInfoForm.controls['threeJobs2aAmount'].errors
+                              ?.pattern
+                          "
+                          >Numbers with decimal value are allowed</mat-error
+                        >
+                      </mat-form-field>
+                      <p class="list">
+                        <b>b) &nbsp;</b>
+                        Add the annual wages of the two highest-paying jobs from
+                        line 2a together and use the total as the wages in the
+                        “Higher Paying Job” row and use the annual wages for
+                        your third job in the “Lower Paying Job” column to find
+                        the amount from the appropriate table on page 4 and
+                        enter this amount on line2………
+                        <b>2b</b>
+                      </p>
+                      <mat-form-field appearance="outline" floatLabel="always">
+                        <mat-label>Amount</mat-label>
+                        <input
+                          matInput
+                          formControlName="threeJobs2bAmount"
+                          class="example-right-align"
+                          placeholder="0"
+                          maxlength="10"
+                        />
+                        <span matPrefix>$&nbsp;</span>
+                        <mat-error
+                          *ngIf="
+                            taxInfoForm.controls['threeJobs2bAmount'].errors
+                              ?.pattern
+                          "
+                          >Numbers with decimal value are allowed</mat-error
+                        >
+                      </mat-form-field>
+                      <p>
+                        <b>c)</b>
+                        Add the amounts from lines 2a and 2b and enter the
+                        result on line 2c
+                      </p>
+                      <mat-form-field appearance="outline" floatLabel="always">
+                        <mat-label>Amount</mat-label>
+                        <input
+                          matInput
+                          formControlName="threeJobs2cAmount"
+                          class="example-right-align"
+                          placeholder="0"
+                          maxlength="10"
+                        />
+                        <span matPrefix>$&nbsp;</span>
+                        <mat-error
+                          *ngIf="
+                            taxInfoForm.controls['threeJobs2cAmount'].errors
+                              ?.pattern
+                          "
+                          >Numbers with decimal value are allowed</mat-error
+                        >
+                      </mat-form-field>
+                    </div>
+                    <p class="list">
+                      <b> 3 &nbsp; </b> Enter the number of pay periods per year
+                      for the highest paying job. For example, if that job pays
+                      weekly, enter 52; if it pays every other week, enters 26;
+                      if it pays monthly, enters 12, etc
+                    </p>
+                    <mat-form-field appearance="outline" floatLabel="always">
+                      <mat-label>Amount</mat-label>
+                      <input
+                        matInput
+                        formControlName="numberOfPayPeriods"
+                        class="example-right-align"
+                        placeholder="0"
+                        maxlength="10"
+                      />
+                      <span matPrefix>$&nbsp;</span>
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['numberOfPayPeriods'].errors
+                            ?.pattern
+                        "
+                        >Numbers with decimal value are allowed</mat-error
+                      >
+                    </mat-form-field>
+                    <p class="list">
+                      <b>4 &nbsp;</b> Divide the annual amount on line 1 or line
+                      2c by the number of pay periods on line 3. Enter this
+                      amount here and in Step 4(c) of Form W-4 for the highest
+                      paying job (along with any other additional amount you
+                      want to be withheld)
+                    </p>
+                    <mat-form-field appearance="outline" floatLabel="always">
+                      <mat-label>Amount</mat-label>
+                      <input
+                        matInput
+                        formControlName="amountPerPayPeriod"
+                        class="example-right-align"
+                        placeholder="0"
+                        maxlength="10"
+                      />
+                      <span matPrefix>$&nbsp;</span>
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['amountPerPayPeriod'].errors
+                            ?.pattern
+                        "
+                        >Numbers with decimal value are allowed</mat-error
+                      >
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="tax-info__footer">
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    color="primary"
+                    (click)="previousStep()"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    mat-raised-button
+                    type="button"
+                    color="primary"
+                    (click)="saveMultipleJobs()"
+                  >
+                    Next
+                  </button>
+                </div>
+              </mat-tab>
+              <mat-tab label="Step 3">
+                <div class="tax-tabs">
+                  <div class="form-l-group__header-hr">
+                    <h3>Step 3 : Claim Dependants (Only if applicable)</h3>
+                    <hr />
+                  </div>
+                  <div class="tax-info__sub">
+                    <div class="tax-info__info">
+                      <b> Note : </b> If your total income will be $200,000 or
+                      less ($400,000 or less if married filing jointly)
+                    </div>
+                    <div class="tax-info__cnt">
+                      <div class="tax-info__cnt--list">
+                        <div class="claims">
+                          <p>
+                            1. Multiply the number of qualifying children under
+                            age 17 by $2,000
+                          </p>
+                          <div class="claims__cnt">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Number of Children</mat-label>
+                              <input
+                                matInput
+                                placeholder="0"
+                                min="0"
+                                max="10"
+                                formControlName="numberOfChildren"
+                                (keyup)="updateTotalChildrenClaimAmt($event)"
+                              />
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['numberOfChildren']
+                                    .errors?.pattern
+                                "
+                                >Only numbers are allowed</mat-error
+                              >
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['numberOfChildren']
+                                    .errors?.min
+                                "
+                                >Children count must be between 0 to
+                                10</mat-error
+                              >
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['numberOfChildren']
+                                    .errors?.max
+                                "
+                                >Children count must be between 0 to
+                                10</mat-error
+                              >
+                            </mat-form-field>
+                            <div class="claims__cnt--divider">
+                              *
+                              <p>$2000 =</p>
+                            </div>
+                            <div class="form-l-group">
+                              <div class="form-l-group__form">
+                                <label>Total Amount</label>
+                                <p>
+                                  {{ totalChildrenClaimAmt | currency: 'USD' }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="claims">
+                          <p>
+                            2. Multiply the number of other dependents by $500
+                          </p>
+                          <div class="claims__cnt">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Number of Dependents</mat-label>
+                              <input
+                                matInput
+                                placeholder="0"
+                                formControlName="numberOfDependents"
+                                min="0"
+                                max="10"
+                                (keyup)="updateTotalDependentsClaimAmt($event)"
+                              />
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['numberOfDependents']
+                                    .errors?.pattern
+                                "
+                                >Only numbers are allowed</mat-error
+                              >
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['numberOfDependents']
+                                    .errors?.min
+                                "
+                                >Dependents count must be between 0 to
+                                10</mat-error
+                              >
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['numberOfDependents']
+                                    .errors?.max
+                                "
+                                >Dependents count must be between 0 to
+                                10</mat-error
+                              >
+                            </mat-form-field>
+                            <div class="claims__cnt--divider">
+                              *
+                              <p>$500 =</p>
+                            </div>
+                            <div class="form-l-group">
+                              <div class="form-l-group__form">
+                                <label>Total Amount</label>
+                                <p>
+                                  {{
+                                    totalDependentsClaimAmt | currency: 'USD'
+                                  }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="claims">
+                          <p>
+                            3. Add the Total amounts above and enter the total
+                            here
+                          </p>
+                          <div class="claims__cnt">
+                            <div class="form-l-group">
+                              <div class="form-l-group__form">
+                                <label>Total Amount</label>
+                                <p>
+                                  {{ totalClaimAmt | currency: 'USD' }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tax-info__footer">
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    color="primary"
+                    (click)="previousStep()"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    mat-raised-button
+                    type="button"
+                    color="primary"
+                    (click)="saveClaimDependents()"
+                  >
+                    Next
+                  </button>
+                </div>
+              </mat-tab>
+              <mat-tab label="Step 4">
+                <div class="tax-tabs">
+                  <div class="form-l-group__header-hr">
+                    <h3>Step 4 : (Optional) : Other Adjustments</h3>
+                    <hr />
+                  </div>
+                  <div class="tax-info__cnt">
+                    <div class="tax-info__cnt--list">
+                      <div class="claims">
+                        <p>
+                          <b>(a) Other income (not from jobs). &nbsp;</b> If you
+                          want tax withheld for other income you expect this
+                          year that won’t have withholding, enter the amount of
+                          other income here. This may include interest,
+                          dividends, and retirement income
+                        </p>
+                        <div class="form-fld-group">
+                          <div class="claims__cnt">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Other Income Amount</mat-label>
+                              <input
+                                matInput
+                                formControlName="otherIncome"
+                                class="example-right-align"
+                                placeholder="0"
+                                maxlength="10"
+                              />
+                              <span matPrefix>$&nbsp;</span>
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['otherIncome'].errors
+                                    ?.pattern
+                                "
+                                >Amount must be between 2 digits to 10
+                                digits</mat-error
+                              >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="claims">
+                        <p>
+                          <b>(b) Deductions. &nbsp;</b> If you expect to claim
+                          deductions other than the standard deduction and want
+                          to reduce your withholding, use the Deductions
+                          Worksheet on page 3 and enter the result here
+                        </p>
+                        <p>
+                          W4 page 3 attachment (required if deductions selected
+                          as yes)
+                        </p>
+                        <div class="claims__cnt">
+                          <div class="form-fld-group">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Deductions </mat-label>
+                              <mat-select
+                                formControlName="hasDeductions"
+                                (selectionChange)="chooseDeductionsType($event)"
+                              >
+                                <mat-option value="Yes">Yes </mat-option>
+                                <mat-option value="No"> No </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                              <mat-label>Number of Deductions </mat-label>
+                              <input
+                                matInput
+                                placeholder="0"
+                                formControlName="numberOfDeductions"
+                                min="0"
+                                max="10"
+                              />
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['numberOfDeductions']
+                                    .errors?.pattern
+                                "
+                                >Only numbers are allowed</mat-error
+                              >
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['numberOfDeductions']
+                                    .errors?.min
+                                "
+                                >Deductions value must be between 0 to
+                                10</mat-error
+                              >
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['numberOfDeductions']
+                                    .errors?.max
+                                "
+                                >Deductions value must be between 0 to
+                                10</mat-error
+                              >
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                              <mat-label>Deduction Amount</mat-label>
+                              <input
+                                matInput
+                                formControlName="deductionAmount"
+                                class="example-right-align"
+                                placeholder="0"
+                                maxlength="10"
+                              />
+                              <span matPrefix>$&nbsp;</span>
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['deductionAmount'].errors
+                                    ?.pattern
+                                "
+                                >Amount must be between 2 digits to 10
+                                digits</mat-error
+                              >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="tax-info__info" *ngIf="showStep4B">
+                          <div class="tax-info__info--title">
+                            <h3>
+                              Step 4(b)—Deductions Worksheet (Keep for your
+                              records.)
+                            </h3>
+                          </div>
+                          <div class="claims">
+                            <p class="list">
+                              <b>1. </b> Enter an estimate of your 2022 itemized
+                              deductions (from Schedule A (Form 1040)). Such
+                              deductions may include qualifying home mortgage
+                              interest, charitable contributions, state and
+                              local taxes (up to$10,000), and medical expenses
+                              in excess of 7.5% of your income .. . 1
+                            </p>
+                            <div class="claims__cnt">
+                              <mat-form-field appearance="outline">
+                                <input
+                                  matInput
+                                  formControlName="deduction1Amount"
+                                  class="example-right-align"
+                                  placeholder="0"
+                                  maxlength="10"
+                                />
+                                <span matPrefix>$&nbsp;</span>
+                                <mat-error
+                                  *ngIf="
+                                    taxInfoForm.controls['deduction1Amount']
+                                      .errors?.pattern
+                                  "
+                                  >Amount must be between 2 digits to 10
+                                  digits</mat-error
+                                >
+                              </mat-form-field>
+                            </div>
+                          </div>
+
+                          <p class="list">
+                            <b>2. </b> Enter: $25,900 if you’re married filing
+                            jointly or qualifying widow(er)
+                          </p>
+                          <ul>
+                            <li>$19,400 if you’re head of household</li>
+                            <li>
+                              $12,950 if you’re single or married filing
+                              separately . . 2
+                            </li>
+                          </ul>
+                          <div class="claims__cnt">
+                            <mat-form-field appearance="outline">
+                              <input
+                                matInput
+                                formControlName="deduction2Amount"
+                                class="example-right-align"
+                                placeholder="0"
+                                maxlength="10"
+                              />
+                              <span matPrefix>$&nbsp;</span>
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['deduction2Amount']
+                                    .errors?.pattern
+                                "
+                                >Amount must be between 2 digits to 10
+                                digits</mat-error
+                              >
+                            </mat-form-field>
+                          </div>
+                          <p class="list">
+                            <b>3. </b> If line 1 is greater than line 2,
+                            subtract line 2 from line 1 and enter the result
+                            here. If line 2 is greater than line 1, enter “-0-”
+                            . . . . . 3
+                          </p>
+                          <div class="claims__cnt">
+                            <mat-form-field appearance="outline">
+                              <input
+                                matInput
+                                formControlName="deductionDifferenceAmount"
+                                class="example-right-align"
+                                placeholder="0"
+                                maxlength="10"
+                              />
+                              <span matPrefix>$&nbsp;</span>
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls[
+                                    'deductionDifferenceAmount'
+                                  ].errors?.pattern
+                                "
+                                >Amount must be between 2 digits to 10
+                                digits</mat-error
+                              >
+                            </mat-form-field>
+                          </div>
+                          <p class="list">
+                            <b>4. </b> Enter an estimate of your student loan
+                            interest, deductible IRA contributions, and certain
+                            other adjustments (from Part II of Schedule 1 (Form
+                            1040)). See Pub. 505 for more information . . . . 4
+                          </p>
+                          <div class="claims__cnt">
+                            <mat-form-field appearance="outline">
+                              <input
+                                matInput
+                                formControlName="adjustmentAmount"
+                                class="example-right-align"
+                                placeholder="0"
+                                maxlength="10"
+                              />
+                              <span matPrefix>$&nbsp;</span>
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['adjustmentAmount']
+                                    .errors?.pattern
+                                "
+                                >Amount must be between 2 digits to 10
+                                digits</mat-error
+                              >
+                            </mat-form-field>
+                          </div>
+                          <p class="list">
+                            <b>5. </b> Add lines 3 and 4. Enter the result here
+                            and in Step 4(b) of Form W-4 . . . . . . . . . . . 5
+                          </p>
+                          <div class="claims__cnt">
+                            <mat-form-field appearance="outline">
+                              <input
+                                matInput
+                                formControlName="totalDeductionAmount"
+                                class="example-right-align"
+                                placeholder="0"
+                                maxlength="10"
+                              />
+                              <span matPrefix>$&nbsp;</span>
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['totalDeductionAmount']
+                                    .errors?.pattern
+                                "
+                                >Amount must be between 2 digits to 10
+                                digits</mat-error
+                              >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="claims">
+                        <p>
+                          <b>(c) Extra withholding. &nbsp;</b> Enter any
+                          additional tax you want withheld each pay period
+                        </p>
+                        <div class="form-fld-group">
+                          <div class="claims__cnt">
+                            <mat-form-field appearance="outline">
+                              <mat-label>Additional Tax Amount</mat-label>
+                              <input
+                                matInput
+                                formControlName="additionalTaxAmount"
+                                class="example-right-align"
+                                placeholder="0"
+                                min="1"
+                                max="999"
+                              />
+                              <span matPrefix>$&nbsp;</span>
+                              <mat-error
+                                *ngIf="
+                                  taxInfoForm.controls['additionalTaxAmount']
+                                    .errors?.pattern
+                                "
+                                >Amount must be between 2 digits to 10
+                                digits</mat-error
+                              >
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tax-info__footer">
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    (click)="previousStep()"
+                    type="button"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    mat-raised-button
+                    type="button"
+                    color="primary"
+                    (click)="saveOtherAdjustments()"
+                  >
+                    Next
+                  </button>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Employers Info">
+                <div class="tax-tabs">
+                  <div class="form-l-group__header-hr">
+                    <h3>Employer’s Information</h3>
+                    <hr />
+                  </div>
+                  <div class="form-l-group">
+                    <div class="form-l-group__form">
+                      <label for="">Employer’s Name</label>
+                      <p>{{ taxInformationResult?.employerName }}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Employer Identification Number</label>
+                      <p>
+                        {{ taxInformationResult?.employerIdentificationNumber }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">First Date of Employment </label>
+                      <p>
+                        {{
+                          taxInformationResult?.firstEmploymentDate
+                            | date: 'MM/dd/yyyy'
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Employer’s Address</label>
+                      <p>{{ taxInformationResult?.employerAddress }}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">City </label>
+                      <p>{{ taxInformationResult?.employerCity }}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">State </label>
+                      <p>{{ taxInformationResult?.employerState }}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Country</label>
+                      <p>{{ taxInformationResult?.employerCountry }}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Zip Code</label>
+                      <p>{{ taxInformationResult?.employerZIPCode }}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="tax-info__footer">
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    (click)="previousStep()"
+                    type="button"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="nextStep()"
+                    type="button"
+                  >
+                    Next
+                  </button>
+                </div>
+              </mat-tab>
+              <mat-tab label="Sign">
+                <div class="tax-tabs">
+                  <div class="form-l-group__header-hr">
+                    <h3>Sign here (Mandatory)</h3>
+                    <hr />
+                  </div>
+                  <div class="tax-info__info">
+                    <b> Note : &nbsp;</b> Under penalties of perjury, I declare
+                    that this certificate, to the best of my knowledge and
+                    belief, is true, correct, and complete.
+                  </div>
+                  <div class="tax-info__sign">
+                    <div class="tax-info__sign">
+                      <div class="tax-info__sign--btn">
+                        <label>Employee Signature</label>
+                        <div
+                          class="tax-info__sign--img"
+                          *ngIf="
+                            taxInformationResult?.candidateSignatureId ===
+                              null &&
+                            (signEmpStatus === false || candSignURL === '')
+                          "
+                        >
+                          <button
+                            mat-raised-button
+                            color="primary"
+                            (click)="openSignatureDialog('Employee')"
+                          >
+                            Click to Sign
+                          </button>
+                        </div>
+
+                        <div
+                          class="tax-info__sign--img-close"
+                          *ngIf="
+                            (signEmpStatus === true && candSignURL !== '') ||
+                            taxInformationResult?.candidateSignatureId !== null
+                          "
+                        >
+                          <button
+                            class="close"
+                            mat-button
+                            color="warn"
+                            type="button"
+                            (click)="deleteSign()"
+                          >
+                            <mat-icon> close </mat-icon>
+                          </button>
+                          <img [src]="candSignURL" alt="" />
+                        </div>
+                      </div>
+                      <div class="tax-info__sign--date">
+                        <p>Date: {{ signDate | date: 'mediumDate' }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tax-info__footer">
+                  <button
+                    mat-stroked-button
+                    type="button"
+                    color="primary"
+                    (click)="previousStep()"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    mat-raised-button
+                    type="button"
+                    color="primary"
+                    [disabled]="
+                      taxInformationResult?.candidateSignatureId === null &&
+                      (signEmpStatus === false || candSignURL === '')
+                    "
+                    (click)="saveAndGenerateW4()"
+                  >
+                    Next
+                  </button>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+          <div class="tax-info__pdf" *ngIf="docURL">
+            <div class="pdf-viewer flex-1">
+              <div *ngIf="isLoadingFederalTax" class="spinner">
+                <app-spinner diameter="35"></app-spinner>
+              </div>
+
+              <pdf-viewer
+                src="{{ docURL }}"
+                [original-size]="false"
+              ></pdf-viewer>
+            </div>
+            <div class="tax-info__footer">
+              <button
+                mat-stroked-button
+                type="button"
+                color="primary"
+                (click)="docURL = ''"
+              >
+                Previous
+              </button>
+              <button
+                mat-raised-button
+                type="button"
+                color="primary"
+                (click)="openStateTaxWithHolding()"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+          <!-- (selectedTabChange)="tabChanged($event)" -->
+          <div class="state-tax" *ngIf="stateTax">
+            <mat-tab-group
+              [ngClass]="{
+                'disable-mat-tab-navigation': !stateTax,
+                'enable-mat-tab-navigation': stateTax
+              }"
+              mat-align-tabs="start"
+              [(selectedIndex)]="selectedIndex"
+            >
+              <mat-tab label="Personal Information">
+                <div class="tax-personal-info">
+                  <div class="form-l-group__header-hr">
+                    <h3>Step 1: Personal Information</h3>
+                    <hr />
+                  </div>
+                  <div class="form-l-group">
+                    <div class="form-l-group__form">
+                      <label for="">First Name</label>
+                      <p>
+                        {{
+                          piObj?.firstName
+                            ? piObj?.firstName
+                            : taxInformationResult?.firstName
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Last Name</label>
+                      <p>
+                        {{
+                          piObj?.lastName
+                            ? piObj?.lastName
+                            : taxInformationResult?.lastName
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">SSN</label>
+                      <p>{{ ssn ? ssn : taxInformationResult?.ssn }}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">City</label>
+                      <p>
+                        {{
+                          piObj?.city ? piObj?.city : taxInformationResult?.city
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">State</label>
+                      <p>
+                        {{
+                          piObj?.state
+                            ? piObj?.state
+                            : taxInformationResult?.state
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Country</label>
+                      <p>
+                        {{
+                          piObj?.country
+                            ? piObj?.country
+                            : taxInformationResult?.country
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Zip Code</label>
+                      <p>
+                        {{
+                          piObj?.postalCode
+                            ? piObj?.postalCode
+                            : taxInformationResult?.postalCode
+                        }}
+                      </p>
+                    </div>
+                    <div class="form-l-group__form">
+                      <label for="">Marital Status</label>
+                      <p>
+                        {{
+                          piObj?.maritalStatus
+                            ? piObj?.maritalStatus
+                            : taxInformationResult?.maritalStatus
+                        }}
+                      </p>
+                    </div>
+
+                    <div class="form-l-group__form">
+                      <label for="">Filing Status</label>
+                      <p>{{ taxFilingStatus }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tax-info__footer">
+                  <button
+                    type="button"
+                    mat-stroked-button
+                    type="button"
+                    color="primary"
+                    (click)="previousStep()"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    mat-raised-button
+                    type="button"
+                    color="primary"
+                    (click)="nextStep()"
+                  >
+                    Next
+                  </button>
+                </div>
+              </mat-tab>
+              <mat-tab label="State and Locality Tax's">
+                <div class="tax-personal-info">
+                  <div class="form-l-group__header-hr">
+                    <h3>State Tax</h3>
+                    <hr />
+                  </div>
+
+                  <div class="form-fld-group tax-form">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Worked State</mat-label>
+                      <input
+                        matInput
+                        placeholder="Worked State"
+                        formControlName="workedState"
+                        maxlength="50"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Total Exemptions Worked State</mat-label>
+                      <input
+                        matInput
+                        placeholder="0"
+                        formControlName="exemptionInWorkedState"
+                        min="0"
+                        max="10"
+                      />
+
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['exemptionInWorkedState'].errors
+                            ?.pattern
+                        "
+                        >Only numbers are allowed</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['exemptionInWorkedState'].errors
+                            ?.min
+                        "
+                        >Exemptions in worked state must be between 0 to
+                        10</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['exemptionInWorkedState'].errors
+                            ?.max
+                        "
+                        >Exemptions in worked state must be between 0 to
+                        10</mat-error
+                      >
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Lived In State</mat-label>
+                      <input
+                        matInput
+                        placeholder="Lived In State"
+                        formControlName="livedInState"
+                        maxlength="50"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Total Exemptions lived State</mat-label>
+                      <input
+                        matInput
+                        placeholder="0"
+                        formControlName="exemptionsInLivedInState"
+                        min="0"
+                        max="10"
+                      />
+
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['exemptionsInLivedInState']
+                            .errors?.pattern
+                        "
+                        >Only numbers are allowed</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['exemptionsInLivedInState']
+                            .errors?.min
+                        "
+                        >Exemptions in lived state must be between 0 to
+                        10</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['exemptionsInLivedInState']
+                            .errors?.max
+                        "
+                        >Exemptions in lived state must be between 0 to
+                        10</mat-error
+                      >
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Total Exemptions for Age and Blind </mat-label>
+                      <input
+                        matInput
+                        placeholder="0"
+                        formControlName="totalExemptionsForAgeOrBlind"
+                        min="0"
+                        max="10"
+                      />
+
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['totalExemptionsForAgeOrBlind']
+                            .errors?.pattern
+                        "
+                        >Only numbers are allowed</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['totalExemptionsForAgeOrBlind']
+                            .errors?.min
+                        "
+                        >Total Exemptions for age and blind must be between 0 to
+                        10</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['totalExemptionsForAgeOrBlind']
+                            .errors?.max
+                        "
+                        >Total Exemptions for age and blind must be between 0 to
+                        10</mat-error
+                      >
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Additional Taxes Amount</mat-label>
+                      <input
+                        matInput
+                        class="example-right-align"
+                        placeholder="Additional Taxes Amount"
+                        formControlName="stateAdditionalTaxAmount"
+                        min="1"
+                        max="999"
+                      />
+                      <span matPrefix>$&nbsp;</span>
+
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['stateAdditionalTaxAmount']
+                            .errors?.pattern
+                        "
+                        >Numbers with decimal value are allowed</mat-error
+                      >
+                    </mat-form-field>
+                  </div>
+
+                  <div class="form-l-group__header-hr">
+                    <h3>Locality Tax</h3>
+                    <hr />
+                  </div>
+                  <div class="form-fld-group">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Worked in City</mat-label>
+                      <input
+                        matInput
+                        placeholder="Worked in City"
+                        formControlName="workedinCity"
+                        maxlength="50"
+                      />
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['workedinCity'].errors?.pattern
+                        "
+                        >Only alphabets are allowed.
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Exemptions worked in city</mat-label>
+                      <input
+                        matInput
+                        placeholder="0"
+                        formControlName="exemptionsInWorkedCity"
+                        min="0"
+                        max="10"
+                      />
+
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['exemptionsInWorkedCity'].errors
+                            ?.pattern
+                        "
+                        >Only numbers are allowed</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['exemptionsInWorkedCity'].errors
+                            ?.min
+                        "
+                        >Exemptions in worked city must be between 0 to
+                        10</mat-error
+                      >
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['exemptionsInWorkedCity'].errors
+                            ?.max
+                        "
+                        >Exemptions in worked city must be between 0 to
+                        10</mat-error
+                      >
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Lived In Locality </mat-label>
+                      <input
+                        matInput
+                        placeholder="Lived In Locality"
+                        formControlName="livedInCity"
+                        maxlength="50"
+                      />
+                      <mat-error
+                        *ngIf="
+                          taxInfoForm.controls['livedInCity'].errors?.pattern
+                        "
+                        >Only alphabets are allowed.
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="tax-info__footer">
+                  <button
+                    type="button"
+                    mat-stroked-button
+                    color="primary"
+                    (click)="previousStep()"
+                  >
+                    Previous
+                  </button>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+
+        <div class="tax-info__forms--list">
+          <ul>
+            <li
+              *ngFor="let tax of taxFormsList; let i = index"
+              [ngClass]="{
+                active: currentTaxFormIndex === i,
+                verified: taxFormsUpdated.includes(i)
+              }"
+            >
+              <span class="doc-card__container--preview">
+                <mat-icon>check_circle</mat-icon>
+              </span>
+              <p matTooltip="{{ tax }}">
+                {{ tax }}
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="tax-info__footer">
+    <button
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="onPrevious()"
+    >
+      Previous
+    </button>
+    <button
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="goToDashboard()"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      mat-raised-button
+      color="primary"
+      [disabled]="!stateTax || selectedIndex === 0"
+      (click)="saveStateTaxDetails()"
+    >
+      Save & Continue
+    </button>
+  </div>
+</div>

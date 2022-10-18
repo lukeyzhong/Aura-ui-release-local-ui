@@ -1,0 +1,64 @@
+@import '../../../../../../styles/utilities/variables';
+
+.modal-popup {
+  &__footer {
+    border: none;
+  }
+  &__content {
+    padding: 15px 20px;
+    .mat-form-field {
+      width: 100%;
+    }
+    h3 {
+      color: $primary;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    textarea {
+      width: 100%;
+      border: 1px solid transparent;
+      border-radius: 5px;
+    }
+  }
+}
+.reject-Respons {
+  &__content {
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    h3 {
+      color: $primary;
+      font-size: 16px;
+      font-weight: bold;
+      padding: 10px 0;
+    }
+    p {
+      font-weight: 16px;
+      color: #4e4e4e;
+      padding-bottom: 10px;
+      a {
+        text-decoration: none;
+        color: $primary;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+    button {
+      margin: 15px 0;
+    }
+  }
+}
+.spinner {
+  position: inherit;
+  background-color: #fafafa;
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

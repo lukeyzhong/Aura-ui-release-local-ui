@@ -1,0 +1,54 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <div class="modal-popup__header">
+      <h3>Candidate Onboarding</h3>
+      <button (click)="onCancel($event)" mat-button color="primary">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-popup__content">
+      <div class="onboarding-header">
+        <div class="onboarding-header--search">
+          <input
+            type="text"
+            #search
+            (keyup)="performSearch(search.value)"
+            placeholder="Search....."
+            matTooltip="Search....."
+          />
+        
+        </div>
+        <div
+          *ngIf="detailsPanelConfig.totalRows !== 0"
+          class="onboarding-header--controls"
+        >
+           <app-download-icon (downloadBtnClicked)="download($event)"></app-download-icon>
+        </div>
+      </div>
+      <div class="accordion-parent">
+        <mat-accordion>
+          <div *ngFor="let entry of mapStatus | keyvalue">
+            <app-details-panel
+              [title]="entry.value!"
+              [titleCode]="entry.key!"
+              [displayedColumns]="detailsPanelConfig.displayedColumns"
+              [isLoading]="detailsPanelConfig.isLoading"
+              [tableData]="detailsPanelConfig.tableData"
+              [totalRows]="detailsPanelConfig.totalRows"
+              [isExpanded]="isExpanded"
+              [isDisabled]="isDisabled"
+              [expandedPanelCode]="titleCode"
+              [searchText]="searchText"
+              [counts]="onboardingCounts[entry.key]!"
+              [cardType]="cardType"
+              [cardStatusCode] = "cardStatusCode"
+              (paginatorClicked)="getNextRecords($event)"
+              (expandedPanelTitleCode)="getExpandedPanelTitleCode($event)"
+              (refreshCounts)="getOnboardingsCounts($event)"
+            ></app-details-panel>
+          </div>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>
+</div>

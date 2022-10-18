@@ -1,0 +1,36 @@
+.recent-activities {
+  position: relative;
+  padding: 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  &__header {
+    border-bottom: 1px solid #ccc;
+    h3 {
+      font-family: 'ProximaNova-semibold' !important;
+      font-size: 15px;
+    }
+  }
+  &__open-new {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    min-width: 32px;
+    height: 32px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  &__cnt {
+    position: absolute;
+    width: Calc(100% - 20px);
+    top: 50px;
+    bottom: 10px;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

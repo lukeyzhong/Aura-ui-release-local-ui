@@ -1,0 +1,53 @@
+<div class="dashboard__overview dashboard__overview--new-hires aura-widget">
+  <button
+    class="dashboard__overview--open-new"
+    mat-button
+    (click)="newHireEmployeesDetails()"
+  >
+    <span class="material-icons">open_in_new</span>
+  </button>
+  <div *ngIf="isLoadSpinner; else newEmp" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <ng-template #newEmp>
+    <div class="dashboard__overview--count">
+      <h1>
+        <span class="chart-count">{{
+          Math.abs(chartResponseData?.totalNewEmployeeCount! - chartResultPreviousYearMonth[0]?.newEmployeeCount!)
+        }}</span>
+        <span *ngIf="hireEmpUp" class="material-icons"> arrow_upward </span>
+        <span *ngIf="hireEmpDown" class="material-icons arrowcolor">
+          arrow_downward
+        </span>
+        <span class="c-info">
+          <div>
+            <p>
+              {{ monthName?.slice(0, 3) }} {{ previousYear }}
+              -
+              {{ chartResultPreviousYearMonth[0]?.newEmployeeCount }}
+            </p>
+            <p>
+              {{ monthName?.slice(0, 3) }} {{ currYear }} -
+              {{ chartResponseData?.totalNewEmployeeCount }}
+            </p>
+          </div>
+        </span>
+      </h1>
+      <p>Total New Hires (YTD)</p>
+    </div>
+    <div [style.height]="getChartHeight()">     
+      <canvas
+        baseChart
+        [datasets]="newHiresLineChartData"
+        [labels]="newHiresLineChartLabels"
+        [options]="newHiresLineChartOptions"
+        [colors]="newHiresLineChartColors"
+        [legend]="newHiresLineChartLegend"
+        [chartType]="newHiresLineChartType"
+        [legend]="false"
+      >
+      </canvas>
+    </div>
+    <div></div>
+  </ng-template>
+</div>

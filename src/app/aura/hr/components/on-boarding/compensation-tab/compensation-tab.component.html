@@ -1,0 +1,260 @@
+<form [formGroup]="compensationInfoForm" class="p-tab">
+  <div class="si__content">
+    <div class="si__form">
+      <div class="form-l-group__header-hr">
+        <h3>Compensation</h3>
+        <hr />
+      </div>
+    </div>
+    <div class="employment-details">
+      <div class="form-fld-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Compensation Type</mat-label>
+          <mat-select required formControlName="compensationType">
+            <mat-option
+              *ngFor="let entry of mapWageCompensationType | keyvalue"
+              [value]="entry.key"
+              >{{ entry.value }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              compensationInfoForm.controls['compensationType'].errors?.required
+            "
+            >This field is mandatory.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Calculated By </mat-label>
+          <mat-select required formControlName="calculatedBy">
+            <mat-option
+              *ngFor="let entry of mapCalculatedBy | keyvalue"
+              [value]="entry.key"
+              >{{ entry.value }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              compensationInfoForm.controls['calculatedBy'].errors?.required
+            "
+            >This field is mandatory.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Payment Frequency </mat-label>
+          <mat-select required formControlName="paymentFrequency">
+            <mat-option
+              *ngFor="let entry of mapPayFrequency | keyvalue"
+              [value]="entry.key"
+              >{{ entry.value }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              compensationInfoForm.controls['paymentFrequency'].errors?.required
+            "
+            >This field is mandatory.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" floatLabel="always">
+          <mat-label>Amount</mat-label>
+          <input
+            required
+            matInput
+            formControlName="amount"
+            placeholder="Amount"
+            maxlength="15"
+          />
+          <span matPrefix>$&nbsp;</span>
+          <mat-error
+            *ngIf="compensationInfoForm.controls['amount'].errors?.required"
+            >This field is mandatory.
+          </mat-error>
+          <mat-error
+            *ngIf="compensationInfoForm.controls['amount'].errors?.pattern"
+            >Only numeric charactors allowed
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="si__form">
+        <div class="form-l-group__header-hr">
+          <h3>Additional Earnings</h3>
+          <hr />
+          <button
+            type="button"
+            class="add-new"
+            mat-raised-button
+            color="primary"
+            (click)="addAdditionalEarnings()"
+          >
+            <mat-icon>add</mat-icon>
+            Add New
+          </button>
+        </div>
+
+        <div
+          formArrayName="additionalEarnings"
+          *ngFor="let earning of additionalEarnings?.controls; let i = index"
+          class="Additional-erng"
+        >
+          <div [formGroupName]="i" class="form-fld-group additional-ear">
+            <mat-form-field appearance="outline">
+              <mat-label>Compensation Name</mat-label>
+              <mat-select formControlName="compensationType">
+                <mat-option
+                  *ngFor="let entry of mapWageCompensationName | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Calculated By </mat-label>
+              <mat-select formControlName="calculatedBy">
+                <mat-option
+                  *ngFor="let entry of mapCalculatedBy | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Payment Frequency </mat-label>
+              <mat-select formControlName="paymentFrequency">
+                <mat-option
+                  *ngFor="let entry of mapPayFrequency | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Amount</mat-label>
+              <input
+                matInput
+                formControlName="amount"
+                placeholder="Amount"
+                maxlength="15"
+              />
+              <span matPrefix>$&nbsp;</span>
+              <mat-error *ngIf="earning?.get('amount')?.errors?.pattern"
+                >Only numeric charactors allowed</mat-error
+              >
+            </mat-form-field>
+
+            <button
+              type="button"
+              class="dlt-btn"
+              (click)="removeAdditionalEarnings(i)"
+            >
+              <mat-icon class="delete-earnings">clear</mat-icon>
+            </button>
+          </div>
+          <hr />
+        </div>
+      </div>
+
+      <div class="form-l-group__header-hr">
+        <h3>FLSA</h3>
+        <hr />
+      </div>
+      <div class="form-fld-group">
+        <mat-form-field appearance="outline">
+          <mat-label>FLSA Classification</mat-label>
+          <div class="form-info">
+            <mat-select
+              required
+              formControlName="flsaClassification"
+              (selectionChange)="chooseFLSAClassification($event)"
+            >
+              <mat-option value="true">Exempt </mat-option>
+              <mat-option value="false">Non-Exempt </mat-option>
+            </mat-select>
+            <mat-icon class="right-side">info</mat-icon>
+            <div class="field-info field-info--top">
+              <h4>FLSA: The Fair Labor Standards Act</h4>
+              <hr />
+              <div class="field-info__form">
+                <label for=""> Exempt: </label>
+                <p>
+                  An exempt employee is not paid overtime wages for hours worked
+                  over 40hours in a week.
+                </p>
+              </div>
+              <div class="field-info__form">
+                <label for=""> Non-exempt: </label>
+                <p>
+                  employees must receive overtime pay for hours worked over 40
+                  hours in a week.
+                </p>
+              </div>
+            </div>
+            <mat-error
+              *ngIf="
+                compensationInfoForm.controls['flsaClassification'].errors
+                  ?.required
+              "
+              >This field is mandatory.
+            </mat-error>
+          </div>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Overtime Pay Info</mat-label>
+          <input
+            required
+            matInput
+            formControlName="overTimePayInfo"
+            placeholder="overTime PayInfo"
+            maxlength="15"
+          />
+          <span matPrefix>$&nbsp;</span>
+          <mat-error
+            *ngIf="
+              compensationInfoForm.controls['overTimePayInfo'].errors?.required
+            "
+            >This field is mandatory.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              compensationInfoForm.controls['overTimePayInfo'].errors?.pattern
+            "
+            >Only numeric charactors allowed.
+          </mat-error>
+        </mat-form-field>
+        <div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card__footer">
+    <button
+      mat-stroked-button
+      type="button"
+      color="primary"
+      (click)="onRestore($event, compensationInfoForm)"
+    >
+      Previous
+    </button>
+
+    <button
+      type="button"
+      (click)="goToHrDashboard(compensationInfoForm)"
+      mat-stroked-button
+      color="primary"
+    >
+      Close
+    </button>
+
+    <button
+      mat-raised-button
+      [disabled]="compensationInfoForm.invalid"
+      type="button"
+      color="primary"
+      (click)="saveContinue(compensationInfoForm)"
+    >
+      Save & Continue
+    </button>
+  </div>
+</form>

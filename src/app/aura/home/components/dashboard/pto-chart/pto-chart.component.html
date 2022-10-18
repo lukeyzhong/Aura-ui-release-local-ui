@@ -1,0 +1,36 @@
+<div class="chart">
+  <div class="chart__header">
+    <h2 class="card-title">PTO</h2>
+    <button class="chart__header--open-new" mat-button color="primary">
+      <mat-icon>open_in_new</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="isLoadPTOChartSpinner; else ptoChart" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <div class="chart__cnt">
+    <ng-template #ptoChart>
+      <div class="chart__cnt--chart">
+        <canvas
+          baseChart
+          style="width: 100%; height: 100%"
+          [datasets]="empPTODoughnutChartData"
+          [labels]="empPTODoughnutChartLabels"
+          [options]="empPTODoughnutChartOptions"
+          [colors]="empPTODoughnutChartColors"
+          [legend]="empPTODoughnutChartLegend"
+          [chartType]="empPTODoughnutChartType"
+          [plugins]="doughnutChartPlugins"
+        >
+        </canvas>
+        <div
+          *ngIf="ptoChartData?.totalCount === 0 || ptoChartData === null"
+          class="no-data-display"
+        >
+          <img src="./assets/svg/employee-dashboard/PTO.svg" alt="" />
+          <p>No Data to display</p>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

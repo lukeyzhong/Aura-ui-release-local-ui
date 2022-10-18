@@ -1,0 +1,18 @@
+<div class="login-bg">
+  <div class="login">
+    <div *ngIf="isLoading" class="spinner">
+      <app-spinner diameter="35"></app-spinner>
+    </div>
+    <div class="login_logo">
+      <img src="./assets/svg/aura-logo-icon.svg" class="logo" width="120px" />
+    </div>
+    <div class="">
+      <antra-login class="default" [showLoginError]="showLoginError" [loginErrorMessage]="loginErrorMessage"
+        [loginUsingOption]="true" [loginUsingGmail]="true" [emailPattern]="emailPattern"
+        [emailAddressValidationMessage]="emailAddressValidationMsg" [passwordValidationMessage]="passwordValidationMsg"
+        (loginActionEvent)="getLoginActionEvent($event)">
+      </antra-login>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,216 @@
+<div class="employee-details-parent">
+  <!-- Certification Begin -->
+  <div class="employee-details">
+    <div class="employee-details__tabs-content">
+      <div class="employee-details__content-header">
+        <h3><b>Certification</b></h3>
+        <button
+          mat-button
+          color="primary"
+          (click)="addCertificationInfo('Add')"
+        >
+          Add New
+        </button>
+      </div>
+      <div class="card-parent">
+        <div class="card" *ngIf="isLoading; else certificationData">
+          <div class="spinner">
+            <app-spinner diameter="25"></app-spinner>
+          </div>
+        </div>
+        <ng-template #certificationData>
+          <div
+            class="card card-no-data"
+            *ngIf="totalCertificationDocs === 0; else CertificationDocs"
+          >
+            <div class="no-data">
+              <mat-icon> find_in_page </mat-icon>
+              <h4>Information Not Added</h4>
+            </div>
+          </div>
+          <ng-template #CertificationDocs>
+            <div
+              *ngFor="
+                let certificationInfo of certificationResult;
+                let i = index
+              "
+            >
+              <div class="card">
+                <div
+                  class="card__edit-icon"
+                  matTooltip="Edit"
+                  (click)="editCertificationInfo('Edit', i)"
+                  aria-label="Button that displays a tooltip when focused or hovered over"
+                >
+                  <mat-icon>edit</mat-icon>
+                </div>
+                <div class="card-fields">
+                  <ul class="certification-list">
+                    <li>
+                      <p class="card-fields__label">Certification Name</p>
+                      <p class="card-fields__value">
+                        {{ certificationInfo?.certificationName }}
+                      </p>
+                    </li>
+                    <li>
+                      <p class="card-fields__label">Certification Code</p>
+                      <p class="card-fields__value">
+                        {{
+                          certificationInfo?.certificationCode === 'null'
+                            ? ''
+                            : certificationInfo?.certificationCode
+                        }}
+                      </p>
+                    </li>
+                    <li>
+                      <p class="card-fields__label">Certificate Number</p>
+                      <p class="card-fields__value">
+                        {{
+                          certificationInfo?.certificateSerialNumber === 'null'
+                            ? ''
+                            : certificationInfo?.certificateSerialNumber
+                        }}
+                      </p>
+                    </li>
+                    <li>
+                      <p class="card-fields__label">Certifying Agency</p>
+                      <p class="card-fields__value">
+                        {{ certificationInfo?.certifyingAgency }}
+                      </p>
+                    </li>
+                    <li>
+                      <p class="card-fields__label">Date of Issue</p>
+                      <p class="card-fields__value">
+                        {{ certificationInfo?.issuedDate | date: 'MM-dd-yyyy' }}
+                      </p>
+                    </li>
+                    <li>
+                      <p class="card-fields__label">Expiration Date</p>
+                      <p class="card-fields__value">
+                        {{ certificationInfo?.expiryDate | date: 'MM-dd-yyyy' }}
+                      </p>
+                    </li>
+                    <li>
+                      <p class="card-fields__label">Status</p>
+                      <p class="card-fields__value">
+                        {{ certificationInfo?.certificationStatus }}
+                      </p>
+                    </li>
+                  </ul>
+
+                  <div class="file-area">
+                    <div
+                      class="document-table"
+                      [ngClass]="{
+                        'rows-collapse': certificationMoreOrLess[i]
+                      }"
+                      *ngIf="certificationInfo?.documents?.length! > 0"
+                    >
+                      <table cellspacing="0">
+                        <tr>
+                          <th width="45%">Document Name</th>
+                          <th width="20%">Description</th>
+                          <th width="20%">Uploaded On</th>
+                          <th>Uploaded By</th>
+                        </tr>
+                        <tr
+                          *ngFor="
+                            let certDocument of certificationInfo?.documents
+                          "
+                        >
+                          <td class="file-name">
+                            <div *ngIf="certDocument?.fileExtension === '.pdf'">
+                              <img
+                                width="24px"
+                                src="./assets/svg/icn-pdf.svg"
+                                alt=""
+                              />
+                            </div>
+                            <div
+                              *ngIf="
+                                fileExt.includes(certDocument?.fileExtension!)
+                              "
+                            >
+                              <img
+                                width="24px"
+                                src="./assets/svg/icn-image.svg"
+                                alt=""
+                              />
+                            </div>
+                            <p>{{ certDocument?.displayName }}</p>
+                            <span>
+                              <mat-icon
+                                matTooltip="Preview"
+                                (click)="previewDocument(certDocument)"
+                                >remove_red_eye
+                              </mat-icon> </span
+                            ><span>
+                              <mat-icon
+                                matTooltip="Download"
+                                (click)="downloadDocument(certDocument)"
+                                >get_app
+                              </mat-icon>
+                            </span>
+                          </td>
+                          <td>
+                            {{
+                              certDocument?.fileDescription === 'null'
+                                ? ''
+                                : certDocument?.fileDescription
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              certDocument?.createdDateTime
+                                | date: 'M-d-yyyy h:mm a'
+                            }}
+                          </td>
+                          <td>
+                            {{ personName }}
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div
+                      class="min-rows"
+                      *ngIf="certificationInfo?.documents?.length! > 1"
+                    >
+                      <button
+                        class="show-more-btn"
+                        (click)="
+                          certificationMoreOrLess[i] =
+                            !certificationMoreOrLess[i];
+                          showMoreLessCertification(i)
+                        "
+                      >
+                        {{ btnMoreLessCertText[i] }}
+                        <mat-icon
+                          [ngClass]="{
+                            less: btnMoreLessCertText[i] === 'Less'
+                          }"
+                          >expand_more</mat-icon
+                        >
+                      </button>
+                    </div>
+                    <div
+                      class="no-files"
+                      *ngIf="certificationInfo?.documents?.length === 0"
+                    >
+                      <img
+                        src="./assets/svg/no-doc-attached.svg"
+                        width="24px"
+                        alt=""
+                      />
+                      <h4>Documents Not Uploaded</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <!-- Certification Info End -->
+</div>

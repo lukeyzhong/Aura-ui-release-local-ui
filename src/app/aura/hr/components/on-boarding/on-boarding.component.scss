@@ -1,0 +1,382 @@
+@import '../../../../styles/utilities/variables';
+.onboarding-send {
+  padding: 0 20px 15px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  .mat-form-field {
+    margin-top: 16px;
+  }
+  ::ng-deep
+    .mat-tab-header-pagination-controls-enabled
+    .mat-tab-header-pagination {
+    display: none !important;
+  }
+  ::ng-deep .mat-tab-label {
+    padding: 0 10px !important;
+    height: 35px !important;
+    font-size: 12px !important;
+  }
+  ::ng-deep .mat-tab-body {
+    min-height: auto !important;
+    .mat-tab-body-content {
+      padding: 10px;
+      background-color: transparent;
+      border: none;
+      border-radius: 0;
+      border-top: 1px solid #ccc;
+    }
+  }
+  ::ng-deep .mat-tab-header {
+    width: max-content;
+  }
+
+  ::ng-deep .mat-step-header .mat-step-icon-state-done,
+  ::ng-deep .mat-step-header .mat-step-icon-state-edit {
+    background-color: green;
+  }
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-prefix {
+    top: 0 !important;
+  }
+  ::ng-deep .mat-stepper-horizontal {
+    display: flex;
+    margin: 0;
+    .mat-horizontal-stepper-header-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      border-radius: 10px;
+      background: rgb(3, 125, 189);
+      background: linear-gradient(
+        33deg,
+        rgba(3, 125, 189, 1) 0%,
+        rgba(2, 80, 152, 1) 100%
+      );
+
+      .mat-step-text-label {
+        color: #fff;
+        font-size: 17px;
+        font-weight: 300;
+      }
+      .mat-horizontal-stepper-content {
+        width: 100% !important;
+      }
+
+      .mat-stepper-horizontal-line {
+        display: none;
+      }
+    }
+    .mat-horizontal-content-container {
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+      padding: 0 10px 0px 15px !important;
+    }
+  }
+
+  ::ng-deep .mat-step-header {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box !important;
+
+    &::after {
+      content: '';
+      height: 100%;
+      border-left: 1px solid #fff;
+      display: block;
+      left: 36px;
+      position: absolute;
+      z-index: 0;
+    }
+    &:first-child {
+      &::after {
+        top: 50% !important;
+      }
+    }
+    &:last-child {
+      &::after {
+        bottom: 50% !important;
+      }
+    }
+
+    .mat-step-icon {
+      background-color: #a3a3a3;
+      border: 2px solid #fff;
+      z-index: 111;
+
+      &.mat-step-icon-state-done {
+        background-color: green;
+      }
+      &.mat-step-icon-state-edit,
+      &.mat-step-icon-selected {
+        background-color: #f78a0d;
+      }
+    }
+  }
+}
+.si-header {
+  display: flex;
+  justify-content: space-between;
+  h2 {
+    font-size: 20px;
+    color: #163160;
+  }
+}
+.si {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  ::ng-deep .mat-stepper-horizontal {
+    flex: 1;
+    display: flex;
+    .mat-horizontal-content-container {
+      position: relative;
+    }
+    .mat-horizontal-stepper-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      position: absolute;
+      top: 0;
+      left: 10px;
+      bottom: 0;
+      right: 0;
+      app-personal-info-tab,
+      app-employment-details-tab,
+      app-compensation-tab,
+      app-documents-tab,
+      app-preview-tab,
+      app-send-offer-tab {
+        overflow: auto;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+}
+.cnd-details {
+  display: flex;
+  ul {
+    display: flex;
+    li {
+      display: flex;
+      margin-left: 20px;
+      align-items: center;
+      label {
+        color: #a29c9c;
+      }
+      p {
+        margin-left: 5px !important;
+        color: #202020;
+        font-weight: 500;
+        font-family: 'ProximaNova-semibold' !important;
+      }
+    }
+  }
+  &__resume {
+    display: flex;
+    margin-left: 10px;
+  }
+}
+.si-content {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  &__card {
+    margin-top: 40px;
+    position: relative;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0px 3px 5px 0px rgb(0 0 0 / 20%);
+    -webkit-box-shadow: 0px 3px 5px 0px rgb(0 0 0 / 20%);
+    -moz-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    &--label {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      padding: 10px 25px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      background-color: $primary;
+      margin-left: 35px;
+      z-index: -1;
+      &::after {
+        content: '';
+        display: block;
+        width: 25px;
+        overflow: hidden;
+        height: 100%;
+        position: absolute;
+        border-radius: 0 0 10px 0 !important;
+        top: 0;
+        right: 100%;
+        box-shadow: 5px 24px 0 0 $primary;
+      }
+      &::before {
+        content: '';
+        display: block;
+        width: 25px;
+        overflow: hidden;
+        height: 91%;
+        position: absolute;
+        border-radius: 0 0px 10px 10px !important;
+        top: 3px;
+        right: -25px;
+        box-shadow: -14px 7px 0 0 $primary;
+      }
+
+      p {
+        color: #fff;
+      }
+    }
+    &--confirmation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      height: Calc(100vh - 210px);
+      p {
+        width: 50%;
+        text-align: center;
+        color: #606060;
+        margin: 20px 0 !important;
+        a {
+          color: $primary;
+          font-weight: bold;
+        }
+      }
+      button {
+        min-width: 300px;
+      }
+    }
+  }
+}
+
+.phone {
+  display: flex;
+  justify-content: space-between;
+  &__code {
+    width: 20%;
+    margin-right: 10px;
+  }
+  &__ext {
+    margin-left: 10px;
+    width: 20%;
+  }
+  &__number {
+    flex-grow: 1;
+  }
+}
+.phone-ext {
+  &__number {
+    width: 55%;
+  }
+}
+.card__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  button {
+    margin-left: 15px;
+  }
+  .disable-btn {
+    background-color: white;
+  }
+}
+.edit-icon {
+  min-width: 24px;
+  height: 24px;
+  border-radius: 30px;
+  padding: 0;
+  margin-left: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e2f5ff;
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #008acc;
+  }
+}
+.job-description {
+  display: flex;
+  position: absolute;
+  top: -30px;
+  right: 0px;
+  label {
+    color: #000000;
+    font-family: 'ProximaNova-light' !important;
+  }
+  p {
+    cursor: pointer;
+    font-weight: 400;
+    color: $primary;
+  }
+}
+
+::ng-deep
+  .mat-tab-header-pagination-controls-enabled
+  .mat-tab-header-pagination {
+  display: none !important;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-done,
+::ng-deep .mat-step-header .mat-step-icon-state-edit {
+  background-color: green;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-prefix {
+  top: 0 !important;
+}
+::ng-deep .mat-stepper-horizontal {
+  display: flex;
+  margin: 0;
+  .mat-horizontal-stepper-header-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 10px;
+    background: rgb(3, 125, 189);
+    background: linear-gradient(
+      33deg,
+      rgba(3, 125, 189, 1) 0%,
+      rgba(2, 80, 152, 1) 100%
+    );
+
+    .mat-step-text-label {
+      color: #fff;
+      font-size: 17px;
+      font-weight: 300;
+    }
+    .mat-horizontal-stepper-content {
+      width: 100% !important;
+    }
+
+    .mat-stepper-horizontal-line {
+      display: none;
+    }
+  }
+  .mat-horizontal-content-container {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding-bottom: 5px;
+  }
+}
+.inactiveStepper {
+  ::ng-deep .mat-horizontal-stepper-header {
+    pointer-events: none !important;
+  }
+}
+.activeStepper {
+  ::ng-deep .mat-horizontal-stepper-header {
+    pointer-events: unset !important;
+  }
+}

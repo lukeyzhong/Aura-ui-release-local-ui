@@ -1,0 +1,11 @@
+.current-time {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 13px;
+  font-family: 'ProximaNova-light' !important;
+  p {
+    width: 75px;
+    font-family: 'ProximaNova-light' !important;
+  }
+}

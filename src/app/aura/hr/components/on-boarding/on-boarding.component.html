@@ -1,0 +1,159 @@
+<div class="onboarding-send">
+  <div class="si-header">
+    <h2 class="page-header">Onboarding</h2>
+    <div class="cnd-details">
+      <ul>
+        <li>
+          <label for="">Candidate ID :</label>
+          <p>{{ onboardingDetailsResult?.candidateCode }}</p>
+        </li>
+        <li>
+          <label for="">Candidate Name :</label>
+          <p>
+            {{
+              candidateName === ''
+                ? onboardingDetailsResult?.candidateName
+                : candidateName
+            }}
+          </p>
+        </li>
+        <li>
+          <label for="">Recruiter :</label>
+          <p>{{ onboardingDetailsResult?.recruiterName }}</p>
+        </li>
+        <li>
+          <label for="">Resume </label>
+          <div
+            class="cnd-details__resume"
+            (click)="previewDocument(onboardingDetailsResult.resumeDocument)"
+            style="cursor: pointer"
+          >
+            <img src="./assets/svg/Document_icon.svg" width="24px" alt="" />
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="si-content">
+    <div class="si-content__card">
+      <div class="si-content__card--label">
+        <p>Send Invite</p>
+      </div>
+
+      <div class="si-content__card--confirmation" *ngIf="offerSentStatus">
+        <img src="./assets/svg/email_confirmation.svg" width="300px" alt="" />
+        <p>
+          Successfully sent offer letter to
+          <b>{{ onboardingDetailsResult?.candidateName }}.</b> <br />You will
+          receive notifications when candidate submitted the required documents.
+        </p>
+        <button
+          type="button"
+          mat-raised-button
+          color="primary"
+          (click)="goToHrDashboard()"
+        >
+          Go To Dashboard
+        </button>
+      </div>
+
+      <div class="cnd-details">
+        <div class="job-description">
+          <label for="">Client Job Code & Client Job Title :</label>
+          <p
+            (click)="showJobDescription(onboardingDetailsResult.jobDescription)"
+          >
+            {{
+              onboardingDetailsResult?.jobcode
+                ? onboardingDetailsResult?.jobcode + ', '
+                : ''
+            }}
+            {{
+              onboardingDetailsResult?.jobTitle
+                ? onboardingDetailsResult?.jobTitle
+                : ''
+            }}
+          </p>
+        </div>
+      </div>
+      <div class="si" *ngIf="offerSentStatus === false">
+        <mat-horizontal-stepper
+          [ngClass]="{
+            activeStepper: status === 'active',
+            inactiveStepper: status === 'inactive'
+          }"
+          [linear]="isLinear"
+          #stepper
+        >
+          <mat-step [stepControl]="personalGroup">
+            <ng-template matStepLabel>Personal Information </ng-template>
+            <app-personal-info-tab
+              [candidateId]="candidateId"
+              [candidateJobRequirementId]="candidateJobRequirementId"
+              [stepper]="stepper"
+              (candidateNameChanged)="getNewName($event)"
+            >
+            </app-personal-info-tab>
+          </mat-step>
+
+          <mat-step [stepControl]="employmentGroup" label="Employment Details">
+            <app-employment-details-tab
+              [candidateId]="candidateId"
+              [candidateJobRequirementId]="candidateJobRequirementId"
+              [stepper]="stepper"
+              (pkgTypeChanged)="getPkgType($event)"
+            >
+            </app-employment-details-tab>
+          </mat-step>
+
+          <mat-step [stepControl]="compensationGroup">
+            <ng-template matStepLabel>Compensation </ng-template>
+            <app-compensation-tab
+              [candidateId]="candidateId"
+              [candidateJobRequirementId]="candidateJobRequirementId"
+              [stepper]="stepper"
+            ></app-compensation-tab>
+          </mat-step>
+
+          <mat-step [stepControl]="documentsGroup">
+            <ng-template matStepLabel>Documents</ng-template>
+            <app-documents-tab
+              [candidateId]="candidateId"
+              [candidateJobRequirementId]="candidateJobRequirementId"
+              (enableSideBarNav)="setSideBarNavStatus($event)"
+              [stepper]="stepper"
+            >
+            </app-documents-tab>
+            <!-- <app-documents-tab
+            [pkgTypeValue]="pkgTypeValue"
+            [pkgTypeCode]="pkgTypeCode"
+            [candidateId]="candidateId"
+            [candidateJobRequirementId]="candidateJobRequirementId"
+            (enableSideBarNav)="setSideBarNavStatus($event)"
+            [stepper]="stepper"
+          >
+          </app-documents-tab> -->
+          </mat-step>
+
+          <mat-step [stepControl]="previewGroup">
+            <ng-template matStepLabel>Preview </ng-template>
+            <app-preview-tab
+              [candidateId]="candidateId"
+              [candidateJobRequirementId]="candidateJobRequirementId"
+              [stepper]="stepper"
+            ></app-preview-tab>
+          </mat-step>
+
+          <mat-step [stepControl]="sendOfferGroup">
+            <ng-template matStepLabel>Send Offer </ng-template>
+            <app-send-offer-tab
+              [candidateId]="candidateId"
+              [candidateJobRequirementId]="candidateJobRequirementId"
+              (offerSent)="getOfferSentStatus($event)"
+            ></app-send-offer-tab>
+          </mat-step>
+        </mat-horizontal-stepper>
+      </div>
+    </div>
+  </div>
+</div>

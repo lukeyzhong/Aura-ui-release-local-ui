@@ -1,0 +1,193 @@
+<div class="employee-details__content-header btn-alignment">
+  <h3><b>Form I-9 & E-Verify</b></h3>
+</div>
+<div class="card card-no-data" *ngIf="i9Result?.length === 0">
+    <div class="no-data">
+      <mat-icon> find_in_page </mat-icon>
+      <h4>No Data Found</h4>
+    </div>
+</div>
+<div
+  class="file-area"
+  *ngFor="let filteredI9 of filteredI9Result; let i = index"
+>
+  <div
+    class="card-parent"
+    *ngFor="let i9Details of filteredI9?.i9DocList | slice: 0:1"
+  >
+    <div class="document-table">
+      <table cellspacing="0">
+        <tr>
+          <th>Document Name</th>
+          <th>Description</th>
+          <th>Uploaded On</th>
+          <th>Uploaded By</th>
+          <th></th>
+        </tr>
+        <tr>
+          <td class="file-name">
+            <div *ngIf="i9Details?.fileExtension === '.pdf'">
+              <img width="24px" src="./assets/svg/icn-pdf.svg" alt="" />
+            </div>
+            <div *ngIf="fileExt.includes(i9Details?.fileExtension!)">
+              <img width="24px" src="./assets/svg/icn-image.svg" alt="" />
+            </div>
+            <p>
+              <b>{{ i9Details?.displayName }}</b>
+            </p>
+            <span>
+              <mat-icon
+                matTooltip="Preview"
+                (click)="previewDocument(i9Details)"
+                >remove_red_eye</mat-icon
+              > </span
+            ><span>
+              <mat-icon
+                matTooltip="Download"
+                (click)="downloadDocument(i9Details)"
+                >get_app</mat-icon
+              >
+            </span>
+          </td>
+          <td>
+            <b>{{ i9Details?.fileDescription }}</b>
+          </td>
+          <td>
+            <b>{{ i9Details?.uploadedDateTime | date: 'MM-dd-yyyy' }}</b>
+          </td>
+          <td>
+            <b>{{ personName }}</b>
+          </td>
+          <td>
+            <div *ngIf="i9Details?.documentPurposeCode === 16" class="expand-e-verify" (click)="eVerifyDetails()">
+              <b>E-Verify</b>
+              <span [ngClass]="{ open: showEVerify }"
+                ><mat-icon>expand_more</mat-icon></span
+              >
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="showEVerify && (i9Details?.documentPurposeCode === 16)">
+          <td colspan="5">
+            <div class="card-parent">
+                <div class="card card-no-data" *ngIf="!eVerifyResult">
+                    <div class="no-data">
+                      <mat-icon> find_in_page </mat-icon>
+                      <h4>No Data Found</h4>
+                    </div>
+                </div>
+              <div class="card" *ngIf="eVerifyResult">              
+                <div class="card-fields">
+                  <ul>
+                    <li>
+                      <p class="card-fields__label">Case Number</p>
+                      <p class="card-fields__value">
+                        <b>{{ eVerifyResult?.uscisCaseNumber }}</b>
+                      </p>
+                    </li>
+                    <li>
+                      <p class="card-fields__label">Case Results</p>
+                      <p class="card-fields__value">
+                        <b> {{ eVerifyResult?.caseEligibilityStatement }} </b>
+                      </p>
+                    </li>
+                    <li>
+                      <p class="card-fields__label">Document Expired</p>
+                      <p class="card-fields__value">
+                        <b>{{
+                          eVerifyResult?.documentExpiryDate | date: 'MM-dd-yyyy'
+                        }}</b>
+                      </p>
+                    </li>
+                    <li>
+                      <div class="adl-docs">
+                        <div class="reverify">Reverify</div>
+                        <div class="results" (click)="viewCaseResult()">
+                          View Case Result
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div
+      class="other-degrees"
+      *ngIf="
+        filteredI9?.i9DocList?.length! > 0 &&
+        filteredI9?.i9DocList?.length! - 1 !== 0
+      "
+    >
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <h4>
+              <i class="fas fa-xs fa-info-circle"></i> Previous I-9
+              <span class="previous-document-count">{{
+                filteredI9?.i9DocList?.length! - 1
+              }}</span>
+            </h4>
+          </mat-expansion-panel-header>
+          <div
+            class="document-table"
+            *ngFor="
+              let i9 of filteredI9?.i9DocList
+                | slice: 1:filteredI9?.i9DocList.length;
+              let i = index
+            "
+          >
+            <table cellspacing="0">
+              <tr>
+                <th>Document Name</th>
+                <th>Description</th>
+                <th>Uploaded On</th>
+                <th>Uploaded By</th>
+                <th></th>
+              </tr>
+              <tr>
+                <td class="file-name">
+                  <div *ngIf="i9?.fileExtension === '.pdf'">
+                    <img width="24px" src="./assets/svg/icn-pdf.svg" alt="" />
+                  </div>
+                  <div *ngIf="fileExt.includes(i9?.fileExtension!)">
+                    <img width="24px" src="./assets/svg/icn-image.svg" alt="" />
+                  </div>
+                  <p>
+                    <b>{{ i9?.displayName }}</b>
+                  </p>
+                  <span>
+                    <mat-icon matTooltip="Preview" (click)="previewDocument(i9)"
+                      >remove_red_eye</mat-icon
+                    > </span
+                  ><span>
+                    <mat-icon
+                      matTooltip="Download"
+                      (click)="downloadDocument(i9)"
+                      >get_app</mat-icon
+                    >
+                  </span>
+                </td>
+                <td>
+                  <b>{{ i9?.fileDescription }}</b>
+                </td>
+                <td>
+                  <b>{{ i9?.uploadedDateTime | date: 'MM-dd-yyyy' }}</b>
+                </td>
+                <td>
+                  <b>{{ personName }}</b>
+                </td>
+                <td>
+                  <div class="expand-e-verify"></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

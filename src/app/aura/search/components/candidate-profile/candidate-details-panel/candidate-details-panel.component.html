@@ -1,0 +1,50 @@
+<mat-tab-group>
+  <mat-tab label="Identification">
+    <app-summary-tab
+      [personId]="personId"
+      [id]="id"
+      [personName]="personName"
+    ></app-summary-tab>
+  </mat-tab>
+  <mat-tab label="Education & Skills">
+    <app-education-skills-tab
+      [personId]="personId"
+      [id]="id"
+      [personName]="personName"
+    ></app-education-skills-tab>
+  </mat-tab>
+  <mat-tab label="Certifications">
+    <app-certifications-tab
+      [personId]="personId"
+      [id]="id"
+      [personName]="personName"
+    ></app-certifications-tab>
+  </mat-tab>
+  <mat-tab label="Documents">
+    <app-candidate-documents-tab
+      [personId]="personId"
+      [id]="id"
+      [personName]="personName"
+    ></app-candidate-documents-tab>
+    </mat-tab>
+    <mat-tab label="Submissions">
+      <app-candidate-submissions-tab
+      [personId]="personId" 
+      ></app-candidate-submissions-tab>
+    </mat-tab>
+    <mat-tab label="Resume"> 
+      <app-candidate-resume-tab
+        [personId]="personId"
+        [personName]="personName"
+        [resumeDocumentId]="resumeDocumentId"
+        [displayName]="displayName"
+    ></app-candidate-resume-tab> 
+    </mat-tab>   
+  <mat-tab label="Notes">
+    <app-notes-tab
+      [personId]="personId"
+      [id]="id"
+      [personName]="personName"
+    ></app-notes-tab>
+  </mat-tab>
+</mat-tab-group>

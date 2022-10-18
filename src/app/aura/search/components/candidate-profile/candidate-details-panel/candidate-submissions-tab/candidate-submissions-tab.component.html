@@ -1,0 +1,18 @@
+<div class="employee-details-parent submissions-tab">
+    <div class="submission__header">
+        <mat-form-field appearance="outline" class="mat-tbl-search">           
+            <input matInput [disabled]="!enableSearch" #search (keydown.enter)="performSearch(search.value)" 
+            matTooltip="Press Enter Or Click On search icon after typing" matTooltipPosition="above" placeholder="Search">
+           <mat-icon *ngIf="enableSearch" id="search-icon" (click)="performSearch(search.value)" matSuffix>search</mat-icon>
+           <mat-icon *ngIf="!enableSearch" id="search-icon" matSuffix>search</mat-icon>
+        </mat-form-field>      
+    </div>  
+    <app-candidate-submissions-table    
+    [isLoading]="candidateSubmissionPanelConfig.isLoading"
+    [displayedColumns]="candidateSubmissionPanelConfig.displayedColumns" 
+    [columns]="candidateSubmissionPanelConfig.columns"
+    [tableData]="candidateSubmissionPanelConfig.tableData" 
+    [totalRows]="candidateSubmissionPanelConfig.totalRows"    
+    (paginatorClicked)="getNextRecords($event)"    
+    ></app-candidate-submissions-table>
+</div>

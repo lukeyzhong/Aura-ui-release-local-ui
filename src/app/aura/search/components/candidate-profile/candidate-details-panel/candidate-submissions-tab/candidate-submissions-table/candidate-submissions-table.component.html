@@ -1,0 +1,99 @@
+<div class="sr-panel">
+  <div class="sr-table">
+    <div *ngIf="isLoading; else data" class="spinner">
+      <app-spinner diameter="35"></app-spinner>
+    </div>
+    <ng-template #data>
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z8"
+        multiTemplateDataRows
+      >
+        <ng-container *ngFor="let col of columns" [matColumnDef]="col.key">
+          <th mat-header-cell *matHeaderCellDef>{{ col.headerDisplay }}</th>
+          <td mat-cell *matCellDef="let element">
+            <span
+              *ngIf="
+                col.key !== searchKey[0] &&
+                  col.key !== searchKey[1] &&
+                  col.key !== searchKey[2];
+                else searchLink
+              "
+            >
+              {{
+                element[col.key] === null || element[col.key] === ''
+                  ? '-'
+                  : isFloat(element[col.key]) === 1
+                  ? element[col.key]
+                  : isFloat(element[col.key]) === 0
+                  ? (element[col.key] | date: 'mediumDate')
+                  : element[col.key]
+              }}
+            </span>
+            <ng-template #searchLink>
+              <a
+                [ngClass]="{
+                  jobTitle: col.key === searchKey[0],
+                  vendorName: col.key === searchKey[1],
+                  endClientName: col.key === searchKey[2]
+                }"
+                matTooltip="{{ element[col.key] }}"
+                *ngIf="
+                  col.key === searchKey[0] ||
+                  col.key === searchKey[1] ||
+                  col.key === searchKey[2]
+                "
+                >{{ element[col.key] }}</a
+              >
+            </ng-template>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>RTR</th>
+          <td class="d-flex rtrCol" mat-cell *matCellDef="let row">
+            <a class="pdf-icons-table">
+              <span *ngIf="row.rtrDocumentFileExtension === '.pdf'"
+                ><img width="24px" src="./assets/svg/icn-pdf.svg" alt=""
+              /></span>
+              <span *ngIf="row.rtrDocumentFileExtension !== '.pdf'"
+                ><img width="24px" src="./assets/svg/icn-image.svg" alt=""
+              /></span>
+            </a>
+            <span class="link-icons">
+              <mat-icon (click)="previewDocument(row)" matTooltip="Preview"
+                >remove_red_eye</mat-icon
+              ></span
+            ><span class="link-icons">
+              <mat-icon (click)="downloadDocument(row)" matTooltip="Download"
+                >get_app</mat-icon
+              >
+            </span>
+          </td>
+        </ng-container>
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></tr>
+        <tr
+          (click)="select(row, $event)"
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+        ></tr>
+      </table>
+      <h4
+        class="no-data-display"
+        *ngIf="!isLoading && dataSource.data.length === 0"
+      >
+        No Data to Display
+      </h4>
+    </ng-template>
+  </div>
+  <mat-paginator
+    [length]="resultsLength"
+    (page)="pageChanged($event)"
+    [pageSizeOptions]="pageSizeOptions"
+    showFirstLastButtons
+  >
+  </mat-paginator>
+</div>

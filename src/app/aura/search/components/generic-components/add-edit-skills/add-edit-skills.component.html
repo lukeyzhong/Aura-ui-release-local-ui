@@ -1,0 +1,89 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <form  class="pop-inner" [formGroup]="skillsForm" (ngSubmit)="saveSkills()">
+      <div class="modal-popup__header">
+        <h3>{{ headerTitle }}</h3>
+        <button
+          (click)="onCancel($event, skillsForm)"
+          mat-button
+          color="primary"
+          type="button"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-popup__content">
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div class="form-fld-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Skill</mat-label>
+            <input required
+              matInput
+              [formControl]="skill"
+              [matAutocomplete]="skillAuto"
+              placeholder="Skill Name"
+            />
+            <mat-autocomplete #skillAuto="matAutocomplete">
+              <mat-option
+                *ngFor="let entry of mapSkillName | keyvalue"
+                [value]="entry.value"
+                >{{ entry.value }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="skill.errors?.required"
+              >This field is mandatory.</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Skill Level</mat-label>
+            <mat-select required formControlName="skillLevel">
+              <mat-option
+                *ngFor="let entry of mapSkillLevel | keyvalue"
+                [value]="entry.key"
+                >{{ entry.value }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="skillsForm.controls['skillLevel'].errors?.required"
+              >This field is mandatory.</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Last Used In</mat-label>
+            <mat-select required formControlName="lastUsedYear">
+              <mat-option *ngFor="let year of last15Years" [value]="year">{{
+                year
+              }}</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="skillsForm.controls['lastUsedYear'].errors?.required"
+              >This field is mandatory.</mat-error
+            >
+          </mat-form-field>
+        </div>
+        
+      </div>
+      <div class="modal-popup__footer">
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="onCancel($event, skillsForm)"
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="skillsForm.invalid || skill.invalid"
+          >
+            Save
+          </button>
+        </div>
+      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+    </form>
+  </div>
+</div>

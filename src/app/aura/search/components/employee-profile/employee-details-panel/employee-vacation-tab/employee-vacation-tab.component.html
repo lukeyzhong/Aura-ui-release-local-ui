@@ -1,0 +1,114 @@
+<div class="vocation-page">
+  <div class="vocation-page-head">
+    <div class="paid-leaves">
+      <div *ngIf="isLoadSpinner" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <h4>Paid Leaves</h4>
+      <div class="paid-leaves-row">
+        <div>
+          <ul>
+            <li>
+              <p>Available</p>
+              <p class="paid-leaves__value paid-leaves__value--available">
+                {{empPTOSummary?.availableHours}} Hrs
+              </p>
+            </li>
+            <li>
+              <p>Accrued So Far</p>
+              <p class="paid-leaves__value paid-leaves__value--accrued">
+                {{empPTOSummary?.accuredHours}} Hrs
+              </p>
+            </li>
+            <li>
+              <p>Consumed</p>
+              <p class="paid-leaves__value paid-leaves__value--consumed">
+                {{empPTOSummary?.consumedHours}} Hrs
+              </p>
+            </li>
+            <li>
+              <p>Pending for Approvals</p>
+              <p class="paid-leaves__value paid-leaves__value--pending">
+                {{empPTOSummary?.approvalPendingHours}} Hrs
+              </p>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div>
+            <div class="relative">
+              <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [legend]="false"
+                [colors]="chartColors" [options]="chartOptions" [chartType]="doughnutChartType">
+              </canvas>
+              <div
+                *ngIf="empPTOSummary?.availableHours || empPTOSummary?.consumedHours || empPTOSummary?.approvalPendingHours"
+                class="absolute-center text-center">
+                <p><b>{{empPTOSummary?.availableHours}} Hrs</b> <br>Available</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vo-timesheet">
+      <div *ngIf="isLoading" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <h4 class="d-flex">TIME SHEET <span>{{dateRange}}</span>
+        <div class="calendar-parent">
+          <mat-icon>date_range</mat-icon>
+          <mat-form-field appearance="outline" class="date-picker-week">
+            <input matInput type="date" (change)="onChangeEvent($event)" placeholder="Placeholder" />
+          </mat-form-field>
+        </div>
+        <mat-icon *ngIf="btnClose" class="close-icon" (click)="displayCloseBtn();">highlight_off</mat-icon>
+      </h4>
+      <div class="timesheet-container">
+        <div class="timesheet-container__arrow arrow--pre" matTooltip="Previous Week"
+          aria-label="Button that displays a tooltip when focused or hovered over">
+          <mat-icon (click)="movingBackward()">
+            arrow_back_ios_new
+          </mat-icon>
+        </div>
+        <div *ngIf="errorCode !== 0" class="vo-timesheet__week vo-timesheet__week--empty">
+          <mat-icon>
+            date_range
+          </mat-icon>
+          <p>time sheet not available for this week</p>
+        </div>
+        <div *ngIf="errorCode === 0" class="d-flex vo-timesheet__week">
+          <div *ngFor="let timesheet of employeeTimesheetDetails; let i = index" class="vo-timesheet__box" [ngClass]="{
+          'vo-timesheet__box--pto':(i===1 || i===2 || i===3 || i===4 || i===5)
+        }">
+            <p class="vo-timesheet__date">{{daylist[i]}}</p>
+            <p class="vo-timesheet__day">{{days[i]}}</p>
+            <p [ngClass]="{
+            'timesheet_holiday':(i === 0 || i === 6)}" class="vo-timesheet__hrs">{{timesheet?.hours}} Hrs</p>
+            <p class="vo-timesheet__label" [ngClass]="{
+            'vo-timesheet__label--pto':(timesheet?.chargeCodeType === 'Paid Vacation'),
+            'vo-timesheet__label--worked':(timesheet?.chargeCodeType === 'Worked'),
+            'vo-timesheet__label--unpaid':(timesheet?.chargeCodeType === 'Unpaid Vacation')
+          }"> <span></span>{{timesheet?.chargeCodeType!.split(' ')[0]}}</p>
+          </div>
+        </div>
+        <div class="timesheet-container__arrow arrow--next" matTooltip="Next Week"
+          aria-label="Button that displays a tooltip when focused or hovered over">
+          <mat-icon (click)="movingForward()">
+            arrow_forward_ios
+          </mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ts-table">
+    <h3 class="sub-header">PTO</h3>
+    <div class="">
+      <app-vacation-history-panel [isLoading]="employeesVacationHistoryPanelConfig.isLoading"
+        [displayedColumns]="employeesVacationHistoryPanelConfig.displayedColumns"
+        [columns]="employeesVacationHistoryPanelConfig.columns"
+        [tableData]="employeesVacationHistoryPanelConfig.tableData"
+        [totalRows]="employeesVacationHistoryPanelConfig.totalRows" (paginatorClicked)="getNextRecords($event)">
+      </app-vacation-history-panel>
+    </div>
+  </div>
+</div>

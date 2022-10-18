@@ -1,0 +1,67 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <form  class="pop-inner" [formGroup]="notesForm" (ngSubmit)="saveNotes()">
+      <div class="modal-popup__header">
+        <h3>Add Notes</h3>
+        <button
+          (click)="onCancel($event, notesForm)"
+          mat-button
+          color="primary"
+          type="button"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-popup__content">
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div class="modal-popup__fields">
+          <div class="width-100 full-width">
+            <ckeditor
+              [editor]="editor"
+              formControlName="comment"
+              [config]="{
+                toolbar: [
+                  'heading',
+                  '|',
+                  'bold',
+                  'italic',
+                  'link',
+                  'bulletedList',
+                  'numberedList',
+                  '|',
+                  'indent',
+                  'outdent',
+                  '|',
+                  'undo',
+                  'redo'
+                ]
+              }"
+            ></ckeditor>
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-popup__footer">
+          <button
+            mat-stroked-button
+            color="primary"
+            (click)="onCancel($event, notesForm)"
+            type="button"
+          >
+            Cancel
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="notesForm.invalid"
+          >
+            Save
+          </button>
+        </div>
+      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+    </form>
+  </div>
+</div>

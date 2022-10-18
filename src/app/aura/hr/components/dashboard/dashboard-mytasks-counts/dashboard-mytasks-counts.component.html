@@ -1,0 +1,87 @@
+<div class="task-actions">
+  <div class="task-actions--header">
+    <h3 class="card-title">Alerts</h3>
+  </div>
+  <div *ngIf="isLoadTaskCountSpinner" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <!-- <div *ngIf="!toggleDiv" class="task-actions--options">
+    <button mat-button color="primary" (click)="toggle()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div *ngIf="toggleDiv" class="task-actions--overlay">
+    <form [formGroup]="taskForm" (ngSubmit)="saveCheckBoxSelection()">
+      <button class="task-actions--close" mat-button color="primary">
+        <mat-icon>close</mat-icon>
+      </button>
+      <div class="task-actions--list">
+        <ul>
+          <li
+            formArrayName="chkBoxProperty"
+            *ngFor="let chk of chkBoxProperty.controls; let i = index"
+          >
+            <div [formGroupName]="i">
+              <input type="checkbox" formControlName="checkBox" />
+              {{ chk?.get('chkBoxKey')?.value }}
+            </div>
+          </li>
+        </ul>
+      </div>
+    </form>
+  </div> -->
+  <div class="task-actions__nav">
+    <div class="task-actions__nav--left">
+      <button
+        mat-button
+        [style.visibility]="!isTaskBackward ? 'hidden' : 'visible'"
+        (click)="taskBackward()"
+        color="primary"
+      >
+        <mat-icon>arrow_back_ios</mat-icon>
+      </button>
+    </div>
+    <div class="task-actions__nav--center">   
+      <div class="task-actions__nav--card" (click)="redirectToDetails(taskCounts[index]?.key)">
+        <div class="task-actions__nav--c-dtls">
+          <h2>{{ taskCounts[index]?.value }}</h2>
+          <p>{{ taskCounts[index]?.key }}</p>
+        </div>
+      </div>
+      <div class="task-actions__nav--card" (click)="redirectToDetails(taskCounts[index + 1]?.key)">
+        <div class="task-actions__nav--c-dtls">
+          <h2>{{ taskCounts[index + 1]?.value }}</h2>
+          <p>{{ taskCounts[index + 1]?.key }}</p>
+        </div>
+      </div>
+      <div class="task-actions__nav--card" (click)="redirectToDetails(taskCounts[index + 2]?.key)">
+        <div class="task-actions__nav--c-dtls">
+          <h2>{{ taskCounts[index + 2]?.value }}</h2>
+          <p>{{ taskCounts[index + 2]?.key }}</p>
+        </div>
+      </div>
+      <div class="task-actions__nav--card" (click)="redirectToDetails(taskCounts[index + 3]?.key)">
+        <div class="task-actions__nav--c-dtls">
+          <h2>{{ taskCounts[index + 3]?.value }}</h2>
+          <p>{{ taskCounts[index + 3]?.key }}</p>
+        </div>
+      </div>
+      <div class="task-actions__nav--card" (click)="redirectToDetails(taskCounts[index + 4]?.key)">
+        <div class="task-actions__nav--c-dtls">
+          <h2>{{ taskCounts[index + 4]?.value }}</h2>
+          <p>{{ taskCounts[index + 4]?.key }}</p>
+        </div>
+      </div>     
+    </div>
+    <div class="task-actions__nav--right">
+      <button
+        mat-button
+        [style.visibility]="!isTaskForward ? 'hidden' : 'visible'"
+        (click)="taskForward()"
+        color="primary"
+      >
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

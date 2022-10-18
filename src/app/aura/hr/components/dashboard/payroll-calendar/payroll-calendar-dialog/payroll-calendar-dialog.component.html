@@ -1,0 +1,83 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <div class="modal-popup__header">
+      <h3>Payroll Schedule {{ currentDate?.year }}</h3>
+      <div>
+        <button mat-button (click)="onCancel($event)" color="primary">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="modal-popup__content">
+      <div class="payroll-calendar">
+        <div class="download-btn">
+          <app-download-icon
+            (downloadBtnClicked)="download($event)"
+          ></app-download-icon>
+        </div>
+        <mat-tab-group
+          #calendarView
+          animationDuration="0ms"
+          (focusChange)="tabChanged($event)"
+          [selectedIndex]="0"
+          class="payroll-tabs"
+        >
+          <mat-tab label="Month">
+            <div class="p-roll">
+              <div class="spinner" *ngIf="isLoading; else payRollCalendar">
+                <app-spinner diameter="35"></app-spinner>
+              </div>
+              <ng-template #payRollCalendar>
+                <div class="p-roll__clndr">
+                  <div class="payrolldate">
+                    <mat-card class="payroll-inline-calendar-card">
+                      <mat-calendar
+                        #month
+                        (click)="onClick($event)"
+                        [dateClass]="hanldeDateClass"
+                      ></mat-calendar>
+                    </mat-card>
+                  </div>
+                  <div class="p-days">
+                    <div class="p-days__cards">
+                      <mat-card
+                        class="p-days__card"
+                        *ngFor="let payList of payrollCalendarList"
+                      >
+                        <div class="date">
+                          <h2>{{ payList?.payDateText }}</h2>
+                          <p>Pay Date</p>
+                        </div>
+                        <div class="p-days__card--lbls">
+                          <div class="p-days__card--form">
+                            <label for="">From Date :</label>
+                            <p>{{ payList?.fromDateText }}</p>
+                          </div>
+                          <div class="p-days__card--form">
+                            <label for="">To Date :</label>
+                            <p>{{ payList?.toDateText }}</p>
+                          </div>
+                        </div>
+                        <div class="p-days__card--day">
+                          Last Date for Submission
+                          <p>{{ payList?.submText }}</p>
+                        </div>
+                      </mat-card>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </div>
+          </mat-tab>
+          <mat-tab label="Year">
+            <app-custom-calendar
+              *ngIf="yearView === 1"
+              [payrollCalendarResult]="payrollCalendarResult"
+              (monthChanged)="switchMonth($event)"
+            ></app-custom-calendar>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

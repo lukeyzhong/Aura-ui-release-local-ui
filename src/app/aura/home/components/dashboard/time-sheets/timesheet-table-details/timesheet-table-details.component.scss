@@ -1,0 +1,42 @@
+.tbl-responsive {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  flex: 1;
+  position: absolute;
+  min-width: 100%;
+  top: 6px;
+  bottom: 4px;
+  ::ng-deep .mat-paginator {
+    button:disabled,
+    button[disabled] {
+      background-color: transparent !important;
+      border: none;
+      cursor: not-allowed;
+    }
+  }
+  .no-data-display {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+:host {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.no-data-display {
+  display: block;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.54);
+
+  img {
+    width: 40%;
+  }
+}

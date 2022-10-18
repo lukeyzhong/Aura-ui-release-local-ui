@@ -1,0 +1,588 @@
+<form [formGroup]="personalInfoForm" class="p-tab">
+  <div class="si__content">
+    <div class="form-l-group__header-hr">
+      <h3>Personal Information</h3>
+      <hr />
+      <button
+        type="button"
+        (click)="editPersonalInfo()"
+        mat-raised-button
+        class="edit-icon"
+      >
+        <mat-icon *ngIf="!piEditStatus"> edit </mat-icon>
+        <mat-icon *ngIf="piEditStatus"> close </mat-icon>
+      </button>
+    </div>
+    <div *ngIf="piEditStatus; else personalDetails">
+      <div class="form-fld-group employment-details">
+        <mat-form-field appearance="outline">
+          <mat-label>First Name</mat-label>
+          <input
+            matInput
+            formControlName="firstName"
+            placeholder="First Name"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name </mat-label>
+          <input matInput formControlName="lastName" placeholder="Last Name" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Alias Name</mat-label>
+          <input
+            matInput
+            formControlName="aliasName"
+            placeholder="Alias name"
+            maxlength="50"
+          />
+          <mat-error
+            *ngIf="personalInfoForm.controls['aliasName'].errors?.pattern"
+            >Only alphabets are allowed.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Date Of Birth</mat-label>
+          <input
+            matInput
+            required
+            formControlName="dateOfBirth"
+            [matDatepicker]="dob"
+            placeholder="MM/DD/YYYY"
+          />
+          <mat-datepicker-toggle matSuffix [for]="dob"></mat-datepicker-toggle>
+          <mat-datepicker #dob></mat-datepicker>
+          <mat-error
+            *ngIf="personalInfoForm.controls['dateOfBirth'].errors?.required"
+            >This field is mandatory.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              personalInfoForm.controls['dateOfBirth'].errors?.isAgeInvalid
+            "
+            >Age can not be < 18 and> 100 years</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Gender </mat-label>
+          <mat-select required formControlName="gender">
+            <mat-option
+              *ngFor="let entry of mapGender | keyvalue"
+              [value]="entry.key"
+              >{{ entry.value }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="personalInfoForm.controls['gender'].errors?.required"
+            >This field is mandatory.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Marital Status</mat-label>
+          <mat-select required formControlName="maritalStatus">
+            <mat-option
+              *ngFor="let entry of mapMarital | keyvalue"
+              [value]="entry.key"
+              >{{ entry.value }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="personalInfoForm.controls['maritalStatus'].errors?.required"
+            >This field is mandatory.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>SSN Number</mat-label>
+          <input
+            required
+            matInput
+            formControlName="socialSecurityNumber"
+            placeholder="Social Security Number"
+            maxlength="9"
+          />
+          <mat-error
+            *ngIf="
+              personalInfoForm.controls['socialSecurityNumber'].errors?.required
+            "
+            >This field is mandatory.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              personalInfoForm.controls['socialSecurityNumber'].errors?.pattern
+            "
+            >Invalid Social Security Number.
+          </mat-error>
+          <div
+            class="ssn-option"
+            *ngIf="personalInformationResult.socialSecurityNumber === null"
+          >
+            <input
+              type="checkbox"
+              formControlName="ssn"
+              checked="personalInformationResult.ssnApplied"
+              [(ngModel)]="personalInformationResult.ssnApplied"
+              (change)="appliedForSSN(ssn.checked)"
+              #ssn
+            />
+            *Applied for SSN
+
+            <mat-error *ngIf="personalInfoForm.controls['ssn'].errors?.required"
+              >This field is mandatory.
+            </mat-error>
+          </div>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Work Authorization </mat-label>
+          <mat-select required formControlName="workAuthorizationStatus">
+            <mat-option
+              *ngFor="let entry of mapWorkAuth | keyvalue"
+              [value]="entry.key"
+              >{{ entry.value }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              personalInfoForm.controls['workAuthorizationStatus'].errors
+                ?.required
+            "
+            >This field is mandatory.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-l-group__header-hr">
+        <h3>Contact Details</h3>
+        <hr />
+      </div>
+
+      <div class="form-fld-group employment-details">
+        <div class="phone">
+          <mat-form-field appearance="outline" class="phone__code">
+            <mat-label>Code</mat-label>
+            <input
+              required
+              matInput
+              formControlName="cellCountryCode"
+              placeholder="123"
+              maxlength="3"
+            />
+            <span matPrefix>+&nbsp;</span>
+            <mat-error
+              *ngIf="
+                personalInfoForm.controls['cellCountryCode'].errors?.required
+              "
+              >*</mat-error
+            >
+            <mat-error
+              *ngIf="
+                personalInfoForm.controls['cellCountryCode'].errors?.pattern
+              "
+              >E.g: +1</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="phone__number">
+            <mat-label>Cell Phone </mat-label>
+            <input
+              required
+              matInput
+              formControlName="cellPhoneNumber"
+              phoneMask
+              [preValue]="personalInfoForm.value.cellPhoneNumber"
+              maxlength="14"
+              placeholder="(012) 345-6789"
+            />
+            <mat-error
+              *ngIf="
+                personalInfoForm.controls['cellPhoneNumber'].errors?.required
+              "
+              >This field is mandatory.</mat-error
+            >
+            <mat-error
+              *ngIf="
+                personalInfoForm.controls['cellPhoneNumber'].errors?.minlength
+              "
+              >Should be of 10 digits.</mat-error
+            >
+          </mat-form-field>
+        </div>
+
+        <div class="phone">
+          <mat-form-field appearance="outline" class="phone__code">
+            <mat-label>Code</mat-label>
+            <input
+              matInput
+              formControlName="homeCountryCode"
+              placeholder="123"
+              maxlength="3"
+            />
+            <span matPrefix>+&nbsp;</span>
+            <mat-error
+              *ngIf="
+                personalInfoForm.controls['homeCountryCode'].errors?.pattern
+              "
+              >E.g: +1</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="phone__number">
+            <mat-label>Home Phone </mat-label>
+            <input
+              matInput
+              formControlName="homePhoneNumber"
+              phoneMask
+              [preValue]="personalInfoForm.value.homePhoneNumber"
+              maxlength="14"
+              placeholder="(012) 345-6789"
+            />
+            <mat-error
+              *ngIf="
+                personalInfoForm.controls['homePhoneNumber'].errors?.minlength
+              "
+              >Should be of 10 digits.</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <div class="phone phone-ext">
+          <mat-form-field appearance="outline" class="phone__code">
+            <mat-label>Code</mat-label>
+            <input
+              matInput
+              formControlName="officeCountryCode"
+              placeholder="123"
+              maxlength="3"
+            />
+            <span matPrefix>+&nbsp;</span>
+            <mat-error
+              *ngIf="
+                personalInfoForm.controls['officeCountryCode'].errors?.pattern
+              "
+              >E.g: +1</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="phone-ext__number">
+            <mat-label>Office Phone </mat-label>
+            <input
+              matInput
+              formControlName="officePhoneNumber"
+              phoneMask
+              [preValue]="personalInfoForm.value.officePhoneNumber"
+              maxlength="14"
+              placeholder="(012) 345-6789"
+            />
+            <mat-error
+              *ngIf="
+                personalInfoForm.controls['officePhoneNumber'].errors?.minlength
+              "
+              >Should be of 10 digits.</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="phone__ext">
+            <mat-label>Ext</mat-label>
+            <input
+              matInput
+              matInput
+              formControlName="officeExt"
+              placeholder="0123"
+              maxlength="4"
+            />
+            <mat-error
+              *ngIf="personalInfoForm.controls['officeExt'].errors?.pattern"
+              >Invalid extension number i.e. 0123
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email Address </mat-label>
+          <input
+            required
+            matInput
+            formControlName="emailId"
+            placeholder="Email Address"
+            maxlength="100"
+          />
+          <mat-error
+            *ngIf="personalInfoForm.controls['emailId'].errors?.required"
+            >This field is mandatory.</mat-error
+          >
+          <mat-error *ngIf="personalInfoForm.controls['emailId'].errors?.email"
+            >Invalid Email Address.</mat-error
+          >
+        </mat-form-field>
+      </div>
+
+      <div class="form-l-group__header-hr">
+        <h3>Address Details</h3>
+        <hr />
+      </div>
+
+      <div class="form-fld-group employment-details" *ngIf="isApiLoaded">
+        <mat-form-field appearance="outline">
+          <mat-label>Address Line 1 </mat-label>
+          <input
+            required
+            matInput
+            #addressLine1
+            ngx-google-places-autocomplete
+            (onAddressChange)="handleAddressChange($event)"
+            [options]="options"
+            formControlName="mailingAddressLine1"
+            placeholder="Address Line 1"
+            maxlength="1000"
+          />
+          <mat-error
+            *ngIf="
+              personalInfoForm.controls['mailingAddressLine1'].errors?.required
+            "
+            >This field is mandatory.</mat-error
+          >
+          <mat-error
+            *ngIf="
+              personalInfoForm.controls['mailingAddressLine1'].errors?.maxlength
+            "
+            >Maximum 1000 charactors allowed.</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Address Line 2 </mat-label>
+          <input
+            matInput
+            formControlName="mailingAddressLine2"
+            placeholder="Address Line 2"
+            maxlength="200"
+          />
+          <mat-error
+            *ngIf="
+              personalInfoForm.controls['mailingAddressLine2'].errors?.maxlength
+            "
+            >Maximum 200 charactors allowed.</mat-error
+          >
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Country</mat-label>
+          <mat-select required formControlName="mailingCountry">
+            <mat-option
+              *ngFor="let entry of mapCountry | keyvalue"
+              [value]="entry.key"
+              >{{ entry.value }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="personalInfoForm.controls['mailingCountry'].errors?.required"
+            >This field is mandatory.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>State</mat-label>
+          <mat-select required formControlName="mailingState">
+            <mat-option
+              *ngFor="let entry of mapState | keyvalue"
+              [value]="entry.key"
+              >{{ entry.value }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="personalInfoForm.controls['mailingState'].errors?.required"
+            >This field is mandatory.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>City </mat-label>
+          <input
+            required
+            matInput
+            formControlName="mailingCity"
+            placeholder="City"
+            maxlength="50"
+          />
+          <mat-error
+            *ngIf="personalInfoForm.controls['mailingCity'].errors?.required"
+            >This field is mandatory.
+          </mat-error>
+          <mat-error
+            *ngIf="personalInfoForm.controls['mailingCity'].errors?.pattern"
+            >Only alphabets are allowed.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>ZIP Code </mat-label>
+          <input
+            required
+            matInput
+            formControlName="mailingPostalCode"
+            placeholder="Zip Code"
+            maxlength="5"
+          />
+          <mat-error
+            *ngIf="
+              personalInfoForm.controls['mailingPostalCode'].errors?.required
+            "
+            >This field is mandatory.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              personalInfoForm.controls['mailingPostalCode'].errors?.pattern
+            "
+            >Invalid Postal Code e.g. 50234</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </div>
+
+    <ng-template #personalDetails>
+      <div class="form-l-group employment-details">
+        <div class="form-l-group__form">
+          <label for="">First Name</label>
+          <p>{{ personalInformationResult?.firstName }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Last Name</label>
+          <p>{{ personalInformationResult?.lastName }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Alias Name</label>
+          <p>{{ personalInformationResult?.aliasName }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Date Of Birth</label>
+          <p>
+            {{ personalInformationResult?.dateOfBirth | date: 'MM/dd/yyyy' }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Gender </label>
+          <p>{{ personalInformationResult?.gender }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Marital Status </label>
+          <p>{{ personalInformationResult?.maritalStatus }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">SSN Number </label>
+          <p>
+            {{ personalInformationResult?.socialSecurityNumber }}
+            <br />
+            <span *ngIf="personalInformationResult?.ssnApplied"
+              >*Applied for SSN</span
+            >
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Work Authorization </label>
+          <p>
+            {{ personalInformationResult?.workAuthorizationStatus }}
+          </p>
+        </div>
+      </div>
+
+      <div class="form-l-group__header-hr">
+        <h3>Contact Details</h3>
+        <hr />
+      </div>
+      <div class="form-l-group employment-details">
+        <div class="form-l-group__form">
+          <label for="">Cell Phone</label>
+          <p>{{ cellPhone }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Home Phone</label>
+          <p>{{ homePhone }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Office Phone </label>
+          <p>{{ officePhone }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Email Address </label>
+          <p>{{ email }}</p>
+        </div>
+      </div>
+      <div class="form-l-group__header-hr">
+        <h3>Address</h3>
+        <hr />
+      </div>
+      <div class="form-l-group employment-details">
+        <div class="form-l-group__form">
+          <label for="">Address Line 1 </label>
+          <p>{{ livingAddress?.addressLine1 }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Address Line 2 </label>
+          <p>{{ livingAddress?.addressLine2 }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Country </label>
+          <p>{{ livingAddrCountryName }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">State </label>
+          <p>{{ livingAddrStateName }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">City </label>
+          <p>{{ livingAddress?.city }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">ZIP code </label>
+          <p>{{ livingAddress?.postalCode }}</p>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="card__footer">
+    <button
+      *ngIf="piEditStatus && !personalInfoForm.pristine"
+      type="button"
+      (click)="onRestore($event, personalInfoForm)"
+      mat-stroked-button
+      color="primary"
+    >
+      Restore
+    </button>
+
+    <button
+      type="button"
+      *ngIf="showContinue && piEditStatus === false"
+      (click)="closePInfo(personalInfoForm)"
+      mat-stroked-button
+      color="primary"
+    >
+      Close
+    </button>
+    <button
+      *ngIf="!showContinue || piEditStatus"
+      type="button"
+      (click)="goToHrDashboard(personalInfoForm)"
+      mat-stroked-button
+      color="primary"
+    >
+      Close
+    </button>
+    <button
+      type="button"
+      *ngIf="showContinue && piEditStatus === false"
+      (click)="saveContinue(personalInfoForm)"
+      mat-raised-button
+      color="primary"
+      [disabled]="
+        this.livingAddress === null ||
+        this.contactAddress === null ||
+        this.personalInfoForm.status === 'INVALID'
+      "
+    >
+      Continue
+    </button>
+    <button
+      type="button"
+      *ngIf="!showContinue || piEditStatus"
+      (click)="saveContinue(personalInfoForm)"
+      [disabled]="personalInfoForm.invalid"
+      mat-raised-button
+      color="primary"
+    >
+      Save & Continue
+    </button>
+  </div>
+</form>

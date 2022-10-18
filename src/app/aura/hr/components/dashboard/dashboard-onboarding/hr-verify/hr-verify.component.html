@@ -1,0 +1,139 @@
+<div class="onboarding-send">
+  <div class="si-header">
+    <h2>Onboarding</h2>
+    <div class="cnd-details">
+      <ul>
+        <li>
+          <label for="">Candidate ID :</label>
+          <p>{{ onboardingDetailsResult?.candidateCode }}</p>
+        </li>
+        <li>
+          <label for="">Candidate Name :</label>
+          <p>
+            {{ onboardingDetailsResult?.candidateName }}
+          </p>
+        </li>
+        <li>
+          <label for="">Recruiter :</label>
+          <p>{{ onboardingDetailsResult?.recruiterName }}</p>
+        </li>
+        <li>
+          <label for="">Resume </label>
+          <div
+            class="cnd-details__resume"
+            (click)="previewDocument(onboardingDetailsResult?.resumeDocument!)"
+            style="cursor: pointer"
+          >
+            <img src="./assets/svg/Document_icon.svg" width="24px" alt="" />
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="si-content">
+    <div class="si-content__card">
+      <div class="si-content__card--label">
+        <p>HR Verify</p>
+      </div>
+      <mat-accordion
+        *ngIf="!showDashboardLink && !showSendEmail"
+        class="aura-accordion"
+      >
+        <app-personal-info
+          [employeeOnboardingId]="employeeOnboardingId"
+          (checkCommentLength)="checkCommentLengthValue($event)"
+          [countKeysPersonalInfo]="countKeysPersonalInfo"
+        ></app-personal-info>
+        <app-identification-information
+          [employeeOnboardingId]="employeeOnboardingId"
+          (checkCommentLength)="checkCommentLengthValue($event)"
+          [countKeysIdentificationInfo]="countKeysIdentificationInfo"
+        ></app-identification-information>
+        <app-education-info
+          [employeeOnboardingId]="employeeOnboardingId"
+          (checkCommentLength)="checkCommentLengthValue($event)"
+          [countKeysEducationInfo]="countKeysEducationInfo"
+        ></app-education-info>
+        <app-emergency-contacts
+          [employeeOnboardingId]="employeeOnboardingId"
+          (checkCommentLength)="checkCommentLengthValue($event)"
+          [countKeysContactsInfo]="countKeysContactsInfo"
+        ></app-emergency-contacts>
+        <app-compensation-info
+          [employeeOnboardingId]="employeeOnboardingId"
+          (checkEmploymentType)="checkEmploymentTypeValue($event)"
+        ></app-compensation-info>
+        <app-bank-paycheck
+          [employeeOnboardingId]="employeeOnboardingId"
+          (checkCommentLength)="checkCommentLengthValue($event)"
+          [countKeysBanksPaychecksInfo]="countKeysBanksPaychecksInfo"
+        ></app-bank-paycheck>
+        <app-hr-verify-tax-information
+          *ngIf="showTaxInfoSection"
+          [employeeOnboardingId]="employeeOnboardingId"
+        ></app-hr-verify-tax-information>
+        <app-hr-verify-documents
+          [employeeOnboardingId]="employeeOnboardingId"
+        ></app-hr-verify-documents>
+        <app-hr-verify-work-eligibility-i9
+          [employeeOnboardingId]="employeeOnboardingId"
+          [countKeysWorkEligibilityInfo]="countKeysWorkEligibilityInfo"
+          (checkCommentLength)="checkCommentLengthValue($event)"
+          (checkUscisStatus)="checkUscisStatusValue($event)"
+        ></app-hr-verify-work-eligibility-i9>
+      </mat-accordion>
+      <div *ngIf="showDashboardLink" class="si-content__card--confirmation">
+        <img src="./assets/svg/email_confirmation.svg" width="300px" alt="" />
+        <p>
+          <b>ADP Account is successfully created. ADP Position ID :</b
+          ><a
+            ><b> {{ positionID }}</b></a
+          ><br /><br />
+          successfully sent to {{ onboardingDetailsResult?.candidateName }}!
+        </p>
+        <button
+          type="button"
+          mat-raised-button
+          color="primary"
+          (click)="goToHrDashboard()"
+        >
+          Go To Dashboard
+        </button>
+      </div>
+      <div *ngIf="showSendEmail">
+        <app-hr-verify-send-email
+          [employeeOnboardingId]="employeeOnboardingId"
+          (previousButtonClicked)="showAllAccordians($event)"
+          (reloadCommentsCount)="callHRComments($event)"
+        ></app-hr-verify-send-email>
+      </div>
+      <div class="spinner" *ngIf="isLoading">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <div class="cnd-details">
+        <div class="job-description">
+          <label for="">Client Job Code & Job Title :</label>
+          <p (click)="showJobDescription(onboardingDetailsResult.jobDescription)">
+            {{ onboardingDetailsResult?.jobcode + ', ' + title }}
+          </p>
+        </div>
+      </div>
+      <div class="si"></div>
+      <div
+        *ngIf="!showDashboardLink && !showSendEmail"
+        class="hr-verify__footer"
+      >
+        <button
+          (click)="checkForEmailADP()"
+          [disabled]="
+            hrCommentLength === 0 && !i9SubmissionDate
+          "
+          mat-raised-button
+          color="primary"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

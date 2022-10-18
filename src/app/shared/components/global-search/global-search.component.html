@@ -1,0 +1,444 @@
+<div class="globalsearch">
+  <div class="globalsearch__icon">
+    <span class="material-icons"> search </span>
+  </div>
+  <input
+    matInput
+    type="text"
+    class="globalsearch__input"
+    placeholder="Search"
+    [formControl]="searchCtrl"
+    #trigger="matAutocompleteTrigger"
+    (keyup)="search()"
+    [matAutocomplete]="auto"
+    (keydown.enter)="redirectToViewAllResults(); trigger.closePanel()"
+  />
+  <mat-autocomplete
+    (optionSelected)="optionSelected($event)"
+    [displayWith]="displayWith"
+    #auto="matAutocomplete"
+    class="global-search-wrap"
+  >
+    <div class="global-filter" *ngIf="noResults">
+      <div class="global-filter__title">Filter By:</div>
+      <div>
+        <mat-button-toggle
+          [checked]="filterByAll"
+          (change)="filter($event)"
+          value="All"
+          >All <span class="material-icons">check</span>
+        </mat-button-toggle>
+        <mat-button-toggle
+          [checked]="filterByEmployees"
+          (change)="filter($event)"
+          value="Employees"
+        >
+          Employees</mat-button-toggle
+        >
+        <mat-button-toggle
+          [checked]="filterByCandidates"
+          (change)="filter($event)"
+          value="Candidates"
+        >
+          Candidates
+        </mat-button-toggle>
+        <mat-button-toggle
+          [checked]="filterByJobs"
+          (change)="filter($event)"
+          value="Jobs"
+          >Jobs
+        </mat-button-toggle>
+        <mat-button-toggle
+          [checked]="filterByOrganizations"
+          (change)="filter($event)"
+          value="Organizations"
+        >
+          Organizations
+        </mat-button-toggle>
+      </div>
+    </div>
+    <mat-option
+      disabled
+      *ngIf="
+        !filterByAll &&
+        !filterByEmployees &&
+        !filterByCandidates &&
+        !filterByOrganizations &&
+        !filterByJobs
+      "
+    ></mat-option>
+    <mat-option *ngIf="isLoading" class="is-loading">
+      <app-spinner diameter="40"></app-spinner>
+    </mat-option>
+    <div class="filters-container">
+      <div
+        *ngIf="
+          (filterByAll || filterByEmployees) &&
+          !isLoading &&
+            searchResult.result.EmployeeSearchList.results.length > 0
+        "
+        class="filter-group"
+      >
+        <div class="gs-section-head">
+          <div class="gs-section-head__title">
+            From <strong>Employees</strong>
+          </div>
+          <div
+            class="gs-section-head__title__results"
+            (click)="navigateToSearchResultPanel('Employees')"
+          >
+            {{ searchResult.result.EmployeeSearchList.virtualCount }}
+            Results
+          </div>
+        </div>
+        <div class="gs-results">
+          <mat-option
+            *ngFor="
+              let element of searchResult.result.EmployeeSearchList.results
+            "
+            class="gs-results-item"
+            [mdePopoverTriggerFor]="popContent"
+            [value]="element"
+            (mouseover)="setEmpDetails(element)"
+          >
+            <div class="gs-userpic">
+              <div
+                *ngIf="!element.employeePhoto; else profilePictureDB"
+                class="gs-userpic__img"
+              >
+                <img src="./assets/svg/profile-empty.svg" />
+              </div>
+              <ng-template #profilePictureDB>
+                <div class="gs-userpic__img">
+                  <img src="{{ element.employeePhoto }}" width="40px" />
+                </div>
+              </ng-template>
+              <!-- <div
+                class="gs-userpic__status gs-userpic__status--active"
+                *ngIf="element.employeeStatus === 'Active'"
+              ></div>
+              <div
+                class="gs-userpic__status gs-userpic__status--resigned"
+                *ngIf="element.employeeStatus === 'Resigned'"
+              ></div>
+              <div
+                class="gs-userpic__status gs-userpic__status--terminated"
+                *ngIf="element.employeeStatus === 'Terminated'"
+              ></div> -->
+            </div>
+            <div class="gs-userdesc">
+              <div class="gs-userdesc__username">
+                {{ element.firstName + ' ' + element.lastName }}
+              </div>
+              <div class="gs-userdesc__info">
+                <!-- <div class="col">
+                  <span class="label">Alias Name:</span
+                  ><span>{{ element.aliasName }} </span>
+                </div> -->
+                <div class="col">
+                  <span class="label">Status:</span
+                  ><span>{{ element.employeeStatus }} </span>
+                </div>
+                <div class="col">
+                  <span class="label">Emp ID:</span
+                  ><span> {{ element.employeeCode }}</span>
+                </div>
+                <div class="col">
+                  <span class="label">Location: </span
+                  ><span *ngIf="element.city || element.state"
+                    >{{ element.city }} , {{ element.state }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </mat-option>
+        </div>
+      </div>
+
+      <!-- @material-extended/mde lib - popover binding - employee data -->
+      <mde-popover
+        #popContent="mdePopover"
+        mdePopoverPositionX="after"
+        [mdePopoverOffsetX]="525"
+        class="testpopover"
+        [mdeFocusTrapEnabled]="false"
+        [mdeFocusTrapAutoCaptureEnabled]="false"
+        id="asdf"
+      >
+        <div class="popover-arrow" id="popover-arrow"></div>
+        <div class="gs-moreinfo">
+          <div class="gs-moreinfo__row">
+            <div>
+              <div class="gs-moreinfo__lable">Reporting To</div>
+              <div class="gs-moreinfo__value">{{ reportingTo }}</div>
+            </div>
+            <div>
+              <div class="gs-moreinfo__lable">Email ID</div>
+              <div class="gs-moreinfo__value">{{ email }}</div>
+            </div>
+          </div>
+          <div class="antra-spacer-md"></div>
+          <div class="gs-moreinfo__row">
+            <div>
+              <div class="gs-moreinfo__lable">Mobile Number</div>
+              <div class="gs-moreinfo__value">{{ phone }}</div>
+            </div>
+            <div>
+              <div class="gs-moreinfo__lable">Department</div>
+              <div class="gs-moreinfo__value">{{ department }}</div>
+            </div>
+          </div>
+        </div>
+      </mde-popover>
+
+      <!-- CANDIDATES SEARCH BEGIN -->
+      <div
+        *ngIf="
+          (filterByAll || filterByCandidates) &&
+          !isLoading &&
+            searchResult.result.CandidateSearchList.results.length > 0
+        "
+        class="filter-group"
+      >
+        <div class="gs-section-head">
+          <div class="gs-section-head__title">
+            From <strong>Candidates</strong>
+          </div>
+          <div
+            class="gs-section-head__title__results"
+            (click)="navigateToSearchResultPanel('Candidates')"
+          >
+            {{ searchResult.result.CandidateSearchList.virtualCount }}
+            Results
+          </div>
+        </div>
+        <div class="gs-results">
+          <mat-option
+            *ngFor="
+              let element of searchResult.result.CandidateSearchList.results
+            "
+            class="gs-results-item"
+            [mdePopoverTriggerFor]="popCandidateContent"
+            [value]="element"
+            (mouseover)="setCandidateDetails(element)"
+          >
+            <div class="gs-userpic">
+              <div
+                *ngIf="!element.candidatePhoto; else profilePictureDB"
+                class="gs-userpic__img"
+              >
+                <img src="./assets/svg/profile-empty.svg" />
+              </div>
+              <ng-template #profilePictureDB>
+                <div class="gs-userpic__img">
+                  <img src="{{ element.candidatePhoto }}" width="40px" />
+                </div>
+              </ng-template>
+            </div>
+            <div class="gs-userdesc">
+              <div class="gs-userdesc__username">
+                {{ element.firstName + ' ' + element.lastName }}
+              </div>
+              <div class="gs-userdesc__info">
+                <div class="col">
+                  <span class="label">Status:</span
+                  ><span>{{ element.candidateStatus }} </span>
+                </div>
+                <div class="col">
+                  <span class="label">Candidate ID:</span
+                  ><span> {{ element.candidateCode }}</span>
+                </div>
+              </div>
+            </div>
+          </mat-option>
+        </div>
+      </div>
+
+      <!-- @material-extended/mde lib - popover binding - candidate data -->
+      <mde-popover
+        #popCandidateContent="mdePopover"
+        mdePopoverPositionX="after"
+        [mdePopoverOffsetX]="525"
+        class="testpopover"
+        [mdeFocusTrapEnabled]="false"
+        [mdeFocusTrapAutoCaptureEnabled]="false"
+      >
+        <div class="popover-arrow" id="popover-arrow"></div>
+        <div class="gs-moreinfo">
+          <div class="gs-moreinfo__row">
+            <div>
+              <div class="gs-moreinfo__lable">Email ID</div>
+              <div class="gs-moreinfo__value">{{ email }}</div>
+            </div>
+            <div>
+              <div class="gs-moreinfo__lable">Mobile Number</div>
+              <div class="gs-moreinfo__value">{{ phone }}</div>
+            </div>
+          </div>
+        </div>
+      </mde-popover>
+      <!-- CANDIDATES SEARCH END -->
+      <!-- JOBS SEARCH BEGIN -->
+      <div
+        *ngIf="
+          (filterByAll || filterByJobs) &&
+          !isLoading && searchResult.result.JobSearchList.results.length > 0
+        "
+        class="filter-group"
+      >
+        <div class="gs-section-head">
+          <div class="gs-section-head__title">From <strong>Jobs</strong></div>
+          <div
+            class="gs-section-head__title__results"
+            (click)="navigateToSearchResultPanel('Jobs')"
+          >
+            {{ searchResult.result.JobSearchList.virtualCount }}
+            Results
+          </div>
+        </div>
+        <div class="gs-results">
+          <mat-option
+            *ngFor="let element of searchResult.result.JobSearchList.results"
+            class="gs-results-item"
+            [mdePopoverTriggerFor]="popJobContent"
+            [value]="element"
+            (mouseover)="setJobDetails(element)"
+          >
+            <div class="gs-userdesc">
+              <div class="gs-userdesc__username">
+                {{ element.title }}
+              </div>
+              <div class="gs-userdesc__info">
+                <div class="col">
+                  <span class="label">Status: </span
+                  ><span>{{ element.status }} </span>
+                </div>
+                <div class="col">
+                  <span class="label">Client: </span
+                  ><span>{{ element.client }} </span>
+                </div>
+              </div>
+            </div>
+          </mat-option>
+        </div>
+      </div>
+
+      <!-- @material-extended/mde lib - popover binding - job data -->
+      <mde-popover
+        #popJobContent="mdePopover"
+        mdePopoverPositionX="after"
+        [mdePopoverOffsetX]="525"
+        class="testpopover"
+        [mdeFocusTrapEnabled]="false"
+        [mdeFocusTrapAutoCaptureEnabled]="false"
+      >
+        <div class="popover-arrow" id="popover-arrow"></div>
+        <div class="gs-moreinfo">
+          <div class="gs-moreinfo__row">
+            <div>
+              <div class="gs-moreinfo__lable">No. of Positions</div>
+              <div class="gs-moreinfo__value">{{ noOfPositions }}</div>
+            </div>
+            <div>
+              <div class="gs-moreinfo__lable">Job Start Date</div>
+              <div class="gs-moreinfo__value">
+                {{ jobStartDate | date: 'mediumDate' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </mde-popover>
+      <!-- JOBS SEARCH END -->
+      <!-- ORGANIZATIONS SEARCH BEGIN -->
+      <div
+        *ngIf="
+          (filterByAll || filterByOrganizations) &&
+          !isLoading &&
+            searchResult.result.OrganizationSearchList.results.length > 0
+        "
+        class="filter-group"
+      >
+        <div class="gs-section-head">
+          <div class="gs-section-head__title">
+            From <strong>Organizations</strong>
+          </div>
+          <div
+            class="gs-section-head__title__results"
+            (click)="navigateToSearchResultPanel('Organizations')"
+          >
+            {{ searchResult.result.OrganizationSearchList.virtualCount }}
+            Results
+          </div>
+        </div>
+        <div class="gs-results">
+          <mat-option
+            *ngFor="
+              let element of searchResult.result.OrganizationSearchList.results
+            "
+            class="gs-results-item"
+            [mdePopoverTriggerFor]="popOrganizationContent"
+            [value]="element"
+            (mouseover)="setOrganizationDetails(element)"
+          >
+            <div class="gs-userdesc">
+              <div class="gs-userdesc__username">
+                {{ element.name }}
+              </div>
+              <div class="gs-userdesc__info">
+                <div class="col">
+                  <span class="label">Status: </span
+                  ><span>{{ element.status }} </span>
+                </div>
+                <div class="col">
+                  <span class="label">Domain: </span
+                  ><span>{{ element.domain }} </span>
+                </div>
+              </div>
+            </div>
+          </mat-option>
+        </div>
+      </div>
+
+      <!-- @material-extended/mde lib - popover binding - organization data -->
+      <mde-popover
+        #popOrganizationContent="mdePopover"
+        mdePopoverPositionX="after"
+        [mdePopoverOffsetX]="525"
+        class="testpopover"
+        [mdeFocusTrapEnabled]="false"
+        [mdeFocusTrapAutoCaptureEnabled]="false"
+      >
+        <div class="popover-arrow" id="popover-arrow"></div>
+        <div class="gs-moreinfo">
+          <div class="gs-moreinfo__row">
+            <div>
+              <div class="gs-moreinfo__lable">No. of Consultants</div>
+              <div class="gs-moreinfo__value">{{ noOfConsultants }}</div>
+            </div>
+            <div>
+              <div class="gs-moreinfo__lable">EIN</div>
+              <div class="gs-moreinfo__value">{{ ein }}</div>
+            </div>
+          </div>
+        </div>
+      </mde-popover>
+    </div>
+    <!-- all sections end -->
+    <!-- ORGANIZATIONS SEARCH END -->
+    <div class="global-search-wrap__more" *ngIf="noResults">
+      <button mat-button (click)="viewAllResults()">
+        View all {{ getTotalResultCount() }} Results
+      </button>
+    </div>
+
+    <div *ngIf="noResults === false" class="global-search-wrap__noResults">
+      <h4>No Results Found</h4>
+    </div>
+    <div
+      *ngIf="noResults === false && errorMsg"
+      class="global-search-wrap__errorMsg"
+    >
+      <h4>{{ errorMsg }}</h4>
+    </div>
+  </mat-autocomplete>
+</div>

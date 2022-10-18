@@ -1,0 +1,54 @@
+<div class="my-task">
+  <div class="my-task__header">
+    <h3 class="card-title">Tasks</h3>
+    <button mat-button class="my-task__header--open-new" (click)="taskDetails()">
+      <mat-icon>open_in_new</mat-icon>
+    </button>
+  </div>
+  <div class="my-task__container">
+    <div class="my-task__container--left">
+      <div class="year-select">
+        <form [formGroup]="dateFilter">
+          <mat-form-field appearance="outline">
+            <mat-label>From</mat-label>
+            <input matInput [matDatepicker]="from" matTooltip="Date Format: MM/DD/YYYY" matTooltipPosition="above"
+              name="taskFromDate" formControlName="taskFromDate" (dateInput)="updateTaskChart('start')" />
+            <mat-datepicker-toggle matSuffix [for]="from"></mat-datepicker-toggle>
+            <mat-datepicker #from></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>To</mat-label>
+            <input matInput [matDatepicker]="to" matTooltip="Date Format: MM/DD/YYYY" matTooltipPosition="above"
+              name="taskToDate" formControlName="taskToDate" (dateInput)="updateTaskChart('end')" />
+            <mat-datepicker-toggle matSuffix [for]="to"></mat-datepicker-toggle>
+            <mat-datepicker #to></mat-datepicker>
+          </mat-form-field>
+          <small class="error_message-chart" *ngIf="dateFilter.hasError('notValid')">
+            <span class="material-icons"> error_outline </span> Start Date must
+            be less than End Date
+          </small>
+        </form>
+        <button mat-stroked-button color="primary" (click)="resetDates()" matTooltip="Reset Date">
+          <mat-icon>restart_alt</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="my-task__container--right">
+      <div *ngIf="isLoadTaskChartSpinner" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <div class="chart-parent">
+        <div class="task-chart">
+          <canvas width="400" baseChart [datasets]="taskDoughnutChartData" [labels]="taskDoughnutChartLabels"
+            [options]="taskDoughnutChartOptions" [colors]="taskDoughnutChartColors" [legend]="taskDoughnutChartLegend"
+            [chartType]="taskDoughnutChartType" [plugins]="doughnutChartPlugins">
+          </canvas>
+          <div *ngIf="taskChartResponseData?.totalCount === 0" class="absolute-center text-center no-data-display">
+            <img src="./assets/svg/employee-dashboard/No Tasks.svg" alt="" />
+            <span>No Data to display</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

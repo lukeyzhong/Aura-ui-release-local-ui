@@ -1,0 +1,121 @@
+<!-- START HEADER -->
+<header class="header">
+  <div class="header-logo">
+    <img
+      src="./assets/svg/aura-logo-header-icon.svg"
+      width="90px"
+      (click)="goToHome('home/me')"
+    />
+  </div>
+
+  <div>
+    <app-global-search></app-global-search>
+  </div>
+
+  <div class="header-nav">
+    <div
+      class="header-nav__item"
+      [matMenuTriggerFor]="dashboardMenus"
+      aria-expanded="false"
+    >
+      <span class="material-icons"> apps </span>
+    </div>
+
+    <div class="header__item">
+      <mat-menu #dashboardMenus="matMenu">
+        <div class="modulemenu">
+          <div
+            class="modulemenu-item"
+            *ngFor="let module of globalModuleResult"
+            (click)="loadLeftNavigationMenuItems(module.displayValue)"
+          >
+            <span>
+              <img
+                src="./assets/svg/global-module-navigation/{{
+                  module.name
+                }}.svg"
+              />
+            </span>
+            <span class="modulemenu-item__label">{{
+              module.displayValue
+            }}</span>
+          </div>
+          <button mat-stroked-button class="">MORE</button>
+        </div>
+      </mat-menu>
+    </div>
+
+    <div class="header-nav__item">
+      <span class="material-icons"> notifications_none </span>
+    </div>
+
+    <div
+      class="header-nav__item header-nav__userpic"
+      [matMenuTriggerFor]="menu"
+    >
+      <div
+        *ngIf="!this.user?.avatarUrl; else profilePictureDB"
+        class="header-nav__dbpic"
+      >
+        <img class="userprofile__pic" src="./assets/images/user.png" />
+      </div>
+      <ng-template #profilePictureDB>
+        <div class="header-nav__dbpic">
+          <img class="userprofile__pic" src="{{ this.user?.avatarUrl }}" />
+        </div>
+      </ng-template>
+    </div>
+
+    <mat-menu #menu="matMenu" class="">
+      <div class="userprofile">
+        <div>
+          <span class="userprofile__name">{{ this.user?.fullName }}</span>
+          <span class="userprofile__email">{{ this.user?.emailAddress }}</span>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="editProfile()">
+          <mat-icon class="">perm_contact_calendar</mat-icon>
+          <span class="">Profile</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item>
+          <mat-icon class="">settings_applications</mat-icon>
+          <span class="">Settings</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logOut()">
+          <mat-icon class="">power_settings_new</mat-icon>
+          <span class="">Logout</span>
+        </button>
+      </div>
+    </mat-menu>
+  </div>
+</header>
+<!-- END HEADER -->
+
+<!-- START LEFT SIDE NAVIGATION  -->
+<aside class="left-nav">
+  <antra-sidenavbar
+    class="app-drawer-container"
+    sideNavBackgroundColor="rgb(22, 49, 96)"
+    sideNavTextColor="white"
+    sideNavSubMenuTextColor="#00B1FF"
+    [isOpen]="isOpen"
+    [sideNavConfig]="sideNavConfig"
+    sideNavBackgroundHighlightColor="rgb(0, 31, 85)"
+    sideNavFontSize="15"
+    (listOptionClicked)="getClickEventFromSideNav($event)"
+  >
+    <div class="sideNav-content-container">
+      <div>
+        <app-bread-crumb-bar
+          [moduleName]="moduleName"
+          [menuName]="menuName"
+          (breadCrumbClicked)="goToHome($event)"
+        ></app-bread-crumb-bar>
+      </div>
+      <router-outlet></router-outlet>
+    </div>
+  </antra-sidenavbar>
+</aside>
+<!-- END LEFT SIDE NAVIGATION -->

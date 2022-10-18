@@ -1,0 +1,537 @@
+<div *ngIf="isLoading" class="spinner">
+  <app-spinner diameter="35"></app-spinner>
+</div>
+<form [formGroup]="bankPaycheckForm">
+  <div class="si__content">
+    <div class="si__form">
+      <div class="form-l-group__header-hr">
+        <h3><b>Banks & Paychecks</b></h3>
+        <div
+          *ngIf="
+            countKeysBanksPaychecksInfo !== undefined &&
+            countKeysBanksPaychecksInfo > 0
+          "
+          class="comment"
+        >
+          HR Comments
+          <div class="count">
+            <p>{{ countKeysBanksPaychecksInfo }}</p>
+          </div>
+        </div>
+        <hr />
+        <button
+          type="button"
+          [disabled]="totalBanksPaychecks > 4"
+          mat-raised-button
+          color="primary"
+          class="add-new"
+          (click)="addBanksPaychecks()"
+        >
+          <mat-icon>add</mat-icon> Add New
+        </button>
+      </div>
+      <div
+        formArrayName="banksPaychecks"
+        class="semiPadding"
+        *ngFor="let rec of banksPaychecks?.controls; let i = index"
+      >
+        <div class="form-l-group__header-hr">
+          <h4>
+            <b>Bank Account {{ i + 1 }}</b>
+          </h4>
+          <hr />
+          <button
+            type="button"
+            *ngIf="i >= 0"
+            class="close"
+            mat-button
+            color="primary"
+            matTooltip="Delete bank account"
+            (click)="removeBankPaycheck(rec, i)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <p *ngIf="i == 0" class="alert-notification">
+          *This bank account will be considered as primary account
+          <span class="hover_img"
+            ><a
+              >Sample Cheque<mat-icon>info</mat-icon
+              ><span class="aura-wedget"
+                ><img
+                  src="./assets/images/SampleBankCheque.png"
+                  alt="image" /></span></a
+          ></span>
+        </p>
+        <div [formGroupName]="i" class="form-fld-group personal-info">
+          <mat-form-field
+            appearance="outline"
+            [ngClass]="{
+              rejected: hrCommentsMap.has('banksPaychecks.accountName' + i)
+            }"
+          >
+            <mat-label>Full Name</mat-label>
+            <input
+              required
+              matInput
+              formControlName="name"
+              placeholder="Full Name"
+            />
+            <mat-icon
+              class="info"
+              *ngIf="hrCommentsMap.has('banksPaychecks.accountName' + i)"
+              [mdePopoverTriggerFor]="hrCommentPopupContent"
+              (mouseover)="showHRComment('banksPaychecks.accountName' + i)"
+            >
+              info</mat-icon
+            >
+            <mat-error *ngIf="rec?.get('name')?.errors?.required"
+              >This is required field</mat-error
+            >
+            <mat-error *ngIf="rec?.get('name')?.errors?.maxlength"
+              >Maximum 60 characters allowed.
+            </mat-error>
+            <mat-error *ngIf="rec?.get('name')?.errors?.pattern"
+              >Only characters allowed.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field
+            appearance="outline"
+            [ngClass]="{
+              rejected: hrCommentsMap.has('banksPaychecks.bankAccountType' + i)
+            }"
+          >
+            <mat-label>Account Type</mat-label>
+            <mat-select
+              required
+              formControlName="accountType"
+              placeholder="Account Type"
+            >
+              <mat-option value="">Select</mat-option>
+              <mat-option
+                *ngFor="let entry of mapAccountType | keyvalue"
+                [value]="entry.key"
+                >{{ entry.value }}
+              </mat-option>
+            </mat-select>
+            <mat-icon
+              class="info"
+              *ngIf="hrCommentsMap.has('banksPaychecks.bankAccountType' + i)"
+              [mdePopoverTriggerFor]="hrCommentPopupContent"
+              (mouseover)="showHRComment('banksPaychecks.bankAccountType' + i)"
+            >
+              info</mat-icon
+            >
+            <mat-error
+              *ngIf="bankPaycheckForm?.get('accountType')?.errors?.required"
+              >This is required field
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field
+            appearance="outline"
+            [ngClass]="{
+              rejected: hrCommentsMap.has('banksPaychecks.bankName' + i)
+            }"
+          >
+            <mat-label>Bank Name</mat-label>
+            <input
+              required
+              matInput
+              formControlName="bankName"
+              placeholder="Bank Name"
+            />
+            <mat-icon
+              class="info"
+              *ngIf="hrCommentsMap.has('banksPaychecks.bankName' + i)"
+              [mdePopoverTriggerFor]="hrCommentPopupContent"
+              (mouseover)="showHRComment('banksPaychecks.bankName' + i)"
+            >
+              info</mat-icon
+            >
+            <mat-error *ngIf="rec?.get('bankName')?.errors?.required"
+              >This is required field</mat-error
+            >
+            <mat-error *ngIf="rec?.get('bankName')?.errors?.maxlength"
+              >Maximum 60 characters allowed.
+            </mat-error>
+            <mat-error *ngIf="rec?.get('bankName')?.errors?.pattern"
+              >Only characters allowed.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field
+            appearance="outline"
+            [ngClass]="{
+              rejected: hrCommentsMap.has('banksPaychecks.routingNumber' + i)
+            }"
+          >
+            <mat-label>Routing Number</mat-label>
+            <input
+              required
+              matInput
+              formControlName="routingNumber"
+              placeholder="Routing Number"
+            />
+            <mat-icon
+              class="info"
+              *ngIf="hrCommentsMap.has('banksPaychecks.routingNumber' + i)"
+              [mdePopoverTriggerFor]="hrCommentPopupContent"
+              (mouseover)="showHRComment('banksPaychecks.routingNumber' + i)"
+            >
+              info</mat-icon
+            >
+            <mat-error *ngIf="rec?.get('routingNumber')?.errors?.required"
+              >This is required field
+            </mat-error>
+            <mat-error *ngIf="rec?.get('routingNumber')?.errors?.pattern"
+              >Only numeric characters allowed
+            </mat-error>
+            <mat-error *ngIf="rec?.get('routingNumber')?.errors?.maxlength"
+              >Maximum 9 digits allowed.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field
+            appearance="outline"
+            [ngClass]="{
+              rejected: hrCommentsMap.has('banksPaychecks.accountNumber' + i)
+            }"
+          >
+            <mat-label>Account Number</mat-label>
+            <input
+              required
+              matInput
+              formControlName="accountNumber"
+              placeholder="Account Number"
+            />
+            <mat-icon
+              class="info"
+              *ngIf="hrCommentsMap.has('banksPaychecks.accountNumber' + i)"
+              [mdePopoverTriggerFor]="hrCommentPopupContent"
+              (mouseover)="showHRComment('banksPaychecks.accountNumber' + i)"
+            >
+              info</mat-icon
+            >
+            <mat-error *ngIf="rec?.get('accountNumber')?.errors?.required"
+              >This is required field
+            </mat-error>
+            <mat-error *ngIf="rec?.get('accountNumber')?.errors?.pattern"
+              >Only numeric characters allowed
+            </mat-error>
+            <mat-error *ngIf="rec?.get('accountNumber')?.errors?.minlength"
+              >Minimum 10 digits allowed.
+            </mat-error>
+            <mat-error *ngIf="rec?.get('accountNumber')?.errors?.maxlength"
+              >Maximum 15 digits allowed.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field
+            appearance="outline"
+            [ngClass]="{
+              rejected: hrCommentsMap.has('banksPaychecks.branchName' + i)
+            }"
+          >
+            <mat-label>Branch Name</mat-label>
+            <input
+              required
+              matInput
+              formControlName="branchName"
+              placeholder="Branch Name"
+            />
+            <mat-icon
+              class="info"
+              *ngIf="hrCommentsMap.has('banksPaychecks.branchName' + i)"
+              [mdePopoverTriggerFor]="hrCommentPopupContent"
+              (mouseover)="showHRComment('banksPaychecks.branchName' + i)"
+            >
+              info</mat-icon
+            >
+            <mat-error *ngIf="rec?.get('branchName')?.errors?.required"
+              >This is required field
+            </mat-error>
+            <mat-error *ngIf="rec?.get('branchName')?.errors?.maxlength"
+              >Maximum 60 characters allowed.
+            </mat-error>
+            <mat-error *ngIf="rec?.get('branchName')?.errors?.pattern"
+              >Special characters are not allowed.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field
+            appearance="outline"
+            [ngClass]="{
+              rejected: hrCommentsMap.has('banksPaychecks.calculationType' + i)
+            }"
+          >
+            <mat-label>Paycheck Distribution</mat-label>
+            <mat-select
+              required
+              formControlName="paycheckDistribution"
+              placeholder="Paycheck Distribution"
+              (selectionChange)="paycheckDistributionSelection(rec, i)"
+            >
+              <mat-option
+                *ngFor="let entry of mapWageCalculationType | keyvalue"
+                [value]="entry.key"
+                [disabled]="checkUserSelection(entry.key, i)"
+                >{{ entry.value }}
+              </mat-option>
+            </mat-select>
+            <mat-icon
+              class="info"
+              *ngIf="hrCommentsMap.has('banksPaychecks.calculationType' + i)"
+              [mdePopoverTriggerFor]="hrCommentPopupContent"
+              (mouseover)="showHRComment('banksPaychecks.calculationType' + i)"
+            >
+              info</mat-icon
+            >
+            <mat-error
+              *ngIf="
+                bankPaycheckForm?.get('paycheckDistribution')?.errors?.required
+              "
+              >This is required field</mat-error
+            >
+          </mat-form-field>
+          <div
+            class="percentage"
+            *ngIf="
+              rec?.get('paycheckDistribution')?.value === 2 ||
+              rec?.get('paycheckDistribution')?.value === ''
+            "
+          >
+            <mat-form-field
+              appearance="outline"
+              floatLabel="always"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'banksPaychecks.calculationValue' + i
+                )
+              }"
+            >
+              <mat-label>Percentage </mat-label>
+              <input
+                matInput
+                formControlName="percentage"
+                placeholder="Percentage"
+                type="number"
+                [style.visibility]="true ? 'hidden' : 'visible'"
+                class="example-right-align"
+              />
+              <span matSuffix>{{ rec?.get('percentage')?.value }}%</span>
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('banksPaychecks.calculationValue' + i)"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('banksPaychecks.calculationValue' + i)
+                "
+              >
+                info</mat-icon
+              >
+            </mat-form-field>
+            <mat-slider
+              min="0"
+              max="100"
+              [value]="rec?.get('percentage')?.value"
+              #sliderValue
+              (change)="updatePercentControl(rec, sliderValue?.value!, i)"
+            >
+            </mat-slider>
+            <span *ngIf="i === 0 && distributionSelection === 2 && totalPercentage !== 100" class="percentageMsg">* total percentage should be 100%</span>
+            <span *ngIf="i === 0 && distributionSelection === 1 && totalAmount !== amountInfo" class="percentageMsg">* total amount should be {{amountInfo}}</span>
+          </div>
+          <div
+            class="percentage"
+            *ngIf="rec?.get('paycheckDistribution')?.value === 1"
+          >
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'banksPaychecks.calculationValue' + i
+                )
+              }"
+            >
+              <mat-label>Amount</mat-label>
+              <input
+                type="number"
+                required
+                matInput
+                formControlName="amount"
+                #input (keyup)="updateAmountControl(rec, input?.value!, i)"                
+                placeholder="Amount"
+              />
+              <span matPrefix>$&nbsp;</span>
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('banksPaychecks.calculationValue' + i)"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('banksPaychecks.calculationValue' + i)
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error *ngIf="rec?.get('amount')?.errors?.required"
+                >This is required field</mat-error
+              >
+              <mat-error *ngIf="rec?.get('amount')?.errors?.pattern"
+                >Only numeric characters allowed
+              </mat-error>
+              <mat-error *ngIf="rec?.get('amount')?.errors?.maxlength"
+                >Maximum 10 digits allowed.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div
+            *ngIf="
+              (!attachedfileName[i] && !rec?.get('fileName')?.value) ||
+              chooseFileToggle[i]
+            "
+            class="file-upload-field file-upload-close"
+          >
+            <span class="file-upload-field--label"> Browse File </span>
+            <input
+              #file
+              type="file"
+              required
+              accept="image/*,.pdf"
+              matTooltip="Upload Document"
+              name="fileUpload"             
+              id="fileUpload"
+              (change)="fileEvent($event, rec, i)"
+            />
+            <p>Upload Cancelled Cheque *</p>
+            <button
+              type="button"
+              mat-button
+              color="primary"
+              matTooltip="Attachment"
+            >
+              <mat-icon>attach_file</mat-icon>
+            </button>
+          </div>
+          <div
+            *ngIf="rec?.get('fileName')?.value && !chooseFileToggle[i]"
+            class="file-upload-field file-upload-close"
+            [ngClass]="{
+              rejected: hrCommentsMap.has('banksPaychecks.document' + i)
+            }"
+          >
+            <span class="file-upload-field--label"> Document Attachment </span>
+            <div>
+              <img width="24px" src="./assets/svg/{{ imgName[i] }}" alt="" />
+            </div>
+            <div *ngIf="rec?.get('fileExtension')?.value === '.pdf'">
+              <img width="24px" src="./assets/svg/icn-pdf.svg" alt="" />
+            </div>
+            <div *ngIf="fileExt.includes(rec?.get('fileExtension')?.value)">
+              <img width="24px" src="./assets/svg/icn-image.svg" alt="" />
+            </div>
+            <p
+              class="fileDownload"
+              matTooltip="Download Attachment"
+              (click)="
+                downloadDocument(
+                  rec?.get('fileId')?.value,
+                  rec?.get('fileName')?.value
+                )
+              "
+            >
+              {{ rec?.get('fileName')?.value }}
+            </p>
+            <span>
+              <mat-icon
+                matTooltip="Download"
+                (click)="
+                  downloadDocument(
+                    rec?.get('fileId')?.value,
+                    rec?.get('fileName')?.value
+                  )
+                "
+              >
+                get_app</mat-icon
+              >
+            </span>
+            <button
+              type="button"
+              mat-button
+              color="primary"
+              matTooltip="Remove Attachment"
+              (click)="removeFile(rec, i)"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+            <button
+              *ngIf="rec?.get('fileId')?.value"
+              mat-raised-button
+              color="primary"
+              matTooltip="Preview"
+              class="preview-check"
+              (click)="
+                previewCancelChequeDocument(
+                  rec?.get('fileId')?.value,
+                  rec?.get('fileName')?.value,
+                  rec?.get('fileExtension')?.value
+                )
+              "
+            >
+              <mat-icon> remove_red_eye </mat-icon>
+            </button>
+            <mat-icon
+              class="info"
+              *ngIf="hrCommentsMap.has('banksPaychecks.document' + i)"
+              [mdePopoverTriggerFor]="hrCommentPopupContent"
+              (mouseover)="showHRComment('banksPaychecks.document' + i)"
+            >
+              info</mat-icon
+            >
+          </div>
+        </div>
+      </div>
+      <div
+        *ngIf="banksPaychecks?.controls?.length === 0"
+        class="no-data-display"
+      >
+        <h4>No bank account added. Please click on Add New button</h4>
+      </div>
+    </div>
+    <div class="card__footer">
+      <button
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="onPrevious($event)"
+      >
+        Previous
+      </button>
+      <button
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="goToDashboard()"
+      >
+        Close
+      </button>
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        [disabled]="bankPaycheckForm?.invalid || totalAmount !== amountInfo || totalPercentage !== 100 || fileAttached === ''"
+        (click)="saveContinue(bankPaycheckForm)"
+      >
+        Save & Continue
+      </button>
+    </div>
+  </div>
+  <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+</form>
+<mde-popover
+  #hrCommentPopupContent="mdePopover"
+  mdePopoverPositionX="after"
+  [mdePopoverOffsetX]="0"
+  [mdePopoverOffsetY]="27"
+  [mdeFocusTrapEnabled]="false"
+  [mdeFocusTrapAutoCaptureEnabled]="false"
+>
+  <div class="hr-comment">
+    <div>{{ commentValue }}</div>
+  </div>
+</mde-popover>

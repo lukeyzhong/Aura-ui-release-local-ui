@@ -1,0 +1,6 @@
+@import '../summary-tab/summary-tab.component.scss';
+@import '../../../../../styles/utilities/form-group';
+
+.certification-list {
+  grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+}

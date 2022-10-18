@@ -1,0 +1,133 @@
+<div class="container">
+  <div class="card">
+    <h2 class="card__header">Assign Permissions</h2>
+    <div class="card__details">
+      <div class="user-details">
+        <div class="user-details__profile">
+          <div class="user-details__form mail-link">
+            <h3>{{ userInfoResult?.fullName }}</h3>
+            <h4>
+              <mat-icon style="font-size: 14px">mail</mat-icon>
+              {{ userInfoResult?.email }}
+            </h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="user-details">
+        <div class="user-details__form">
+          <label class="user-details__form--label" for=""
+            >Cell Phone Number
+          </label>
+          <p>{{ parsePhoneNumber(userInfoResult?.phone) }}</p>
+        </div>
+      </div>
+      <div class="user-details">
+        <div class="user-details__form">
+          <label class="user-details__form--label" for="">Type Of User </label>
+          <p>{{ userInfoResult?.userType }}</p>
+        </div>
+      </div>
+      <div class="user-details">
+        <div class="user-details__form">
+          <label class="user-details__form--label" for=""
+            >User Created Date
+          </label>
+          <p>{{ userInfoResult?.createdDateTime | date: 'MM/dd/yyyy' }}</p>
+        </div>
+      </div>
+      <button
+        class="card-status"
+        [ngClass]="{
+          active: userInfoResult?.status === 'Active',
+          inactive: userInfoResult?.status === 'Inactive'
+        }"
+      >
+        <span></span>
+        {{ userInfoResult?.status }}
+      </button>
+    </div>
+
+    <div class="permission-tabs">
+      <mat-tab-group
+        animationDuration="0ms"
+        class="side-tabs"
+        (selectedTabChange)="showFeatureSubCategories($event)"
+      >
+        <mat-tab
+          label="{{ entry.value }}"
+          *ngFor="
+            let entry of mapFeaturesCategory | keyvalue;
+            let index = index
+          "
+        >
+          <div class="permissions">
+            <div
+              class="permissions__card"
+              *ngFor="
+                let filteredFeatureSubCategory of filteredFeaturesSubCategoryResult;
+                let i = index
+              "
+            >
+              <div>
+                <div class="permissions__card--header">
+                  <h3>{{ filteredFeatureSubCategory?.key }}</h3>
+
+                  <p>
+                    {{
+                      getSubCategoryFeaturesCount(
+                        filteredFeatureSubCategory?.featuresSubCategoryList
+                      ) +
+                        '/' +
+                        filteredFeatureSubCategory?.featuresSubCategoryList
+                          ?.length
+                    }}
+                  </p>
+                </div>
+                <section class="permissions__subcategories">
+                  <span
+                    class=""
+                    *ngFor="
+                      let featureSubCategoryDetails of filteredFeatureSubCategory?.featuresSubCategoryList;
+                      let i = index
+                    "
+                  >
+                    <mat-checkbox
+                      class="permissions__margin"
+                      color="primary"
+                      (change)="
+                        onChangeSubCategory(
+                          $event,
+                          featureSubCategoryDetails.abbr
+                        )
+                      "
+                      [(ngModel)]="featureSubCategoryDetails.hasPermission"
+                    >
+                      {{ featureSubCategoryDetails?.name }}
+                    </mat-checkbox>
+                  </span>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div>
+            <hr />
+
+            <div class="permissions-footer">
+              <button mat-stroked-button color="primary" (click)="goBack()">
+                Cancel
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="saveUserPermission()"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

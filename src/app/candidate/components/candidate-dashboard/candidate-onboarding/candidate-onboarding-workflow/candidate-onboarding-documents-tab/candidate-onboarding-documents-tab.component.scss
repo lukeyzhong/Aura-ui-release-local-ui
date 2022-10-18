@@ -1,0 +1,174 @@
+@import '../../../../../../styles/utilities/variables';
+.card__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+.card__footer button {
+  margin-left: 15px;
+}
+.doc-card {
+  &__header {
+    display: flex;
+    align-items: center;
+
+    h3 {
+      display: flex;
+      align-items: center;
+      margin-right: 10px !important;
+      img {
+        height: 40px;
+        width: 40px;
+        margin-right: 15px;
+      }
+    }
+    hr {
+      flex-grow: 1;
+    }
+  }
+  &__container {
+    padding: 10px 0;
+    margin-bottom: 10px;
+    min-height: Calc(100vh - 156px);
+    display: flex;
+    gap: 15px;
+    &--preview {
+      cursor: pointer;
+    }
+    &--pdf {
+      padding: 10px 15px;
+      background-color: #f8f9fa;
+      flex-grow: 1;
+      border-radius: 10px;
+      &--header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        div {
+          display: flex;
+          button {
+            margin-left: 10px;
+            min-width: 32px;
+            height: 32px;
+            width: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 32px;
+            mat-icon {
+              font-size: 18px;
+              height: 18px;
+              width: 18px;
+            }
+          }
+        }
+      }
+    }
+    &--pdf-view {
+      position: relative;
+      height: Calc(100vh - 274px);
+      overflow: auto;
+      ::ng-deep .ng2-pdf-viewer-container {
+        overflow: visible;
+        height: auto !important;
+        bottom: auto;
+        min-height: Calc(100vh - 405px);
+      }
+    }
+    &--pdf-list {
+      width: 17%;
+      height: Calc(100vh - 309px);
+      overflow-y: auto;
+      ul {
+        padding: 0;
+        li {
+          color: $primary;
+          font-size: 12px;
+          display: flex;
+          padding: 5px 0;
+          align-items: center;
+          pointer-events: none !important;
+
+          span {
+            visibility: hidden;
+            font-size: 12px;
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+            mat-icon {
+              vertical-align: top;
+              font-size: 16px;
+              height: 16px;
+              width: 16px;
+            }
+          }
+          p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          &.active {
+            position: relative;
+            &::before {
+              content: '';
+              width: 9px;
+              height: 2px;
+              background-color: $primary;
+              border-radius: 3px;
+              position: absolute;
+              top: 13px;
+              left: 4px;
+            }
+            p {
+              font-weight: bold;
+              position: relative;
+            }
+          }
+          &.verified {
+            display: flex;
+            align-items: center;
+            color: #35b54d;
+            &.active {
+              &::before {
+                content: '';
+                width: 0px;
+              }
+            }
+
+            span {
+              visibility: visible;
+            }
+          }
+        }
+      }
+    }
+  }
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      margin-left: 15px;
+    }
+  }
+  &__sign {
+    padding: 5px 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    &.preview {
+      justify-content: flex-end;
+    }
+  }
+}
+.spinner {
+  position: absolute;
+  background-color: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

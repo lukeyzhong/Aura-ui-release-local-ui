@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="17.364" viewBox="0 0 22 17.364">
+  <g id="reporting_manager" data-name="reporting manager" transform="translate(0.5 0.5)">
+    <path id="Path_15796" data-name="Path 15796" d="M16,21.5a.5.5,0,0,1-.5-.5V19A3.5,3.5,0,0,0,12,15.5H5A3.5,3.5,0,0,0,1.5,19v2a.5.5,0,0,1-1,0V19A4.5,4.5,0,0,1,5,14.5h7A4.505,4.505,0,0,1,16.5,19v2A.5.5,0,0,1,16,21.5Z" transform="translate(-1 -4.636)" fill="#008acc"/>
+    <path id="Ellipse_198" data-name="Ellipse 198" d="M4-.5A4.5,4.5,0,1,1-.5,4,4.505,4.505,0,0,1,4-.5Zm0,8A3.5,3.5,0,1,0,.5,4,3.5,3.5,0,0,0,4,7.5Z" transform="translate(3)" fill="#008acc"/>
+    <path id="Path_15797" data-name="Path 15797" d="M19,13.5a.5.5,0,0,1-.354-.146l-2-2a.5.5,0,0,1,.707-.707L19,12.293l3.646-3.646a.5.5,0,0,1,.707.707l-4,4A.5.5,0,0,1,19,13.5Z" transform="translate(-2 -4.701)" fill="#008acc"/>
+  </g>
+</svg>

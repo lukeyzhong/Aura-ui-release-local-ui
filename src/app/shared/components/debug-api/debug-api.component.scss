@@ -1,0 +1,71 @@
+.card {
+  background-color: #eeeeee;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__window {
+    width: 60%;
+    -webkit-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.45);
+    box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.45);
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    &--header {
+      padding: 10px;
+      background-color: #dbdbdb;
+      display: flex;
+      gap: 7px;
+      span {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        &.red {
+          background-color: #e64d4e;
+        }
+        &.green {
+          background-color: #20d357;
+        }
+        &.yellow {
+          background-color: #ffac00;
+        }
+      }
+    }
+    &--center {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    &--cnt {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      img {
+        width: 30vh;
+      }
+      h1 {
+        color: #e64d4e;
+        padding-bottom: 10px;
+      }
+      h2 {
+        color: #777777;
+        padding-bottom: 10px;
+      }
+      p {
+        color: #777777;
+      }
+      button {
+        margin: 10px 0;
+        cursor: pointer;
+        a {
+          color: #fff;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}

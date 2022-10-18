@@ -1,0 +1,22 @@
+<div class="preview">
+    <div class="overlay"></div>
+    <div class="modal-popup">
+      <div class="modal-popup__header">
+        <h3>{{ displayName }}</h3>
+        <mat-icon (click)="closePreview()">close</mat-icon>
+      </div>  
+      <div class="modal-popup__content">
+        <div class="spinner" *ngIf="isLoading">
+          <app-spinner diameter="35"></app-spinner>
+        </div>       
+        <div *ngIf="isRTRDocExist">
+          <pdf-viewer [src]="docURL"></pdf-viewer>
+        </div>
+        <div class="error-Message" *ngIf="errorMessage">
+          <img src="./assets/svg/data-error.svg" width="100px" />
+          <p>{{ errorMessage }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

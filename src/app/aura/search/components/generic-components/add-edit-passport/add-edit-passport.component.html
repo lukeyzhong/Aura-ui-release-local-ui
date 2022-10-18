@@ -1,0 +1,229 @@
+<!-- ADD PASSPORT BEGIN -->
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <form
+      class="pop-inner"
+      [formGroup]="passportForm"
+      (ngSubmit)="savePassport()"
+    >
+      <div class="modal-popup__header">
+        <h3>{{ headerTitle }}</h3>
+        <button
+          (click)="onCancel($event, passportForm)"
+          mat-button
+          color="primary"
+          type="button"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-popup__content">
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div class="form-fld-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Passport Number</mat-label>
+            <input
+              required
+              matInput
+              formControlName="passportNumber"
+              placeholder="Passport Number"
+              maxlength="12"
+            />
+            <mat-error
+              *ngIf="passportForm.controls['passportNumber'].errors?.required"
+              >This field is mandatory.
+            </mat-error>
+            <mat-error
+              *ngIf="passportForm.controls['passportNumber'].errors?.pattern"
+              >Invalid Passport Number
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="date-error">
+            <mat-label> Issue Date</mat-label>
+            <input
+              required
+              matInput
+              min="{{ issueMinDate }}"
+              max="{{ issueMaxDate }}"
+              formControlName="passportIssueDate"
+              [matDatepicker]="passportIssueDate"
+              placeholder="MM/DD/YYYY"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="passportIssueDate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #passportIssueDate></mat-datepicker>
+            <mat-error
+              *ngIf="
+                passportForm.controls['passportIssueDate'].errors?.required
+              "
+              >Please Select Passport Issue Date</mat-error
+            >
+            <small
+              class="error_message-date"
+              *ngIf="passportForm.hasError('passportDatesNotValid')"
+            >
+              <span class="material-icons"> error_outline </span> Issue Date
+              should be before Expiry Date
+            </small>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label> Expiry Date</mat-label>
+            <input
+              matInput
+              required
+              min="{{ expiryMinDate }}"
+              max="{{ expiryMaxDate }}"
+              formControlName="passportExpiryDate"
+              [matDatepicker]="passportExpiryDate"
+              placeholder="MM/DD/YYYY"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="passportExpiryDate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #passportExpiryDate></mat-datepicker>
+            <mat-error
+              *ngIf="
+                passportForm.controls['passportExpiryDate'].errors?.required
+              "
+              >Please Select Passport Expiry Date</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Passport Issue City</mat-label>
+            <input
+              required
+              matInput
+              formControlName="passportIssuedCity"
+              placeholder="Issue City"
+              maxlength="50"
+            />
+            <mat-error
+              *ngIf="
+                passportForm.controls['passportIssuedCity'].errors?.required
+              "
+              >This field is mandatory.</mat-error
+            >
+            <mat-error
+              *ngIf="
+                passportForm.controls['passportIssuedCity'].errors?.maxlength
+              "
+              >Maximum 100 characters allowed.</mat-error
+            >
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Passport Issue Country</mat-label>
+            <mat-select required formControlName="passportIssueCountryCode">
+              <mat-option
+                *ngFor="let entry of mapCountry | keyvalue"
+                [value]="entry.key"
+                >{{ entry.value }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="
+                passportForm.controls['passportIssueCountryCode'].errors
+                  ?.required
+              "
+              >This field is mandatory.</mat-error
+            >
+          </mat-form-field>
+        </div>
+        <div *ngIf="totalFiles > 0" class="width-100 full-width form-fld-group">
+          <div
+            formArrayName="docProperty"
+            class="modal-popup__uploaded-file"
+            *ngFor="let doc of docProperty.controls; let i = index"
+          >
+            <div [formGroupName]="i" class="width-100 flex-between">
+              <mat-form-field
+                *ngIf="actionType !== 'Add' && actionType !== 'Edit'"
+                appearance="outline"
+                class="file-name"
+              >
+                <mat-label>Document ID</mat-label>
+                <input
+                  matInput
+                  formControlName="documentId"
+                  placeholder="File Name"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="file-name">
+                <mat-label>Change File Name</mat-label>
+                <input
+                  matInput
+                  formControlName="displayName"
+                  placeholder="File Name"
+                  class="file-formet-text"
+                />
+                <div class="file-format">
+                  {{ doc?.get('fileExtension')?.value }}
+                </div>
+                <mat-error *ngIf="doc?.get('displayName')?.errors?.maxlength"
+                  >Maximum 100 characters allowed.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="description">
+                <mat-label> Description</mat-label>
+                <input
+                  matInput
+                  formControlName="fileDescription"
+                  placeholder="File Description"
+                />
+                <mat-error
+                  *ngIf="doc?.get('fileDescription')?.errors?.maxlength"
+                  >Maximum 500 characters allowed.
+                </mat-error>
+              </mat-form-field>
+              <mat-icon (click)="deleteFile(doc, i)">delete</mat-icon>
+            </div>
+          </div>
+        </div>
+        <div class="form-fld-group">
+          <div class="modal-popup__file-upload">
+            <input
+              type="file"
+              title=" "
+              accept="image/*,.pdf"
+              multiple="multiple"
+              formControlName="documentInfo"
+              (change)="uploadPassportFiles($event)"
+            />
+            <button class="btn">BROWSE FILE</button>
+            <P>Drag & Drop File here</P>
+            <P class="file-format-msg"
+              >*Supported File Format (.pdf, .jpg, .jpeg, .png, .bmp)</P
+            >
+          </div>
+        </div>
+      </div>
+      <div class="modal-popup__footer">
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="onCancel($event, passportForm)"
+          type="button"
+        >
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          [disabled]="passportForm.invalid"
+          color="primary"
+        >
+          Save
+        </button>
+      </div>
+      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+    </form>
+  </div>
+
+  <div class="overlay"></div>
+</div>
+<!-- END OF ADD PASSPORT -->

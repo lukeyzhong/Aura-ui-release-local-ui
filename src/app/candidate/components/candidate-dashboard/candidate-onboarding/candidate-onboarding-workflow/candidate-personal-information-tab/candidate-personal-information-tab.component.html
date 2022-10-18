@@ -1,0 +1,3179 @@
+<div class="cnd-personal-info">
+  <mat-accordion class="aura-accordion">
+    <!-- PERSONAL INFO -->
+    <mat-expansion-panel
+      [expanded]="onboardingStep === 0"
+      (opened)="setOnboardingStep(0)"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="accordion-header">
+            <img src="./assets/svg/preview-user.svg" width="40px" alt="" />
+            <h3>Personal Information</h3>
+
+            <div
+              *ngIf="
+                countKeysPersonalInfo !== undefined && countKeysPersonalInfo > 0
+              "
+              class="comment"
+            >
+              HR Comments
+              <div class="count">
+                <p>{{ countKeysPersonalInfo }}</p>
+              </div>
+            </div>
+          </div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div *ngIf="isLoadingPersonalInfo" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <form [formGroup]="personalInfoForm">
+        <div class="cnd-info">
+          <div class="form-fld-group">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input
+                matInput
+                formControlName="firstName"
+                placeholder="First Name"
+              />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input
+                matInput
+                formControlName="lastName"
+                placeholder="Last Name"
+              />
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has('personalInformation.aliasName')
+              }"
+            >
+              <mat-label>Alias Name</mat-label>
+              <input
+                matInput
+                formControlName="aliasName"
+                placeholder="Alias name"
+                maxlength="50"
+              />
+
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('personalInformation.aliasName')"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="showHRComment('personalInformation.aliasName')"
+              >
+                info</mat-icon
+              >
+
+              <mat-error
+                *ngIf="personalInfoForm.controls['aliasName'].errors?.pattern"
+                >Only alphabets are allowed.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              class="example-full-width"
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has('personalInformation.dateOfBirth')
+              }"
+            >
+              <mat-label>Date Of Birth</mat-label>
+              <input
+                matInput
+                required
+                formControlName="dateOfBirth"
+                [matDatepicker]="picker"
+                placeholder="MM/DD/YYYY"
+                maxlength="10"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('personalInformation.dateOfBirth')"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="showHRComment('personalInformation.dateOfBirth')"
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['dateOfBirth'].errors?.required
+                "
+                >This field is mandatory.
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['dateOfBirth'].errors?.isAgeInvalid
+                "
+                >Age can not be < 18 and> 100 years</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has('personalInformation.gender')
+              }"
+            >
+              <mat-label>Gender</mat-label>
+              <mat-select required formControlName="gender">
+                <mat-option
+                  *ngFor="let entry of mapGender | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('personalInformation.gender')"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="showHRComment('personalInformation.gender')"
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="personalInfoForm.controls['gender'].errors?.required"
+                >This field is mandatory.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has('personalInformation.maritalStatus')
+              }"
+            >
+              <mat-label>Marital status</mat-label>
+              <mat-select required formControlName="maritalStatus">
+                <mat-option
+                  *ngFor="let entry of mapMarital | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('personalInformation.maritalStatus')"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="showHRComment('personalInformation.maritalStatus')"
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['maritalStatus'].errors?.required
+                "
+                >This field is mandatory.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has('personalInformation.ethnicity')
+              }"
+            >
+              <mat-label>Ethnicity</mat-label>
+              <mat-select
+                required
+                formControlName="ethnicity"
+                (selectionChange)="disableRace($event.value)"
+              >
+                <mat-option
+                  *ngFor="let entry of mapEthnicityType | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('personalInformation.ethnicity')"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="showHRComment('personalInformation.ethnicity')"
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="personalInfoForm.controls['ethnicity'].errors?.required"
+                >This field is mandatory.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has('personalInformation.race')
+              }"
+            >
+              <mat-label>Race</mat-label>
+              <mat-select required formControlName="race">
+                <mat-option
+                  *ngFor="let entry of mapRaceType | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('personalInformation.race')"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="showHRComment('personalInformation.race')"
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="personalInfoForm.controls['race'].errors?.required"
+                >This field is mandatory.
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-l-group__header-hr">
+            <h3>Mailing Address</h3>
+            <hr />
+          </div>
+
+          <div class="form-fld-group" *ngIf="isApiLoaded">
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has('personalInformation.addressLine1')
+              }"
+            >
+              <mat-label>Address 1</mat-label>
+              <input
+                required
+                matInput
+                #addressLine1
+                ngx-google-places-autocomplete
+                (onAddressChange)="handleAddressChange($event)"
+                [options]="options"
+                formControlName="mailingAddressLine1"
+                placeholder="Address Line 1"
+                maxlength="1000"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('personalInformation.addressLine1')"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="showHRComment('personalInformation.addressLine1')"
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['mailingAddressLine1'].errors
+                    ?.required
+                "
+                >This field is mandatory.</mat-error
+              >
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['mailingAddressLine1'].errors
+                    ?.maxlength
+                "
+                >Maximum 200 characters allowed.</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has('personalInformation.addressLine2')
+              }"
+            >
+              <mat-label>Address 2</mat-label>
+              <input
+                matInput
+                formControlName="mailingAddressLine2"
+                placeholder="Address Line 2"
+                maxlength="200"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('personalInformation.addressLine2')"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="showHRComment('personalInformation.addressLine2')"
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['mailingAddressLine2'].errors
+                    ?.maxlength
+                "
+                >Maximum 200 characters allowed.</mat-error
+              >
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has('personalInformation.city')
+              }"
+            >
+              <mat-label>City</mat-label>
+              <input
+                required
+                matInput
+                formControlName="mailingCity"
+                placeholder="Placeholder"
+                maxlength="50"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('personalInformation.city')"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="showHRComment('personalInformation.city')"
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['mailingCity'].errors?.required
+                "
+                >This field is mandatory.
+              </mat-error>
+              <mat-error
+                *ngIf="personalInfoForm.controls['mailingCity'].errors?.pattern"
+                >Only alphabets are allowed.
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'personalInformation.livingAddrressStateName'
+                )
+              }"
+            >
+              <mat-label>State </mat-label>
+              <mat-select required formControlName="mailingState">
+                <mat-option
+                  *ngFor="let entry of mapState | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'personalInformation.livingAddrressStateName'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('personalInformation.livingAddrressStateName')
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['mailingState'].errors?.required
+                "
+                >This field is mandatory.</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'personalInformation.livingAddressCountryName'
+                )
+              }"
+            >
+              <mat-label>Country </mat-label>
+              <mat-select required formControlName="mailingCountry">
+                <mat-option
+                  *ngFor="let entry of mapCountry | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'personalInformation.livingAddressCountryName'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('personalInformation.livingAddressCountryName')
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['mailingCountry'].errors?.required
+                "
+                >This field is mandatory.</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has('personalInformation.postalCode')
+              }"
+            >
+              <mat-label>ZIP Code </mat-label>
+              <input
+                matInput
+                required
+                formControlName="mailingPostalCode"
+                placeholder="Zip Code"
+                maxlength="5"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="hrCommentsMap.has('personalInformation.postalCode')"
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="showHRComment('personalInformation.postalCode')"
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['mailingPostalCode'].errors
+                    ?.required
+                "
+                >This field is mandatory.
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  personalInfoForm.controls['mailingPostalCode'].errors?.pattern
+                "
+                >Invalid Postal Code e.g. 50234</mat-error
+              >
+            </mat-form-field>
+          </div>
+          <div class="form-l-group__header-hr">
+            <h3>Contact Details</h3>
+            <hr />
+          </div>
+          <div class="form-fld-group">
+            <div class="home-phone">
+              <mat-form-field
+                appearance="outline"
+                class="code"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'personalInformation.cellPhoneNumber'
+                  )
+                }"
+              >
+                <mat-label>Code</mat-label>
+                <input
+                  required
+                  matInput
+                  formControlName="cellCountryCode"
+                  placeholder="123"
+                  maxlength="3"
+                />
+                <span matPrefix>+&nbsp;</span>
+                <mat-error
+                  *ngIf="
+                    personalInfoForm.controls['cellCountryCode'].errors
+                      ?.required
+                  "
+                  >*</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    personalInfoForm.controls['cellCountryCode'].errors?.pattern
+                  "
+                  >E.g: +1</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="phone-nm"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'personalInformation.cellPhoneNumber'
+                  )
+                }"
+              >
+                <mat-label>Cell Phone </mat-label>
+                <input
+                  matInput
+                  required
+                  formControlName="cellPhoneNumber"
+                  phoneMask
+                  [preValue]="personalInfoForm.value.cellPhoneNumber"
+                  maxlength="14"
+                  placeholder="(012) 345-6789"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has('personalInformation.cellPhoneNumber')
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment('personalInformation.cellPhoneNumber')
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="
+                    personalInfoForm.controls['cellPhoneNumber'].errors
+                      ?.required
+                  "
+                  >This field is mandatory.</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    personalInfoForm.controls['cellPhoneNumber'].errors
+                      ?.minlength
+                  "
+                  >Should be of 10 digits.</mat-error
+                >
+              </mat-form-field>
+            </div>
+            <div class="home-phone-plus">
+              <mat-form-field
+                appearance="outline"
+                class="code"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'personalInformation.homePhoneNumber'
+                  )
+                }"
+              >
+                <mat-label>Code</mat-label>
+                <input
+                  matInput
+                  required
+                  formControlName="homeCountryCode"
+                  placeholder="123"
+                  maxlength="3"
+                />
+                <span matPrefix>+&nbsp;</span>
+                <mat-error
+                  *ngIf="
+                    personalInfoForm.controls['homeCountryCode'].errors
+                      ?.required
+                  "
+                  >*</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    personalInfoForm.controls['homeCountryCode'].errors?.pattern
+                  "
+                  >E.g: +1</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="phone-nm"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'personalInformation.homePhoneNumber'
+                  )
+                }"
+              >
+                <mat-label>Home Phone</mat-label>
+                <input
+                  required
+                  matInput
+                  formControlName="homePhoneNumber"
+                  phoneMask
+                  [preValue]="personalInfoForm.value.homePhoneNumber"
+                  maxlength="14"
+                  placeholder="(012) 345-6789"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has('personalInformation.homePhoneNumber')
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment('personalInformation.homePhoneNumber')
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="
+                    personalInfoForm.controls['homePhoneNumber'].errors
+                      ?.required
+                  "
+                  >This field is mandatory.</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    personalInfoForm.controls['homePhoneNumber'].errors
+                      ?.minlength
+                  "
+                  >Should be of 10 digits.</mat-error
+                >
+              </mat-form-field>
+            </div>
+
+            <div class="home-phone-plus--ext">
+              <mat-form-field
+                appearance="outline"
+                class="code"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'personalInformation.officePhoneNumber'
+                  )
+                }"
+              >
+                <mat-label>Code</mat-label>
+                <input
+                  matInput
+                  formControlName="officeCountryCode"
+                  placeholder="123"
+                  maxlength="3"
+                />
+                <span matPrefix>+&nbsp;</span>
+                <mat-error
+                  *ngIf="
+                    personalInfoForm.controls['officeCountryCode'].errors
+                      ?.pattern
+                  "
+                  >E.g: +1</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="phone-nm"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'personalInformation.officePhoneNumber'
+                  )
+                }"
+              >
+                <mat-label>Office Phone</mat-label>
+                <input
+                  matInput
+                  formControlName="officePhoneNumber"
+                  phoneMask
+                  [preValue]="personalInfoForm.value.officePhoneNumber"
+                  maxlength="14"
+                  placeholder="(012) 345-6789"
+                />
+
+                <mat-error
+                  *ngIf="
+                    personalInfoForm.controls['officePhoneNumber'].errors
+                      ?.minlength
+                  "
+                  >Should be of 10 digits.</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="phone-ext"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'personalInformation.officePhoneNumber'
+                  )
+                }"
+              >
+                <mat-label>Ext</mat-label>
+                <input
+                  matInput
+                  formControlName="officeExt"
+                  placeholder="0123"
+                  maxlength="4"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has('personalInformation.officePhoneNumber')
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment('personalInformation.officePhoneNumber')
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="personalInfoForm.controls['officeExt'].errors?.pattern"
+                  >Invalid extension number i.e. 0123
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="home-phone">
+              <mat-form-field
+                appearance="outline"
+                class="phone-nm"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has('personalInformation.email')
+                }"
+              >
+                <mat-label>Email Address </mat-label>
+                <input
+                  matInput
+                  required
+                  formControlName="emailId"
+                  placeholder="Email Address"
+                  maxlength="100"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="hrCommentsMap.has('personalInformation.email')"
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="showHRComment('personalInformation.email')"
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="personalInfoForm.controls['emailId'].errors?.required"
+                  >This field is mandatory.
+                </mat-error>
+                <mat-error
+                  *ngIf="personalInfoForm.controls['emailId'].errors?.email"
+                  >Invalid Email Address.</mat-error
+                >
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="form-l-group__header-hr">
+            <h3>Social Profiles</h3>
+            <hr />
+            <button
+              mat-button
+              type="button"
+              class="social-profiles--add"
+              mat-raised-button
+              color="Accent"
+              (click)="addAdditionalSocialMediaLinks()"
+            >
+              <mat-icon>add</mat-icon>
+              Add New
+            </button>
+          </div>
+
+          <div
+            class="form-fld-group width-100 fild-bp-0"
+            formArrayName="additionalSocialMediaLinks"
+            *ngFor="
+              let socialMedia of additionalSocialMediaLinks?.controls;
+              let i = index
+            "
+          >
+            <div [formGroupName]="i" class="social-profiles">
+              <mat-form-field *ngIf="false" appearance="outline">
+                <mat-label>Social Media Link ID</mat-label>
+                <input
+                  matInput
+                  formControlName="socialMediaLinkId"
+                  placeholder="Social Media Link ID"
+                  maxlength="100"
+                />
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                class="social-profiles--select"
+              >
+                <mat-label>Social Profiles</mat-label>
+
+                <mat-select formControlName="socialMediaType">
+                  <mat-select-trigger class="d-flex-option">
+                    <img
+                      src="./assets/svg/{{
+                        getSocialProfilePic(
+                          socialMedia?.get('socialMediaType')?.value
+                        )
+                      }}.svg"
+                      width="20px"
+                      alt=""
+                    />
+                    {{
+                      getSocialProfilePic(
+                        socialMedia?.get('socialMediaType')?.value
+                      )
+                    }}
+                  </mat-select-trigger>
+                  <mat-option
+                    *ngFor="let entry of mapSocialMediaType | keyvalue"
+                    [value]="entry.key"
+                  >
+                    <div class="d-flex-option">
+                      <img
+                        src="./assets/svg/{{ entry.value }}.svg"
+                        width="20px"
+                        alt=""
+                      />
+                      {{ entry.value }}
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div class="social-profiles--input">
+                <mat-form-field
+                  [ngClass]="{
+                    rejected: hrCommentsMap.has(
+                      'personalInformation.socialMediaLink' + i
+                    )
+                  }"
+                  appearance="outline"
+                  class="social-profiles--input"
+                >
+                  <input
+                    matInput
+                    formControlName="socialMediaURL"
+                    maxlength="100"
+                    placeholder="E.g: http(s)://www.facebook.com/david"
+                  />
+                  <mat-icon
+                    class="info"
+                    *ngIf="
+                      hrCommentsMap.has(
+                        'personalInformation.socialMediaLink' + i
+                      )
+                    "
+                    [mdePopoverTriggerFor]="hrCommentPopupContent"
+                    (mouseover)="
+                      showHRComment('personalInformation.socialMediaLink' + i)
+                    "
+                  >
+                    info</mat-icon
+                  >
+                </mat-form-field>
+
+                <button
+                  type="button"
+                  mat-stroked-button
+                  (click)="removeSocialMediaLinks(i, socialMedia)"
+                >
+                  <mat-icon>clear</mat-icon>
+                </button>
+                <mat-error
+                  *ngIf="socialMedia?.get('socialMediaURL')?.errors?.pattern"
+                  >Invalid social media url.</mat-error
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cnd-info__footer">
+          <button
+            mat-stroked-button
+            *ngIf="!personalInfoForm.pristine"
+            color="primary"
+            type="button"
+            (click)="onRestorePersonalInfo($event, personalInfoForm)"
+          >
+            Restore
+          </button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            [disabled]="personalInfoForm.invalid"
+            (click)="savePersonalInfoAndContinue(personalInfoForm)"
+          >
+            Save & Continue
+          </button>
+        </div>
+      </form>
+      <mde-popover
+        #hrCommentPopupContent="mdePopover"
+        mdePopoverPositionX="after"
+        [mdePopoverOffsetX]="0"
+        [mdePopoverOffsetY]="27"
+        [mdeFocusTrapEnabled]="false"
+        [mdeFocusTrapAutoCaptureEnabled]="false"
+      >
+        <div class="hr-comment">
+          <div>{{ commentValue }}</div>
+        </div>
+      </mde-popover>
+    </mat-expansion-panel>
+
+    <!-- IDENTIFICATION INFO -->
+    <mat-expansion-panel
+      [expanded]="onboardingStep === 1"
+      (opened)="setOnboardingStep(1)"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <img src="./assets/svg/Id.svg" alt="" />
+          <h3>Identification Information</h3>
+          <div
+            *ngIf="
+              countKeysIdentificationInfo !== undefined &&
+              countKeysIdentificationInfo > 0
+            "
+            class="comment"
+          >
+            HR Comments
+            <div class="count">
+              <p>{{ countKeysIdentificationInfo }}</p>
+            </div>
+          </div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div *ngIf="isLoadingIdentificationInfo" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <form [formGroup]="identificationInfoForm">
+        <div class="cnd-info">
+          <div class="form-l-group__header-hr">
+            <h3>SSN Information</h3>
+            <hr />
+          </div>
+
+          <div class="form-fld-group">
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.socialSecurityNumber'
+                )
+              }"
+            >
+              <mat-label>SSN Number</mat-label>
+              <input
+                required
+                matInput
+                formControlName="socialSecurityNumber"
+                placeholder="Social Security Number"
+                maxlength="9"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.socialSecurityNumber'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment(
+                    'identificationInformation.socialSecurityNumber'
+                  )
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  identificationInfoForm.controls['socialSecurityNumber'].errors
+                    ?.required
+                "
+                >This field is mandatory.
+              </mat-error>
+              <mat-error
+                *ngIf="
+                  identificationInfoForm.controls['socialSecurityNumber'].errors
+                    ?.pattern
+                "
+                >Invalid Social Security Number.
+              </mat-error>
+            </mat-form-field>
+
+            <div
+              class="uploaded-file"
+              *ngFor="let ssnDoc of ssnDocumentInfo; let i = index"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.ssnDocument' + ssnDoc.documentId
+                )
+              }"
+            >
+              <label for=""> Attached Document</label>
+              <div class="uploaded-file__filenm">
+                <div class="d-flex" *ngIf="ssnDoc?.fileExtension === '.pdf'">
+                  <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                  <p>{{ ssnDoc.displayName }}</p>
+                </div>
+                <div
+                  class="d-flex"
+                  *ngIf="
+                    fileExtO.includes(ssnDoc?.fileExtension!.toLowerCase())
+                  "
+                >
+                  <img src="./assets/svg/icn-image.svg" width="24px" alt="" />
+                  <p>{{ ssnDoc.displayName }}</p>
+                </div>
+                <button
+                  mat-button
+                  type="button"
+                  color="primary"
+                  class="close--icon"
+                >
+                  <mat-icon
+                    matTooltip="Once deleted, you cannot restore it back !"
+                    (click)="deleteFile(ssnDoc, 'SSN', i)"
+                    >close</mat-icon
+                  >
+                </button>
+              </div>
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.ssnDocument' + ssnDoc.documentId
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment(
+                    'identificationInformation.ssnDocument' + ssnDoc.documentId
+                  )
+                "
+              >
+                info</mat-icon
+              >
+            </div>
+
+            <div
+              class="uploaded-file"
+              *ngFor="let ssnFile of ssnFiles; let i = index"
+            >
+              <label for=""> Attached Document</label>
+              <div class="uploaded-file__filenm">
+                <div
+                  class="d-flex"
+                  *ngIf="ssnFile.name.split('.')[1]! === 'pdf'"
+                >
+                  <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                  <p>{{ ssnFileName }}</p>
+                </div>
+                <div
+                  class="d-flex"
+                  *ngIf="
+                    fileExt.includes(ssnFile.name.split('.')[1].toLowerCase()!)
+                  "
+                >
+                  <img src="./assets/svg/icn-image.svg" width="24px" alt="" />
+                  <p>{{ ssnFileName }}</p>
+                </div>
+                <button mat-button type="button" color="primary">
+                  <mat-icon
+                    (click)="deleteFile(ssnFile, 'SSN', i)"
+                    matTooltip="Once deleted, you cannot restore it back !"
+                    >close</mat-icon
+                  >
+                </button>
+              </div>
+            </div>
+
+            <div
+              matTooltip="Document attachment is mandatory."
+              class="upload-file"
+              *ngIf="ssnFileName === ''"
+            >
+              <label for="">Document Attachment</label>
+              <input
+                #file
+                type="file"
+                accept="image/*,.pdf"
+                (change)="uploadSSNDoc($event)"
+              />
+              <p>Browse File *</p>
+              <button mat-button color="primary">
+                <mat-icon>attach_file</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="form-l-group__header-hr">
+            <h3>Passport Information</h3>
+            <hr />
+          </div>
+          <div class="form-fld-group">
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.passportNumber'
+                )
+              }"
+            >
+              <mat-label>Passport Number</mat-label>
+              <input
+                matInput
+                formControlName="passportNumber"
+                placeholder="Passport Number"
+                maxlength="12"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has('identificationInformation.passportNumber')
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('identificationInformation.passportNumber')
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  identificationInfoForm.controls['passportNumber'].errors
+                    ?.pattern
+                "
+                >Invalid Passport Number</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field
+              class="date-error"
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.passportIssueDate'
+                )
+              }"
+            >
+              <mat-label>Issue Date</mat-label>
+              <input
+                matInput
+                min="{{ issueMinDate }}"
+                max="{{ issueMaxDate }}"
+                formControlName="passportIssueDate"
+                [matDatepicker]="passportIssueDate"
+                placeholder="MM/DD/YYYY"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.passportIssueDate'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('identificationInformation.passportIssueDate')
+                "
+              >
+                info</mat-icon
+              >
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="passportIssueDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #passportIssueDate></mat-datepicker>
+              <small
+                class="error_message-date"
+                *ngIf="identificationInfoForm.hasError('passportDatesNotValid')"
+              >
+                <span class="material-icons"> error_outline </span> Issue Date
+                should be before Expiry Date
+              </small>
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.passportExpiryDate'
+                )
+              }"
+            >
+              <mat-label>Expiry Date</mat-label>
+              <input
+                matInput
+                min="{{ expiryMinDate }}"
+                max="{{ expiryMaxDate }}"
+                formControlName="passportExpiryDate"
+                [matDatepicker]="passportExpiryDate"
+                placeholder="MM/DD/YYYY"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.passportExpiryDate'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('identificationInformation.passportExpiryDate')
+                "
+              >
+                info</mat-icon
+              >
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="passportExpiryDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #passportExpiryDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.passportIssuedCity'
+                )
+              }"
+            >
+              <mat-label>Passport Issue City</mat-label>
+              <input
+                matInput
+                formControlName="passportIssuedCity"
+                placeholder="Issue City"
+                maxlength="50"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.passportIssuedCity'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('identificationInformation.passportIssuedCity')
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  identificationInfoForm.controls['passportIssuedCity'].errors
+                    ?.pattern
+                "
+                >Only alphabets are allowed.</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.passportIssueCountry'
+                )
+              }"
+            >
+              <mat-label>Passport Issue Country</mat-label>
+              <mat-select formControlName="passportIssueCountryCode">
+                <mat-option
+                  *ngFor="let entry of mapCountry | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}
+                </mat-option>
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.passportIssueCountry'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment(
+                    'identificationInformation.passportIssueCountry'
+                  )
+                "
+              >
+                info</mat-icon
+              >
+            </mat-form-field>
+            <div
+              class="uploaded-file"
+              *ngFor="let passportDoc of passportDocumentInfo; let i = index"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.passportDocument' +
+                    passportDoc.documentId
+                )
+              }"
+            >
+              <label for="">Attached Document</label>
+              <div class="uploaded-file__filenm">
+                <div
+                  class="d-flex"
+                  *ngIf="passportDoc?.fileExtension === '.pdf'"
+                >
+                  <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                  <p>{{ passportDoc.displayName }}</p>
+                </div>
+                <div
+                  class="d-flex"
+                  *ngIf="
+                    fileExtO.includes(passportDoc?.fileExtension!.toLowerCase())
+                  "
+                >
+                  <img src="./assets/svg/icn-image.svg" width="24px" alt="" />
+                  <p>{{ passportDoc.displayName }}</p>
+                </div>
+                <button mat-button type="button" color="primary">
+                  <mat-icon
+                    matTooltip="Once deleted, you cannot restore it back !"
+                    (click)="deleteFile(passportDoc, 'Passport', i)"
+                    >close</mat-icon
+                  >
+                </button>
+              </div>
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.passportDocument' +
+                      passportDoc.documentId
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment(
+                    'identificationInformation.passportDocument' +
+                      passportDoc.documentId
+                  )
+                "
+              >
+                info</mat-icon
+              >
+            </div>
+
+            <div
+              class="uploaded-file"
+              *ngFor="
+                let passUpFile of uploadedPassportDocs?.fileList;
+                let i = index
+              "
+            >
+              <label for="">Attached Document</label>
+              <div class="uploaded-file__filenm">
+                <div
+                  class="d-flex"
+                  *ngIf="passUpFile?.file?.name.split('.')[1] === 'pdf'"
+                >
+                  <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                  <p>{{ passUpFile?.displayName }}</p>
+                </div>
+                <div
+                  class="d-flex"
+                  *ngIf="
+                    fileExt.includes(
+                      passUpFile?.file?.name.split('.')[1]!.toLowerCase()
+                    )
+                  "
+                >
+                  <img src="./assets/svg/icn-image.svg" width="24px" alt="" />
+                  <p>{{ passUpFile?.displayName }}</p>
+                </div>
+                <button mat-button type="button" color="primary">
+                  <mat-icon
+                    matTooltip="Once deleted, you cannot restore it back !"
+                    (click)="deleteFile(passUpFile, 'Passport', i)"
+                    >close</mat-icon
+                  >
+                </button>
+              </div>
+            </div>
+
+            <div class="upload-file" (click)="uploadDocuments('Passport')">
+              <label for="">Document Attachment</label>
+              <p>Browse File</p>
+              <button mat-button color="primary">
+                <mat-icon>attach_file</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="form-l-group__header-hr">
+            <h3>Driving Licence</h3>
+            <hr />
+          </div>
+          <div class="form-fld-group">
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.drivingLicenseNo'
+                )
+              }"
+            >
+              <mat-label>Licence Number</mat-label>
+              <input
+                matInput
+                formControlName="drivingLicenseNo"
+                placeholder="S500 or S5007660254753456767"
+                maxlength="20"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.drivingLicenseNo'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('identificationInformation.drivingLicenseNo')
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="
+                  identificationInfoForm.controls['drivingLicenseNo'].errors
+                    ?.pattern
+                "
+                >Invalid Driving License. For e.g: S500 or
+                S5007660254753456767</mat-error
+              >
+            </mat-form-field>
+            <mat-form-field
+              class="example-full-width"
+              appearance="outline"
+              class="date-error"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.drivingLicenseIssueDate'
+                )
+              }"
+            >
+              <mat-label>Issue date</mat-label>
+              <input
+                matInput
+                min="{{ issueMinDate }}"
+                max="{{ issueMaxDate }}"
+                formControlName="dlIssueDate"
+                [matDatepicker]="dlIssueDate"
+                placeholder="MM/DD/YYYY"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.drivingLicenseIssueDate'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment(
+                    'identificationInformation.drivingLicenseIssueDate'
+                  )
+                "
+              >
+                info</mat-icon
+              >
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="dlIssueDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #dlIssueDate></mat-datepicker>
+              <small
+                class="error_message-date"
+                *ngIf="identificationInfoForm.hasError('dlDatesNotValid')"
+              >
+                <span class="material-icons"> error_outline </span> Issue Date
+                should be before Expiry Date
+              </small>
+            </mat-form-field>
+
+            <mat-form-field
+              class="example-full-width"
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.drivingLicenseExpiryDate'
+                )
+              }"
+            >
+              <mat-label>Expiry date</mat-label>
+              <input
+                matInput
+                min="{{ expiryMinDate }}"
+                max="{{ expiryMaxDate }}"
+                formControlName="dlExpiryDate"
+                [matDatepicker]="dlExpiryDate"
+                placeholder="MM/DD/YYYY"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.drivingLicenseExpiryDate'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment(
+                    'identificationInformation.drivingLicenseExpiryDate'
+                  )
+                "
+              >
+                info</mat-icon
+              >
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="dlExpiryDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #dlExpiryDate></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.drivingLicenseCity'
+                )
+              }"
+            >
+              <mat-label>City</mat-label>
+              <input
+                matInput
+                formControlName="city"
+                placeholder="City"
+                maxlength="50"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.drivingLicenseCity'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('identificationInformation.drivingLicenseCity')
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="identificationInfoForm.controls['city'].errors?.pattern"
+                >Only alphabets are allowed.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.drivingLicenseState'
+                )
+              }"
+            >
+              <mat-label>State</mat-label>
+              <mat-select formControlName="stateCode">
+                <mat-option
+                  *ngFor="let entry of mapState | keyvalue"
+                  [value]="entry.key"
+                  >{{ entry.value }}</mat-option
+                >
+              </mat-select>
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.drivingLicenseState'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('identificationInformation.drivingLicenseState')
+                "
+              >
+                info</mat-icon
+              >
+            </mat-form-field>
+
+            <mat-form-field
+              appearance="outline"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.drivingLicenseZip'
+                )
+              }"
+            >
+              <mat-label>Zip Code</mat-label>
+              <input
+                matInput
+                formControlName="zip"
+                placeholder="Zip Code"
+                maxlength="5"
+              />
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.drivingLicenseZip'
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment('identificationInformation.drivingLicenseZip')
+                "
+              >
+                info</mat-icon
+              >
+              <mat-error
+                *ngIf="identificationInfoForm.controls['zip'].errors?.pattern"
+                >Numeric and Maximum 5 digits allowed.
+              </mat-error>
+            </mat-form-field>
+
+            <div
+              class="uploaded-file"
+              *ngFor="let dlDoc of dlDocumentInfo; let i = index"
+              [ngClass]="{
+                rejected: hrCommentsMap.has(
+                  'identificationInformation.licenseDocument' + dlDoc.documentId
+                )
+              }"
+            >
+              <label for="">Attached Document</label>
+              <div class="uploaded-file__filenm">
+                <div class="d-flex" *ngIf="dlDoc?.fileExtension === '.pdf'">
+                  <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                  <p>{{ dlDoc.displayName }}</p>
+                </div>
+                <div
+                  class="d-flex"
+                  *ngIf="fileExtO.includes(dlDoc?.fileExtension!.toLowerCase())"
+                >
+                  <img src="./assets/svg/icn-image.svg" width="24px" alt="" />
+                  <p>{{ dlDoc.displayName }}</p>
+                </div>
+                <button mat-button type="button" color="primary">
+                  <mat-icon
+                    matTooltip="Once deleted, you cannot restore it back !"
+                    (click)="deleteFile(dlDoc, 'Driving Licence', i)"
+                    >close</mat-icon
+                  >
+                </button>
+              </div>
+              <mat-icon
+                class="info"
+                *ngIf="
+                  hrCommentsMap.has(
+                    'identificationInformation.licenseDocument' +
+                      dlDoc.documentId
+                  )
+                "
+                [mdePopoverTriggerFor]="hrCommentPopupContent"
+                (mouseover)="
+                  showHRComment(
+                    'identificationInformation.licenseDocument' +
+                      dlDoc.documentId
+                  )
+                "
+              >
+                info</mat-icon
+              >
+            </div>
+
+            <div
+              class="uploaded-file"
+              *ngFor="let dlUpFile of uploadedDLDocs?.fileList; let i = index"
+            >
+              <label for="">Attached Document</label>
+              <div class="uploaded-file__filenm">
+                <div
+                  class="d-flex"
+                  *ngIf="dlUpFile?.file?.name.split('.')[1] === 'pdf'"
+                >
+                  <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                  <p>{{ dlUpFile?.displayName }}</p>
+                </div>
+                <div
+                  class="d-flex"
+                  *ngIf="
+                    fileExt.includes(
+                      dlUpFile?.file?.name.split('.')[1]!.toLowerCase()
+                    )
+                  "
+                >
+                  <img src="./assets/svg/icn-image.svg" width="24px" alt="" />
+                  <p>{{ dlUpFile?.displayName }}</p>
+                </div>
+                <button mat-button type="button" color="primary">
+                  <mat-icon
+                    matTooltip="Once deleted, you cannot restore it back !"
+                    (click)="deleteFile(dlUpFile, 'Driving Licence', i)"
+                    >close</mat-icon
+                  >
+                </button>
+              </div>
+            </div>
+
+            <div
+              class="upload-file"
+              (click)="uploadDocuments('Driving Licence')"
+            >
+              <label for="">Document Attachment</label>
+              <p>Browse File</p>
+              <button mat-button color="primary">
+                <mat-icon>attach_file</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-l-group__header-hr">
+            <h3>Immigration Information</h3>
+            <hr />
+          </div>
+          <div class="cnd-info">
+            <!-- IMMIGRATION -->
+            <div
+              formArrayName="immigrationDetails"
+              *ngFor="
+                let immigration of immigrationDetails?.controls;
+                let immIndex = index;
+                let first = first
+              "
+            >
+              <div class="form-l-group__header-hr">
+                <h3>Immigration</h3>
+                <hr />
+                <button
+                  *ngIf="immIndex >= 0 && first"
+                  mat-button
+                  type="button"
+                  class="social-profiles--add"
+                  mat-raised-button
+                  color="Accent"
+                  (click)="addImmigration()"
+                >
+                  <mat-icon>add</mat-icon>
+                  Add New
+                </button>
+                <button
+                  *ngIf="immIndex > 0"
+                  mat-button
+                  type="button"
+                  color="Primary"
+                  (click)="removeImmigrationDetails(immIndex, immigration)"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              <div *ngIf="isLoading" class="spinner">
+                <app-spinner diameter="35"></app-spinner>
+              </div>
+              <div [formGroupName]="immIndex" class="form-fld-group">
+                <mat-form-field
+                  appearance="outline"
+                  [ngClass]="{
+                    rejected: hrCommentsMap.has(
+                      'identificationInformation.immigrationWorkAuthorizationType' +
+                        immIndex
+                    )
+                  }"
+                >
+                  <mat-label>Work Authorization </mat-label>
+                  <mat-select
+                    required
+                    formControlName="workAuthorizationType"
+                    (selectionChange)="
+                      chooseWorkAuthorization(immIndex, $event)
+                    "
+                  >
+                    <mat-option
+                      *ngFor="let entry of mapWorkAuth | keyvalue"
+                      [value]="entry.value"
+                      >{{ entry.value }}
+                    </mat-option>
+                  </mat-select>
+
+                  <mat-icon
+                    class="info"
+                    *ngIf="
+                      hrCommentsMap.has(
+                        'identificationInformation.immigrationWorkAuthorizationType' +
+                          immIndex
+                      )
+                    "
+                    [mdePopoverTriggerFor]="hrCommentPopupContent"
+                    (mouseover)="
+                      showHRComment(
+                        'identificationInformation.immigrationWorkAuthorizationType' +
+                          immIndex
+                      )
+                    "
+                  >
+                    info</mat-icon
+                  >
+                  <mat-error
+                    *ngIf="
+                      immigration?.get('workAuthorizationType')?.errors
+                        ?.required
+                    "
+                    >This field is mandatory.</mat-error
+                  >
+                </mat-form-field>
+
+                <div class="work-autho-ead" *ngIf="showEADFields[immIndex]">
+                  <mat-form-field
+                    appearance="outline"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'identificationInformation.eadCategoryCode' + immIndex
+                      )
+                    }"
+                  >
+                    <mat-label>EAD Code</mat-label>
+                    <mat-select
+                      required
+                      formControlName="eadCategoryCode"
+                      (selectionChange)="chooseEAD($event)"
+                    >
+                      <mat-option
+                        *ngFor="let entry of mapEADCategory | keyvalue"
+                        [value]="entry.key"
+                        >{{ entry.value }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-icon
+                      class="info"
+                      *ngIf="
+                        hrCommentsMap.has(
+                          'identificationInformation.eadCategoryCode' + immIndex
+                        )
+                      "
+                      [mdePopoverTriggerFor]="hrCommentPopupContent"
+                      (mouseover)="
+                        showHRComment(
+                          'identificationInformation.eadCategoryCode' + immIndex
+                        )
+                      "
+                    >
+                      info</mat-icon
+                    >
+                    <mat-error
+                      *ngIf="
+                        immigration?.get('eadCategoryCode')?.errors?.required
+                      "
+                      >This field is mandatory.</mat-error
+                    >
+                  </mat-form-field>
+                  <mat-icon
+                    matTooltip="Click to open EAD Category List"
+                    (click)="openEADDialog()"
+                    >info</mat-icon
+                  >
+                </div>
+                <mat-form-field
+                  class="ead-name"
+                  matTooltip=" {{ eadCategory }}"
+                  appearance="outline"
+                  *ngIf="showEADFields[immIndex]"
+                  [ngClass]="{
+                    rejected: hrCommentsMap.has(
+                      'identificationInformation.eadCategory' + immIndex
+                    )
+                  }"
+                >
+                  <mat-label>EAD Category Name</mat-label>
+                  <input
+                    matInput
+                    formControlName="eadCategory"
+                    value="{{ eadCategory }}"
+                  />
+                  <mat-icon
+                    class="info"
+                    *ngIf="
+                      hrCommentsMap.has(
+                        'identificationInformation.eadCategory' + immIndex
+                      )
+                    "
+                    [mdePopoverTriggerFor]="hrCommentPopupContent"
+                    (mouseover)="
+                      showHRComment(
+                        'identificationInformation.eadCategory' + immIndex
+                      )
+                    "
+                  >
+                    info</mat-icon
+                  >
+                </mat-form-field>
+
+                <mat-form-field
+                  appearance="outline"
+                  [ngClass]="{
+                    rejected: hrCommentsMap.has(
+                      'identificationInformation.immigrationWorkAuthorizationNumber' +
+                        immIndex
+                    )
+                  }"
+                >
+                  <mat-label>Work Authorization Number</mat-label>
+                  <input
+                    required
+                    matInput
+                    formControlName="workAuthorizationNumber"
+                    placeholder="ABC1234567891"
+                    maxlength="13"
+                  />
+                  <mat-icon
+                    class="info"
+                    *ngIf="
+                      hrCommentsMap.has(
+                        'identificationInformation.immigrationWorkAuthorizationNumber' +
+                          immIndex
+                      )
+                    "
+                    [mdePopoverTriggerFor]="hrCommentPopupContent"
+                    (mouseover)="
+                      showHRComment(
+                        'identificationInformation.immigrationWorkAuthorizationNumber' +
+                          immIndex
+                      )
+                    "
+                  >
+                    info</mat-icon
+                  >
+                  <mat-error
+                    *ngIf="
+                      immigration?.get('workAuthorizationNumber')?.errors
+                        ?.required
+                    "
+                  >
+                    This field is mandatory.
+                  </mat-error>
+                  <mat-error
+                    *ngIf="
+                      immigration?.get('workAuthorizationNumber')?.errors
+                        ?.pattern
+                    "
+                  >
+                    Invalid Work Authorization Number i.e. A12345678912345.
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field
+                  appearance="outline"
+                  class="date-error"
+                  [ngClass]="{
+                    rejected: hrCommentsMap.has(
+                      'identificationInformation.immigrationWorkAuthorizationStartDate' +
+                        immIndex
+                    )
+                  }"
+                >
+                  <mat-label> Validity From Date</mat-label>
+                  <input
+                    matInput
+                    required
+                    formControlName="workAuthorizationStartDate"
+                    [matDatepicker]="workAuthorizationStartDate"
+                    placeholder="MM/DD/YYYY"
+                    min="{{ issueMinDate }}"
+                    max="{{ issueMaxDate }}"
+                  />
+                  <mat-icon
+                    class="info"
+                    *ngIf="
+                      hrCommentsMap.has(
+                        'identificationInformation.immigrationWorkAuthorizationStartDate' +
+                          immIndex
+                      )
+                    "
+                    [mdePopoverTriggerFor]="hrCommentPopupContent"
+                    (mouseover)="
+                      showHRComment(
+                        'identificationInformation.immigrationWorkAuthorizationStartDate' +
+                          immIndex
+                      )
+                    "
+                  >
+                    info</mat-icon
+                  >
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="workAuthorizationStartDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #workAuthorizationStartDate></mat-datepicker>
+                  <mat-error
+                    *ngIf="
+                      immigration?.get('workAuthorizationStartDate')?.errors
+                        ?.required
+                    "
+                    >This field is mandatory.</mat-error
+                  >
+                  <small
+                    class="error_message-date"
+                    *ngIf="immigration.hasError('immigrationDatesNotValid')"
+                  >
+                    <span class="material-icons"> error_outline </span> From
+                    Date should be before Expiry Date
+                  </small>
+                </mat-form-field>
+
+                <mat-form-field
+                  appearance="outline"
+                  [ngClass]="{
+                    rejected: hrCommentsMap.has(
+                      'identificationInformation.immigrationWorkAuthorizationExpiryDate' +
+                        immIndex
+                    )
+                  }"
+                >
+                  <mat-label> Validity Expiry Date</mat-label>
+                  <input
+                    required
+                    matInput
+                    formControlName="workAuthorizationExpiryDate"
+                    [matDatepicker]="workAuthorizationExpiryDate"
+                    placeholder="MM/DD/YYYY"
+                    min="{{ expiryMinDate }}"
+                    max="{{ expiryMaxDate }}"
+                  />
+                  <mat-icon
+                    class="info"
+                    *ngIf="
+                      hrCommentsMap.has(
+                        'identificationInformation.immigrationWorkAuthorizationExpiryDate' +
+                          immIndex
+                      )
+                    "
+                    [mdePopoverTriggerFor]="hrCommentPopupContent"
+                    (mouseover)="
+                      showHRComment(
+                        'identificationInformation.immigrationWorkAuthorizationExpiryDate' +
+                          immIndex
+                      )
+                    "
+                  >
+                    info</mat-icon
+                  >
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="workAuthorizationExpiryDate"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #workAuthorizationExpiryDate></mat-datepicker>
+                  <mat-error
+                    *ngIf="
+                      immigration?.get('workAuthorizationExpiryDate')?.errors
+                        ?.required
+                    "
+                    >This field is mandatory.</mat-error
+                  >
+                </mat-form-field>
+
+                <div
+                  class="uploaded-file"
+                  *ngFor="
+                    let imm of getDocumentsByImmigrationInfoId(
+                      immigration?.get('immigrationInfoId')!
+                    );
+                    let i = index
+                  "
+                  [ngClass]="{
+                    rejected: hrCommentsMap.has(
+                      'identificationInformation.immigrationDocument' +
+                        imm.documentId
+                    )
+                  }"
+                >
+                  <label for="">Attached Document</label>
+                  <div class="uploaded-file__filenm">
+                    <div class="d-flex" *ngIf="imm?.fileExtension === '.pdf'">
+                      <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                      <p>{{ imm.displayName }}</p>
+                    </div>
+                    <div
+                      class="d-flex"
+                      *ngIf="
+                        fileExtO.includes(imm?.fileExtension!.toLowerCase())
+                      "
+                    >
+                      <img
+                        src="./assets/svg/icn-image.svg"
+                        width="24px"
+                        alt=""
+                      />
+                      <p>{{ imm.displayName }}</p>
+                    </div>
+                    <button mat-button type="button" color="primary">
+                      <mat-icon
+                        matTooltip="Once deleted, you cannot restore it back !"
+                        (click)="deleteFile(imm, 'Immigration', immIndex)"
+                        >close</mat-icon
+                      >
+                    </button>
+                  </div>
+                  <mat-icon
+                    class="info"
+                    *ngIf="
+                      hrCommentsMap.has(
+                        'identificationInformation.immigrationDocument' +
+                          imm.documentId
+                      )
+                    "
+                    [mdePopoverTriggerFor]="hrCommentPopupContent"
+                    (mouseover)="
+                      showHRComment(
+                        'identificationInformation.immigrationDocument' +
+                          imm.documentId
+                      )
+                    "
+                  >
+                    info</mat-icon
+                  >
+                </div>
+
+                <div
+                  class="uploaded-file"
+                  *ngFor="
+                    let immigrationUpFile of uploadedImmigrationDocs[immIndex]
+                      ?.fileList;
+                    let i = index
+                  "
+                >
+                  <label for="">Attached Document</label>
+                  <div class="uploaded-file__filenm">
+                    <div
+                      class="d-flex"
+                      *ngIf="
+                        immigrationUpFile?.file?.name!.split('.')[1] === 'pdf'
+                      "
+                    >
+                      <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                      <p>{{ immigrationUpFile?.displayName }}</p>
+                    </div>
+                    <div
+                      class="d-flex"
+                      *ngIf="
+                        fileExt.includes(
+                          immigrationUpFile?.file
+                            ?.name!.split('.')[1]
+                            .toLowerCase()
+                        )
+                      "
+                    >
+                      <img
+                        src="./assets/svg/icn-image.svg"
+                        width="24px"
+                        alt=""
+                      />
+                      <p>{{ immigrationUpFile?.displayName }}</p>
+                    </div>
+                    <button mat-button type="button" color="primary">
+                      <mat-icon
+                        matTooltip="Once deleted, you cannot restore it back !"
+                        (click)="
+                          deleteFile(immigrationUpFile, 'Immigration', immIndex)
+                        "
+                        >close</mat-icon
+                      >
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  [ngClass]="{ 'disable-browse': isUSCitizen }"
+                  matTooltip="Document attachment is mandatory."
+                  class="upload-file"
+                  (click)="
+                    uploadEducationDocs(
+                      'Immigration',
+                      immIndex,
+                      immigration?.get('immigrationInfoId')!
+                    )
+                  "
+                >
+                  <label for="">Document Attachment</label>
+                  <p>Browse File *</p>
+                  <button mat-button type="button" color="primary">
+                    <mat-icon>attach_file</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cnd-info__footer">
+          <button
+            mat-stroked-button
+            color="primary"
+            type="button"
+            (click)="prevOnboardingStep()"
+          >
+            Previous
+          </button>
+          <button
+            mat-stroked-button
+            *ngIf="!identificationInfoForm.pristine"
+            color="primary"
+            type="button"
+            (click)="
+              onRestoreIdentificationInfo($event, identificationInfoForm)
+            "
+          >
+            Restore
+          </button>
+          <!-- [disabled]="
+          (identificationInfoForm.invalid ||
+            uploadedImmigrationDocs?.fileList?.length === 0 ||
+            tempTotalImmigrationDocs === 0 ||
+            totalSSNDocs === 0) &&
+          totalImmigrationDocs === 0
+              
+                    [disabled]="
+         
+              identificationInfoForm.invalid ||
+              totalSSNDocs === 0
+                totalImmigrationDocs === 0 ||
+              tempTotalImmigrationDocs === 0 ||
+            
+               ||
+              totalImmigrationDocs === 0 ||
+              tempTotalImmigrationDocs === 0
+            "
+  immDocsCount[immIndex] === 0 ||
+              immDocsCount[immIndex] === undefined ||
+             || disableIfNotUSCitizen(immIndex)
+             ||
+             
+              tempTotalImmigrationDocs[immIndex] ||
+              tempTotalImmigrationDocs[immIndex] === undefined
+              
+              ||
+              tempTotalImmigrationDocs.includes(true)
+        " -->
+          <button
+            [disabled]="
+              identificationInfoForm.invalid ||
+              duplicateImmigration ||
+              ssnFileName === ''
+            "
+            mat-raised-button
+            color="primary"
+            type="button"
+            (click)="saveIdentificationInfoAndContinue(identificationInfoForm)"
+          >
+            Save & Continue
+          </button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+
+    <!-- EDUCATION INFO -->
+    <mat-expansion-panel
+      [expanded]="onboardingStep === 2"
+      (opened)="setOnboardingStep(2)"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <img src="./assets/svg/Education.svg" alt="" />
+          <h3>Education Information</h3>
+          <div
+            *ngIf="
+              countKeysEducationInfo !== undefined && countKeysEducationInfo > 0
+            "
+            class="comment"
+          >
+            HR Comments
+            <div class="count">
+              <p>{{ countKeysEducationInfo }}</p>
+            </div>
+          </div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div *ngIf="isLoadingEducationInfo" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <form [formGroup]="educationForm">
+        <div class="cnd-info">
+          <!-- EDUCATION -->
+          <div
+            formArrayName="educationDetails"
+            *ngFor="
+              let education of educationDetails?.controls;
+              let eduIndex = index;
+              let first = first
+            "
+          >
+            <div class="form-l-group__header-hr">
+              <h3>Education</h3>
+              <hr />
+              <button
+                *ngIf="eduIndex >= 0 && first"
+                mat-button
+                type="button"
+                class="social-profiles--add"
+                mat-raised-button
+                color="Accent"
+                (click)="addEducationDetails()"
+              >
+                <mat-icon>add</mat-icon>
+                Add New
+              </button>
+              <button
+                *ngIf="eduIndex > 0"
+                mat-button
+                type="button"
+                color="Primary"
+                (click)="removeEducationDetails(eduIndex, education)"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="isLoading" class="spinner">
+              <app-spinner diameter="35"></app-spinner>
+            </div>
+            <div [formGroupName]="eduIndex" class="form-fld-group">
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.degreeName' + eduIndex
+                  )
+                }"
+              >
+                <mat-label>Degree Name</mat-label>
+                <mat-select required formControlName="degreeName">
+                  <mat-option
+                    *ngFor="let entry of mapDegree | keyvalue"
+                    [value]="entry.key"
+                    >{{ entry.value }}
+                  </mat-option>
+                </mat-select>
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.degreeName' + eduIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment('educationInformation.degreeName' + eduIndex)
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="education?.get('degreeName')?.errors?.required"
+                  >This field is mandatory.</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.universityName' + eduIndex
+                  )
+                }"
+              >
+                <mat-label>Institution Name</mat-label>
+                <input
+                  required
+                  matInput
+                  #university
+                  formControlName="universityName"
+                  [matAutocomplete]="universityAuto"
+                  placeholder="Institution Name"
+                  (keyup)="searchUniversity(university.value)"
+                  maxlength="100"
+                />
+                <mat-autocomplete #universityAuto="matAutocomplete">
+                  <mat-option
+                    *ngFor="let entry of mapUniversityName | keyvalue"
+                    [value]="entry.value"
+                    >{{ entry.value }}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.universityName' + eduIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'educationInformation.universityName' + eduIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="education?.get('universityName')?.errors?.required"
+                >
+                  This field is mandatory.
+                </mat-error>
+                <mat-error
+                  *ngIf="
+                    education?.get('universityName')?.errors?.isFoundInList
+                  "
+                >
+                  University Name does not exist
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field
+                appearance="outline"
+                class="date-error"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.educationStartDate' + eduIndex
+                  )
+                }"
+              >
+                <mat-label>Start Date</mat-label>
+                <input
+                  matInput
+                  required
+                  formControlName="startDate"
+                  min="{{ minDate }}"
+                  max="{{ issueMaxDate }}"
+                  [matDatepicker]="educationStartDate"
+                  placeholder="MM/DD/YYYY"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.educationStartDate' + eduIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'educationInformation.educationStartDate' + eduIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="educationStartDate"
+                ></mat-datepicker-toggle>
+
+                <mat-datepicker #educationStartDate></mat-datepicker>
+                <mat-error *ngIf="education?.get('startDate')?.errors?.required"
+                  >Please Select Start Date</mat-error
+                >
+                <small
+                  class="error_message-date"
+                  *ngIf="education.hasError('educationDatesNotValid')"
+                >
+                  <span class="material-icons"> error_outline </span> Start Date
+                  should be before End Date
+                </small>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.educationEndDate' + eduIndex
+                  )
+                }"
+              >
+                <mat-label>End Date</mat-label>
+                <input
+                  required
+                  matInput
+                  formControlName="endDate"
+                  min="{{ minDate }}"
+                  max="{{ expiryMaxDate }}"
+                  [matDatepicker]="educationEndDate"
+                  placeholder="MM/DD/YYYY"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.educationEndDate' + eduIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'educationInformation.educationEndDate' + eduIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="educationEndDate"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #educationEndDate></mat-datepicker>
+                <mat-error *ngIf="education?.get('endDate')?.errors?.required"
+                  >Please Select End Date</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.majorType1' + eduIndex
+                  )
+                }"
+              >
+                <mat-label>Major 1</mat-label>
+                <mat-select required formControlName="majorType">
+                  <mat-option
+                    *ngFor="let entry of mapMajorType | keyvalue"
+                    [value]="entry.key"
+                    >{{ entry.value }}
+                  </mat-option>
+                </mat-select>
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.majorType1' + eduIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment('educationInformation.majorType1' + eduIndex)
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error *ngIf="education?.get('majorType')?.errors?.required"
+                  >This field is mandatory.</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.majorType2' + eduIndex
+                  )
+                }"
+              >
+                <mat-label>Major 2</mat-label>
+                <mat-select formControlName="majorType1">
+                  <mat-option
+                    *ngFor="let entry of mapMajorType | keyvalue"
+                    [value]="entry.key"
+                    >{{ entry.value }}
+                  </mat-option>
+                </mat-select>
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.majorType2' + eduIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment('educationInformation.majorType2' + eduIndex)
+                  "
+                >
+                  info</mat-icon
+                >
+              </mat-form-field>
+
+              <div
+                class="uploaded-file"
+                *ngFor="
+                  let edu of getDocumentsByEducationInfoId(
+                    education?.get('educationInfoId')!
+                  );
+                  let i = index
+                "
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.educationDocument' + edu.documentId
+                  )
+                }"
+              >
+                <label for="">Attached Document</label>
+                <div class="uploaded-file__filenm">
+                  <div class="d-flex" *ngIf="edu?.fileExtension === '.pdf'">
+                    <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                    <p>{{ edu.displayName }}</p>
+                  </div>
+                  <div
+                    class="d-flex"
+                    *ngIf="fileExtO.includes(edu?.fileExtension!.toLowerCase())"
+                  >
+                    <img src="./assets/svg/icn-image.svg" width="24px" alt="" />
+                    <p>{{ edu.displayName }}</p>
+                  </div>
+                  <button mat-button type="button" color="primary">
+                    <mat-icon
+                      matTooltip="Once deleted, you cannot restore it back !"
+                      (click)="deleteFile(edu, 'Education', i)"
+                      >close</mat-icon
+                    >
+                  </button>
+                </div>
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.educationDocument' + edu.documentId
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'educationInformation.educationDocument' + edu.documentId
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+              </div>
+
+              <div
+                class="uploaded-file"
+                *ngFor="
+                  let educationUpFile of uploadedEducationDocs[eduIndex]
+                    ?.fileList;
+                  let i = index
+                "
+              >
+                <label for="">Attached Document</label>
+                <div class="uploaded-file__filenm">
+                  <div
+                    class="d-flex"
+                    *ngIf="educationUpFile?.file?.name!.split('.')[1] === 'pdf'"
+                  >
+                    <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                    <p>{{ educationUpFile?.displayName }}</p>
+                  </div>
+                  <div
+                    class="d-flex"
+                    *ngIf="
+                      fileExt.includes(
+                        educationUpFile?.file?.name!.split('.')[1].toLowerCase()
+                      )
+                    "
+                  >
+                    <img src="./assets/svg/icn-image.svg" width="24px" alt="" />
+                    <p>{{ educationUpFile?.displayName }}</p>
+                  </div>
+                  <button mat-button type="button" color="primary">
+                    <mat-icon
+                      matTooltip="Once deleted, you cannot restore it back !"
+                      (click)="
+                        deleteFile(educationUpFile, 'Education', eduIndex)
+                      "
+                      >close</mat-icon
+                    >
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="upload-file"
+                (click)="
+                  uploadEducationDocs(
+                    'Education',
+                    eduIndex,
+                    education?.get('educationInfoId')!
+                  )
+                "
+              >
+                <label for="">Document Attachment</label>
+                <p>Browse File</p>
+                <button mat-button type="button" color="primary">
+                  <mat-icon>attach_file</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CERTIFICATIONS -->
+          <div
+            formArrayName="certificationDetails"
+            *ngFor="
+              let certification of certificationDetails?.controls;
+              let certIndex = index;
+              let first = first
+            "
+          >
+            <div class="form-l-group__header-hr">
+              <h3>Certifications</h3>
+              <hr />
+              <button
+                *ngIf="certIndex >= 0 && first"
+                mat-button
+                type="button"
+                class="social-profiles--add"
+                mat-raised-button
+                color="Accent"
+                (click)="addCertificationDetails()"
+              >
+                <mat-icon>add</mat-icon>
+                Add New
+              </button>
+              <button
+                *ngIf="certIndex > 0"
+                class="close"
+                mat-button
+                type="button"
+                color="Primary"
+                (click)="removeCertificationDetails(certIndex, certification)"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+            <div
+              [formGroupName]="certIndex"
+              class="certification form-fld-group"
+            >
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.certificationName' + certIndex
+                  )
+                }"
+              >
+                <mat-label>Certification Name</mat-label>
+                <input
+                  matInput
+                  formControlName="certificationName"
+                  placeholder="Certification Name"
+                  maxlength="200"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.certificationName' + certIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'educationInformation.certificationName' + certIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="
+                    certification?.get('certificationName')?.errors?.pattern
+                  "
+                  >Invalid Certificate Name.</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.certificationCode' + certIndex
+                  )
+                }"
+              >
+                <mat-label>Certification Code</mat-label>
+                <input
+                  matInput
+                  formControlName="certificationCode"
+                  placeholder="Certification Code"
+                  maxlength="15"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.certificationCode' + certIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'educationInformation.certificationCode' + certIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="
+                    certification?.get('certificationCode')?.errors?.pattern
+                  "
+                  >Invalid Certificate Code.</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.certificateSerialNumber' + certIndex
+                  )
+                }"
+              >
+                <mat-label>Certificate Number</mat-label>
+                <input
+                  matInput
+                  formControlName="certificateSerialNumber"
+                  placeholder="ABC12345678"
+                  maxlength="15"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.certificateSerialNumber' + certIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'educationInformation.certificateSerialNumber' + certIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-error
+                  *ngIf="
+                    certification?.get('certificateSerialNumber')?.errors
+                      ?.pattern
+                  "
+                  >Invalid Certificate Number.</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field
+                class="certifyi-agency"
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.certifyingAgency' + certIndex
+                  )
+                }"
+              >
+                <mat-label>Certifying Organization</mat-label>
+                <input
+                  matInput
+                  #agency
+                  formControlName="certifyingAgency"
+                  [matAutocomplete]="certificationAgencyAuto"
+                  placeholder="Certifying Agency"
+                  (keyup)="searchCertifyingOrgnization(agency.value)"
+                  maxlength="100"
+                />
+                <mat-autocomplete #certificationAgencyAuto="matAutocomplete">
+                  <mat-option
+                    *ngFor="let entry of mapCertificationAgencyName | keyvalue"
+                    [value]="entry.value"
+                    >{{ entry.value }}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.certifyingAgency' + certIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'educationInformation.certifyingAgency' + certIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+
+                <mat-error
+                  *ngIf="
+                    certification?.get('certifyingAgency')?.errors?.pattern
+                  "
+                >
+                  Invalid Organization name.
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field
+                class="date-error"
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.issuedDate' + certIndex
+                  )
+                }"
+              >
+                <mat-label>Date Of Issue</mat-label>
+                <input
+                  matInput
+                  formControlName="issuedDate"
+                  min="{{ minDate }}"
+                  max="{{ issueMaxDate }}"
+                  [matDatepicker]="certifcationStartDate"
+                  placeholder="MM/DD/YYYY"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.issuedDate' + certIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment('educationInformation.issuedDate' + certIndex)
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="certifcationStartDate"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #certifcationStartDate></mat-datepicker>
+                <small
+                  class="error_message-date"
+                  *ngIf="certification.hasError('certificationDatesNotValid')"
+                >
+                  <span class="material-icons"> error_outline </span> Issue Date
+                  should be before Expiry Date
+                </small>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.expiryDate' + certIndex
+                  )
+                }"
+              >
+                <mat-label>Expiration Date</mat-label>
+                <input
+                  matInput
+                  formControlName="expiryDate"
+                  min="{{ minDate }}"
+                  max="{{ expiryMaxDate }}"
+                  [matDatepicker]="certificationExpiryDate"
+                  placeholder="MM/DD/YYYY"
+                />
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.expiryDate' + certIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment('educationInformation.expiryDate' + certIndex)
+                  "
+                >
+                  info</mat-icon
+                >
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="certificationExpiryDate"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #certificationExpiryDate></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field
+                appearance="outline"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.certificationStatus' + certIndex
+                  )
+                }"
+              >
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="certificationStatus">
+                  <mat-option
+                    *ngFor="let entry of mapCertificationStatus | keyvalue"
+                    [value]="entry.key"
+                    >{{ entry.value }}</mat-option
+                  >
+                </mat-select>
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.certificationStatus' + certIndex
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'educationInformation.certificationStatus' + certIndex
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+              </mat-form-field>
+
+              <div
+                class="uploaded-file"
+                *ngFor="
+                  let cert of getDocumentsByCertificateId(
+                    certification?.get('certificationId')!
+                  );
+                  let i = index
+                "
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'educationInformation.certificationDocument' +
+                      cert.documentId
+                  )
+                }"
+              >
+                <label for="">Attached Document</label>
+                <div class="uploaded-file__filenm">
+                  <div class="d-flex" *ngIf="cert?.fileExtension === '.pdf'">
+                    <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                    <p>{{ cert.displayName }}</p>
+                  </div>
+                  <div
+                    class="d-flex"
+                    *ngIf="
+                      fileExtO.includes(cert?.fileExtension!.toLowerCase())
+                    "
+                  >
+                    <img src="./assets/svg/icn-image.svg" width="24px" alt="" />
+                    <p>{{ cert.displayName }}</p>
+                  </div>
+                  <button mat-button type="button" color="primary">
+                    <mat-icon
+                      matTooltip="Once deleted, you cannot restore it back !"
+                      (click)="deleteFile(cert, 'Certification', i)"
+                      >close</mat-icon
+                    >
+                  </button>
+                </div>
+                <mat-icon
+                  class="info"
+                  *ngIf="
+                    hrCommentsMap.has(
+                      'educationInformation.certificationDocument' +
+                        cert.documentId
+                    )
+                  "
+                  [mdePopoverTriggerFor]="hrCommentPopupContent"
+                  (mouseover)="
+                    showHRComment(
+                      'educationInformation.certificationDocument' +
+                        cert.documentId
+                    )
+                  "
+                >
+                  info</mat-icon
+                >
+              </div>
+
+              <div
+                class="uploaded-file"
+                *ngFor="
+                  let certificationUpFile of uploadedCertificationDocs[
+                    certIndex
+                  ]?.fileList;
+                  let i = index
+                "
+              >
+                <label for="">Attached Document</label>
+                <div class="uploaded-file__filenm">
+                  <div
+                    class="d-flex"
+                    *ngIf="
+                      certificationUpFile?.file?.name!.split('.')[1]! === 'pdf'
+                    "
+                  >
+                    <img src="./assets/svg/icn-pdf.svg" width="24px" alt="" />
+                    <p>{{ certificationUpFile?.displayName }}</p>
+                  </div>
+                  <div
+                    class="d-flex"
+                    *ngIf="
+                      fileExt.includes(
+                        certificationUpFile?.file
+                          ?.name!.split('.')[1]
+                          .toLowerCase()
+                      )
+                    "
+                  >
+                    <img src="./assets/svg/icn-image.svg" width="24px" alt="" />
+                    <p>{{ certificationUpFile?.displayName }}</p>
+                  </div>
+                  <button mat-button type="button" color="primary">
+                    <mat-icon
+                      matTooltip="Once deleted, you cannot restore it back !"
+                      (click)="
+                        deleteFile(
+                          certificationUpFile,
+                          'Certification',
+                          certIndex
+                        )
+                      "
+                      >close</mat-icon
+                    >
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="upload-file"
+                (click)="
+                  uploadEducationDocs(
+                    'Certification',
+                    certIndex,
+                    certification?.get('certificationId')!
+                  )
+                "
+              >
+                <label for="">Document Attachment</label>
+                <p>Browse File</p>
+                <button mat-button type="button" color="primary">
+                  <mat-icon>attach_file</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cnd-info__footer">
+          <button
+            mat-stroked-button
+            color="primary"
+            type="button"
+            (click)="prevOnboardingStep()"
+          >
+            Previous
+          </button>
+          <button
+            mat-stroked-button
+            *ngIf="!educationForm.pristine || eduIndex >= 0 || certIndex >= 0"
+            color="primary"
+            type="button"
+            (click)="
+              onRestoreEducationAndCertificationInfo($event, educationForm)
+            "
+          >
+            Restore
+          </button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            [disabled]="educationForm.invalid"
+            (click)="saveEducationCertificationInfoAndContinue(educationForm)"
+          >
+            Save & Continue
+          </button>
+        </div>
+      </form>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+<div class="cnd-personal-info__footer">
+  <button mat-stroked-button color="primary" (click)="goToDashboard()">
+    Close
+  </button>
+  <button
+    mat-raised-button
+    *ngIf="showNext"
+    color="primary"
+    type="button"
+    (click)="nextTab()"
+  >
+    Next
+  </button>
+</div>

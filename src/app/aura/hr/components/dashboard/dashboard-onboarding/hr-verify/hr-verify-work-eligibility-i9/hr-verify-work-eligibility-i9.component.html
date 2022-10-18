@@ -1,0 +1,1663 @@
+<form [formGroup]="i9Form">
+  <mat-expansion-panel (afterExpand)="getComments()" class="accordion-parent">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <div class="accordion-header">
+          <img
+            src="./assets/svg/HR Verify Icons/work-eligibility.svg"
+            width=""
+            alt=""
+          />
+          <h3>Work Eligibility & I9</h3>
+          <div *ngIf="countKeysWorkEligibilityInfo !== 0" class="comment">
+            HR Comments
+            <div class="count">
+              <p>{{ countKeysWorkEligibilityInfo }}</p>
+            </div>
+          </div>
+          <div *ngIf="countKeysWorkEligibilityInfo !== 0" class="comment">
+            <button
+              class="delete"
+              type="button"
+              (click)="deleteComment('All', $event)"
+              mat-button
+              color="warn"
+              matTooltip="Delete All Comments"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="i-9">
+      <div class="i-9__header">
+        <h2 *ngIf="showPdf"><b>USCIS Form I-9</b></h2>
+      </div>
+      <mat-tab-group
+        *ngIf="showTabs"
+        [selectedIndex]="selectedIndex"
+        (selectedTabChange)="tabChanged($event)"
+      >
+        <mat-tab label="Section 1">
+          <div class="i-9__section">
+            <div class="form-l-group__header-hr">
+              <h3><b>Section I</b></h3>
+              <hr />
+            </div>
+            <div class="i-9__info">
+              <h3><b>Employee Information and Attestation</b></h3>
+              <p>
+                (Employees must complete and sign Section 1 of Form I-9 no later
+                then the first day of employment, but not before accepting a job
+                offer)
+              </p>
+            </div>
+            <div class="form-l-group__semi-header-hr">
+              <h4>Employee Information and Attestation</h4>
+              <hr />
+            </div>
+            <div class="form-l-group disable">
+              <div class="form-l-group__form">
+                <label for="">Last Name</label>
+                <p>
+                  {{ workEligibilityAndI9FormResult?.candidateFilledLastName }}
+                </p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">First Name</label>
+                <p>
+                  {{ workEligibilityAndI9FormResult?.candidateFilledFirstName }}
+                </p>
+              </div>
+              <div class="form-l-group__form">
+                <label for=""
+                  >Middle Initial Other Last Names Used (if any)</label
+                >
+                <p>
+                  {{
+                    workEligibilityAndI9FormResult?.candidateFilledMiddleInitial
+                  }}
+                </p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Other Last Names Used (if any)</label>
+                <p>
+                  {{
+                    workEligibilityAndI9FormResult?.candidateFilledOtherLastNames
+                  }}
+                </p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Address (Street Number and Name)</label>
+                <p>{{ workEligibilityAndI9FormResult?.address }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Apt number</label>
+                <p>
+                  {{ workEligibilityAndI9FormResult?.unitOrApartmentNumber }}
+                </p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">City or Town</label>
+                <p>{{ workEligibilityAndI9FormResult?.city }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Zip Code</label>
+                <p>{{ workEligibilityAndI9FormResult?.zip }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Date of Birth</label>
+                <p>
+                  {{
+                    workEligibilityAndI9FormResult?.dateOfBirth
+                      | date: 'mediumDate'
+                  }}
+                </p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">U.S Social Security Number</label>
+                <p>{{ workEligibilityAndI9FormResult?.ssn }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Employee’s Email Address</label>
+                <p>{{ workEligibilityAndI9FormResult?.email }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Employee’s Telephone Number</label>
+                <p>
+                  {{
+                    parsePhoneNumberToShow(
+                      workEligibilityAndI9FormResult?.phoneNumber
+                    )
+                  }}
+                </p>
+              </div>
+            </div>
+            <p>
+              <b
+                >I am aware that federal law provides for imprisonment and/or
+                fines for false statements or use of false documents in
+                connection with the completion of this form.</b
+              >
+            </p>
+            <p>
+              <b
+                >I attest, under penalty of perjury, that I am (check one of the
+                following boxes):
+              </b>
+            </p>
+            <mat-radio-group
+              class="i-9__radio-group"
+              *ngIf="
+                workEligibilityAndI9FormResult?.citizenshipStatusCode == 65
+              "
+            >
+              <div class="radio-options">
+                <div
+                  class="form-l-group__form"
+                  [ngClass]="{
+                    rejected: hrCommentsMap.has(
+                      'workEligibilityI9.citizenOfUnitedState'
+                    )
+                  }"
+                >
+                  <mat-radio-group class="i-9__radio-group">
+                    <mat-radio-button
+                      class="example-radio-button"
+                      aria-labelledby="example-radio-group-label"
+                    >
+                      <p
+                        id="workEligibilityI9.citizenOfUnitedState"
+                        #citizenUnitedState
+                        (mouseenter)="onHover(citizenUnitedState.id)"
+                      >
+                        A citizen of the United States
+                      </p>
+                    </mat-radio-button>
+                  </mat-radio-group>
+                  <div
+                    *ngIf="
+                      showUpdateButton === false;
+                      then showAddBtn;
+                      else showUpdateBtn
+                    "
+                  ></div>
+                </div>
+              </div>
+            </mat-radio-group>
+            <mat-radio-group
+              class="i-9__radio-group"
+              *ngIf="
+                workEligibilityAndI9FormResult?.citizenshipStatusCode == 66
+              "
+            >
+              <div class="radio-options">
+                <div
+                  class="form-l-group__form"
+                  [ngClass]="{
+                    rejected: hrCommentsMap.has(
+                      'workEligibilityI9.nonCitizenOfUnitedState'
+                    )
+                  }"
+                >
+                  <mat-radio-group class="i-9__radio-group">
+                    <mat-radio-button
+                      class="example-radio-button"
+                      aria-labelledby="example-radio-group-label"
+                    >
+                      <p
+                        id="workEligibilityI9.nonCitizenOfUnitedState"
+                        #nonCitizenUnitedState
+                        (mouseenter)="onHover(nonCitizenUnitedState.id)"
+                      >
+                        A noncitizen national of the United States (see
+                        instructions)
+                      </p>
+                    </mat-radio-button>
+                  </mat-radio-group>
+                  <div
+                    *ngIf="
+                      showUpdateButton === false;
+                      then showAddBtn;
+                      else showUpdateBtn
+                    "
+                  ></div>
+                </div>
+              </div>
+            </mat-radio-group>
+            <mat-radio-group
+              class="i-9__radio-group"
+              *ngIf="
+                workEligibilityAndI9FormResult?.citizenshipStatusCode == 67
+              "
+            >
+              <div class="radio-options">
+                <div
+                  class="form-l-group__form"
+                  [ngClass]="{
+                    rejected: hrCommentsMap.has(
+                      'workEligibilityI9.lawfulPermanentResident'
+                    )
+                  }"
+                >
+                <mat-radio-group class="i-9__radio-group">
+                  <mat-radio-button
+                    class="example-radio-button"
+                    aria-labelledby="example-radio-group-label"
+                  >
+                  <p
+                  id="workEligibilityI9.lawfulPermanentResident"
+                  #permanentResident
+                  (mouseenter)="onHover(permanentResident.id)"
+                >
+                    A lawful permanent resident
+                  </p>
+                  </mat-radio-button>
+                </mat-radio-group>
+                <div
+                *ngIf="
+                  showUpdateButton === false;
+                  then showAddBtn;
+                  else showUpdateBtn
+                "
+              ></div>
+              </div>
+              </div>
+              <div class="selected-options">
+                <div class="form-l-group">
+                  <div
+                    class="form-l-group__form"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.uscisNumber'
+                      )
+                    }"
+                  >
+                    <label for=""
+                      >Alien Registration Number/USCIS Number
+                    </label>
+                    <p
+                      id="workEligibilityI9.uscisNumber"
+                      #uscisNum
+                      (mouseenter)="onHover(uscisNum.id)"
+                    >
+                      {{ workEligibilityAndI9FormResult?.uscisNumber }}
+                    </p>
+                    <div
+                      *ngIf="
+                        showUpdateButton === false;
+                        then showAddBtn;
+                        else showUpdateBtn
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </mat-radio-group>
+            <mat-radio-group class="i-9__radio-group">
+              <div class="radio-options">
+                <div
+                class="form-l-group__form"
+                [ngClass]="{
+                  rejected: hrCommentsMap.has(
+                    'workEligibilityI9.alienAuthorizedtowork'
+                  )
+                }"
+              >
+                <mat-radio-group
+                  class="i-9__radio-group"
+                  *ngIf="
+                    workEligibilityAndI9FormResult?.citizenshipStatusCode == 68
+                  "
+                >
+                  <mat-radio-button
+                    class="example-radio-button"
+                    aria-labelledby="example-radio-group-label"
+                  >
+                  <p
+                  id="workEligibilityI9.alienAuthorizedtowork"
+                  #alienAuthorized
+                  (mouseenter)="onHover(alienAuthorized.id)"
+                >
+                    An alien Authorized to work - until (expiration date , if
+                    Applicable, mm/dd/yyyy)
+                  </p>
+                  </mat-radio-button>
+                </mat-radio-group>
+                <div
+                *ngIf="
+                  showUpdateButton === false;
+                  then showAddBtn;
+                  else showUpdateBtn
+                "
+              ></div>
+              </div>
+                <div class="form-l-group disable">
+                  <div
+                    *ngIf="
+                      workEligibilityAndI9FormResult?.citizenshipStatusCode !==
+                      65
+                    "
+                    class="form-l-group__form"
+                  >
+                  <div
+                    class="form-l-group__form"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.alienAuthorizedEndDate'
+                      )
+                    }"
+                  >
+                    <label for="">End Date</label>
+                    <p id="workEligibilityI9.alienAuthorizedEndDate"
+                    #alienAuthEndDate
+                    (mouseenter)="onHover(alienAuthEndDate.id)">
+                      {{
+                        workEligibilityAndI9FormResult?.alienAuthorizedToWorkExpiryDate
+                          | date: 'mediumDate'
+                      }}
+                    </p>
+                    <div
+                    *ngIf="
+                      showUpdateButton === false;
+                      then showAddBtn;
+                      else showUpdateBtn
+                    "
+                  ></div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                *ngIf="
+                  workEligibilityAndI9FormResult?.citizenshipStatusCode !== 65
+                "
+                class="selected-options"
+              >
+                <div class="form-l-group">
+                  <div
+                    class="form-l-group__form"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.uscisNumber'
+                      )
+                    }"
+                  >
+                    <label for=""
+                      >Alien Registration Number/USCIS Number
+                    </label>
+                    <p
+                      id="workEligibilityI9.uscisNumber"
+                      #uscisNum
+                      (mouseenter)="onHover(uscisNum.id)"
+                    >
+                      {{ workEligibilityAndI9FormResult?.uscisNumber }}
+                    </p>
+                    <div
+                      *ngIf="
+                        showUpdateButton === false;
+                        then showAddBtn;
+                        else showUpdateBtn
+                      "
+                    ></div>
+                  </div>
+                </div>
+                <p></p>
+                <div class="form-l-group">
+                  <div
+                    class="form-l-group__form"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has('workEligibilityI9.i94Number')
+                    }"
+                  >
+                    <label for="">Form I-94 admission number </label>
+                    <p
+                      id="workEligibilityI9.i94Number"
+                      #i94Num
+                      (mouseenter)="onHover(i94Num.id)"
+                    >
+                      {{ workEligibilityAndI9FormResult?.i94Number }}
+                    </p>
+                    <div
+                      *ngIf="
+                        showUpdateButton === false;
+                        then showAddBtn;
+                        else showUpdateBtn
+                      "
+                    ></div>
+                  </div>
+                </div>
+                <p></p>
+                <div class="form-l-group">
+                  <div
+                    class="form-l-group__form"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.foriegnPassportNumber'
+                      )
+                    }"
+                  >
+                    <label for="">Foreign passport number </label>
+                    <p
+                      id="workEligibilityI9.foriegnPassportNumber"
+                      #foriegnPassportNum
+                      (mouseenter)="onHover(foriegnPassportNum.id)"
+                    >
+                      {{
+                        workEligibilityAndI9FormResult?.foriegnPassportNumber
+                      }}
+                    </p>
+                    <div
+                      *ngIf="
+                        showUpdateButton === false;
+                        then showAddBtn;
+                        else showUpdateBtn
+                      "
+                    ></div>
+                  </div>
+                  <div
+                    class="form-l-group__form"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.foriegnPassportIssuanceCountry'
+                      )
+                    }"
+                  >
+                    <label for="">Country of Issuance</label>
+                    <p
+                      id="workEligibilityI9.foriegnPassportIssuanceCountry"
+                      #passportIssuanceCountry
+                      (mouseenter)="onHover(passportIssuanceCountry.id)"
+                    >
+                      {{
+                        workEligibilityAndI9FormResult?.foriegnPassportIssuanceCountry
+                      }}
+                    </p>
+                    <div
+                      *ngIf="
+                        showUpdateButton === false;
+                        then showAddBtn;
+                        else showUpdateBtn
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </mat-radio-group>
+            <div
+              *ngIf="workEligibilityAndI9FormResult?.candidateSignDocumentId!"
+              class="i-9__sign"
+            >
+              <div class="i-9__sign__sig">
+                <h4>Employee - Signature</h4>
+                <div class="i-9__sign--img">
+                  <img [src]="candSignURL" alt="" />
+                </div>
+              </div>
+            </div>
+            <div class="i-9__info">
+              <h3>
+                <b>Preparer and/or Translator Certification (check one).</b>
+              </h3>
+              <div class="radio-options">
+                <mat-radio-group
+                  class="i-9__radio-group"
+                  *ngIf="!workEligibilityAndI9FormResult?.preparerUsed"
+                >
+                  <mat-radio-button
+                    class="example-radio-button"
+                    aria-labelledby="example-radio-group-label"
+                  >
+                    I did not use a Preparer or Translator
+                  </mat-radio-button>
+                </mat-radio-group>
+                <mat-radio-group
+                  class="i-9__radio-group"
+                  *ngIf="workEligibilityAndI9FormResult?.preparerUsed"
+                >
+                  <mat-radio-button
+                    class="example-radio-button"
+                    aria-labelledby="example-radio-group-label"
+                  >
+                    A preparer(s) and /or translator(s) assisted the employee in
+                    completing Section 1.
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div
+              class="form-l-group disable"
+              *ngIf="workEligibilityAndI9FormResult?.preparerUsed"
+            >
+              <div class="form-l-group__form">
+                <label for="">Last Name</label>
+                <p>{{ workEligibilityAndI9FormResult?.preparerLastName }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">First Name</label>
+                <p>{{ workEligibilityAndI9FormResult?.preparerFirstName }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Address</label>
+                <p>{{ workEligibilityAndI9FormResult?.preparerAddress }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">City</label>
+                <p>{{ workEligibilityAndI9FormResult?.preparerCity }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">State</label>
+                <p>{{ workEligibilityAndI9FormResult?.preparerState }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">ZipCode</label>
+                <p>{{ workEligibilityAndI9FormResult?.preparerZIPCode }}</p>
+              </div>
+            </div>
+            <p *ngIf="workEligibilityAndI9FormResult?.preparerUsed">
+              <b
+                >I Assist , Under Penalty of Perjury, that i have Assisted in
+                the Completion of section 1 of the form and that to the best of
+                my Knowledge the information is true and Correct .</b
+              >
+            </p>
+            <div
+              class="i-9__sign"
+              *ngIf="workEligibilityAndI9FormResult?.preparerUsed"
+            >
+              <div class="i-9__sign__sig">
+                <h4>Preparer - Signature</h4>
+                <div class="i-9__sign--img">
+                  <img [src]="prepSignURL" alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Section 2">
+          <div class="i-9__section">
+            <div class="i-9__section--header">
+              <h2>Form I-9</h2>
+            </div>
+            <div class="form-l-group__header-hr">
+              <h3><b>Section II</b></h3>
+              <hr />
+            </div>
+            <div class="i-9__info">
+              <h3>
+                <b
+                  >Section 2. Employer or Authorized Representative Review and
+                  Verification
+                </b>
+              </h3>
+              <p>
+                (Employers or their authorized representative must complete and
+                sign Section 2 within 3 business days of the employee’s first
+                day of employment. You must physically examine one document from
+                List A OR a combination of one document from List B and one
+                document from List C as listed on the “Lists of Acceptable
+                Documents.”)
+              </p>
+            </div>
+            <div class="form-l-group__semi-header-hr">
+              <h4><b>Employee Info from Section 1</b></h4>
+              <hr />
+            </div>
+            <div class="form-l-group disable">
+              <div class="form-l-group__form">
+                <label for="">Last Name (Family Name)</label>
+                <p>
+                  {{ workEligibilityAndI9FormResult?.employerFilledLastName }}
+                </p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">First Name (Given Name)</label>
+                <p>
+                  {{ workEligibilityAndI9FormResult?.employerFilledFirstName }}
+                </p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">M.L</label>
+                <p>
+                  {{
+                    workEligibilityAndI9FormResult?.employerFilledMiddleInitial
+                  }}
+                </p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Citizenship / Immigration Status </label>
+                <p>
+                  {{ workEligibilityAndI9FormResult?.citizenshipStatus }}
+                </p>
+              </div>
+            </div>
+            <div class="form-l-group__semi-header-hr">
+              <h4><b>Identity and Employment Authorisation </b></h4>
+              <hr />
+            </div>
+            <div class="form-l-group disable">
+              <div class="form-l-group__form list-checks disable">
+                <mat-radio-group
+                  formControlName="listABCRadioGroup"
+                  aria-label="Select an option"
+                  (change)="changeRadioBtn($event)"
+                  class="i-9__radio-group"
+                >
+                  <mat-radio-button
+                    class="example-radio-button"
+                    value="1"
+                    aria-labelledby="example-radio-group-label"
+                    [checked]="
+                      workEligibilityAndI9FormResult?.listADocCode1 != null ||
+                      workEligibilityAndI9FormResult?.listADocCode2 != null ||
+                      workEligibilityAndI9FormResult?.listADocCode3 != null
+                    "
+                  >
+                    <div>
+                      <p>List A</p>
+                      <span>Employment </span>
+                    </div>
+                  </mat-radio-button>
+                  <mat-radio-button
+                    class="example-radio-button"
+                    value="2"
+                    aria-labelledby="example-radio-group-label1"
+                    [checked]="
+                      workEligibilityAndI9FormResult?.listBDocCode != null ||
+                      workEligibilityAndI9FormResult?.listCDocCode != null
+                    "
+                  >
+                    <div>
+                      <p>List B</p>
+                      <span>Identity </span>
+                    </div>
+                    &
+                    <div>
+                      <p>List C</p>
+                      <span>Authorization </span>
+                    </div>
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="list-a">
+              <div class="list-a" *ngIf="radioBtnValue != 2">
+                <div class="form-l-group__header-hr">
+                  <h3><b>LIST A Documents </b></h3>
+                  <hr />
+                  <button
+                    *ngIf="index <= 1"
+                    mat-raised-button
+                    class="add-new"
+                    (click)="addDocument()"
+                  >
+                    <mat-icon>add</mat-icon>
+                    Add New
+                  </button>
+                </div>
+                <div class="list-a__adds" *ngIf="showRowOne">
+                  <div class="form-fld-group">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Document Title</mat-label>
+                      <mat-select
+                        required
+                        matTooltip="{{ listADropdownValue }}"
+                        formControlName="listADocumentCodeOne"
+                        (selectionChange)="OnListADropDownChange($event)"
+                      >
+                        <mat-option
+                          matTooltip="{{ entry.value }}"
+                          *ngFor="let entry of listADocs | keyvalue"
+                          [value]="entry.key"
+                          >{{ entry.value }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Issuing Authority</mat-label>
+                      <input
+                        matInput
+                        required
+                        formControlName="listAIssuingAuthorityOne"
+                        maxlength="100"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Document Number</mat-label>
+                      <input
+                        matInput
+                        required
+                        formControlName="listADocumentNumberOne"
+                        maxlength="20"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label
+                        >Expiration Date (if any) (mm/dd/yyyy)</mat-label
+                      >
+                      <input
+                        matInput
+                        required
+                        formControlName="listAExpirationDateOne"
+                        [matDatepicker]="picker"
+                        placeholder="MM/DD/YYYY"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <button
+                    (click)="removeDocument(1)"
+                    [style.visibility]="'hidden'"
+                    mat-mini-fab
+                    color="primary"
+                    class="list-a__adds--close"
+                  >
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+                <div class="list-a__adds" *ngIf="showRowTwo">
+                  <div class="form-fld-group">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Document Title</mat-label>
+                      <mat-select
+                        required
+                        matTooltip="{{ listADropdownValue }}"
+                        formControlName="listADocumentCodeTwo"
+                        (selectionChange)="OnListADropDownChange($event)"
+                      >
+                        <mat-option
+                          matTooltip="{{ entry.value }}"
+                          *ngFor="let entry of listADocs | keyvalue"
+                          [value]="entry.key"
+                          >{{ entry.value }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Issuing Authority</mat-label>
+                      <input
+                        matInput
+                        required
+                        formControlName="listAIssuingAuthorityTwo"
+                        maxlength="100"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Document Number</mat-label>
+                      <input
+                        matInput
+                        required
+                        formControlName="listADocumentNumberTwo"
+                        maxlength="20"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label
+                        >Expiration Date (if any) (mm/dd/yyyy)</mat-label
+                      >
+                      <input
+                        matInput
+                        required
+                        formControlName="listAExpirationDateTwo"
+                        [matDatepicker]="picker"
+                        placeholder="MM/DD/YYYY"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <button
+                    (click)="removeDocument(2)"
+                    mat-mini-fab
+                    color="primary"
+                    class="list-a__adds--close"
+                  >
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+                <div class="list-a__adds" *ngIf="showRowThree">
+                  <div class="form-fld-group">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Document Title</mat-label>
+                      <mat-select
+                        required
+                        matTooltip="{{ listADropdownValue }}"
+                        formControlName="listADocumentCodeThree"
+                        (selectionChange)="OnListADropDownChange($event)"
+                      >
+                        <mat-option
+                          matTooltip="{{ entry.value }}"
+                          *ngFor="let entry of listADocs | keyvalue"
+                          [value]="entry.key"
+                          >{{ entry.value }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Issuing Authority</mat-label>
+                      <input
+                        matInput
+                        required
+                        formControlName="listAIssuingAuthorityThree"
+                        maxlength="100"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Document Number</mat-label>
+                      <input
+                        matInput
+                        required
+                        formControlName="listADocumentNumberThree"
+                        maxlength="20"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label
+                        >Expiration Date (if any) (mm/dd/yyyy)</mat-label
+                      >
+                      <input
+                        matInput
+                        required
+                        formControlName="listAExpirationDateThree"
+                        [matDatepicker]="picker"
+                        placeholder="MM/DD/YYYY"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <button
+                    (click)="removeDocument(3)"
+                    mat-mini-fab
+                    color="primary"
+                    class="list-a__adds--close"
+                  >
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="list-a" *ngIf="radioBtnValue == 2">
+                <div class="form-l-group__header-hr">
+                  <h3><b>LIST B Documents </b></h3>
+                  <hr />
+                </div>
+                <div class="list-a__adds flex-column">
+                  <div class="form-fld-group">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Document Title</mat-label>
+                      <mat-select
+                        required
+                        matTooltip="{{ listBDropdownValue }}"
+                        formControlName="listBDocumentCode"
+                        (selectionChange)="OnListBDropDownChange($event)"
+                      >
+                        <mat-option
+                          matTooltip="{{ entry.value }}"
+                          *ngFor="let entry of listBDocs | keyvalue"
+                          [value]="entry?.key"
+                          >{{ entry?.value }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Issuing Authority</mat-label>
+                      <input
+                        matInput
+                        required
+                        formControlName="listBIssuingAuthority"
+                        maxlength="100"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Document Number</mat-label>
+                      <input
+                        matInput
+                        required
+                        formControlName="listBDocumentNumber"
+                        maxlength="20"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label
+                        >Expiration Date (if any) (mm/dd/yyyy)</mat-label
+                      >
+                      <input
+                        matInput
+                        required
+                        formControlName="listBExpirationDate"
+                        [matDatepicker]="picker"
+                        placeholder="MM/DD/YYYY"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div
+                    *ngIf="
+                      listBDropdownValue?.includes(
+                        'Driver\'s license or ID card issued by a U.S'
+                      ) ||
+                      listBDocs
+                        .get(listBDocumentTypeCode)
+                        ?.includes(
+                          'Driver\'s license or ID card issued by a U.S'
+                        )
+                    "
+                    class="drivers-id"
+                  >
+                    <h3>
+                      Are you Entering a Driver’s License or a State Issued ID
+                      Card?
+                    </h3>
+                    <div class="form-fld-group">
+                      <mat-radio-group
+                        formControlName="listBDriverSateRadioGroup"
+                        aria-label="Select an option"
+                        (change)="changeDriverSateCard($event)"
+                      >
+                        <mat-radio-button
+                          value="1"
+                          formControlName="listBDriver"
+                          ngDefaultControl
+                          [checked]="driverBtnChecked"
+                          >Driver’s License
+                        </mat-radio-button>
+                        <mat-radio-button
+                          value="2"
+                          formControlName="listBState"
+                          ngDefaultControl
+                          [checked]="stateBtnChecked"
+                          >State Issued ID Card
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="form-fld-group">
+                      <mat-form-field appearance="outline">
+                        <mat-label>State</mat-label>
+                        <mat-select formControlName="listBStateCode">
+                          <mat-option
+                            *ngFor="let entry of mapState | keyvalue"
+                            [value]="entry.key"
+                            >{{ entry.value }}</mat-option
+                          >
+                        </mat-select>
+                      </mat-form-field>
+                      <section class="example-section">
+                        <mat-checkbox
+                          formControlName="listBNoExpirationDate"
+                          (change)="showCheckOptions($event)"
+                          class="example-margin"
+                          >No Expiration Date Provided</mat-checkbox
+                        >
+                      </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="list-a" *ngIf="radioBtnValue == 2">
+                <div class="form-l-group__header-hr">
+                  <h3><b>LIST C Documents </b></h3>
+                  <hr />
+                </div>
+                <div class="list-a__adds">
+                  <div class="form-fld-group">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Document Title</mat-label>
+                      <mat-select
+                        required
+                        matTooltip="{{ listCDropdownValue }}"
+                        formControlName="listCDocumentCode"
+                        (selectionChange)="OnListCDropDownChange($event)"
+                      >
+                        <mat-option
+                          matTooltip="{{ entry.value }}"
+                          *ngFor="let entry of listCDocs | keyvalue"
+                          [value]="entry.key"
+                          >{{ entry.value }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Issuing Authority</mat-label>
+                      <input
+                        matInput
+                        required
+                        formControlName="listCIssuingAuthority"
+                        maxlength="100"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label>Document Number</mat-label>
+                      <input
+                        matInput
+                        required
+                        formControlName="listCDocumentNumber"
+                        maxlength="20"
+                      />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                      <mat-label
+                        >Expiration Date (if any) (mm/dd/yyyy)</mat-label
+                      >
+                      <input
+                        matInput
+                        required
+                        formControlName="listCExpirationDate"
+                        [matDatepicker]="picker"
+                        placeholder="MM/DD/YYYY"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+              <div class="i-9__info">
+                <p>
+                  <b>Certification :</b> I attest, under penalty of perjury,
+                  that (1) I have examined the document(s) presented by the
+                  above-named employee, (2) the above-listed document(s) appear
+                  to be genuine and to relate to the employee named, and (3) to
+                  the best of my knowledge the employee is authorized to work in
+                  the United States.
+                </p>
+              </div>
+              <div>
+                <b>The employee’s first day of employment (mm/dd/yyyy):</b
+                >&nbsp;
+                {{
+                  workEligibilityAndI9FormResult?.employmentDate
+                    | date: 'MM/dd/yyyy'
+                }}
+              </div>
+              <div class="form-l-group__semi-header-hr">
+                <h3><b>Employer's Information</b></h3>
+                <hr />
+              </div>
+              <div class="form-l-group emp-info disable">
+                <div class="form-l-group__form">
+                  <label
+                    for=""
+                    matTooltip="Employer’s Business or Organization Name"
+                    >Employer’s Business or Organization Name
+                  </label>
+                  <p>{{ workEligibilityAndI9FormResult?.employerOrgName }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label
+                    for=""
+                    matTooltip="Employer’s Business or Organization Address (Street Number and Name)"
+                    >Employer’s Business or Organization Address (Street Number
+                    and Name)
+                  </label>
+                  <p>
+                    {{ workEligibilityAndI9FormResult?.employerOrgAddress }}
+                  </p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="" matTooltip="City or Town">City or Town </label>
+                  <p>{{ workEligibilityAndI9FormResult?.employerOrgCity }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="" matTooltip="City or Town">State </label>
+                  <p>{{ workEligibilityAndI9FormResult?.employerOrgState }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="" matTooltip="ZIP Code">ZIP Code </label>
+                  <p>{{ workEligibilityAndI9FormResult?.employerOrgZIP }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label
+                    for=""
+                    matTooltip="Title of Employer or Authorized Representative"
+                    >Title of Employer or Authorized Representative
+                  </label>
+                  <p>{{ workEligibilityAndI9FormResult?.employerTitle }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label
+                    for=""
+                    matTooltip="Last Name of Employer or Authorized Representative"
+                    >Last Name of Employer or Authorized Representative
+                  </label>
+                  <p>{{ workEligibilityAndI9FormResult?.employerLastName }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label
+                    for=""
+                    matTooltip="First Name of Employer or Authorized Representative"
+                    >First Name of Employer or Authorized Representative
+                  </label>
+                  <p>{{ workEligibilityAndI9FormResult?.employerFirstName }}</p>
+                </div>
+              </div>
+              <div class="i-9__sign">
+                <div class="i-9__sign__sig">
+                  <h4>Signature of Employer or Authorized Representative</h4>
+                  <button
+                    type="button"
+                    *ngIf="
+                      (workEligibilityAndI9FormResult?.employerSignDocumentId ===
+                        null &&
+                        signEmployerStatus === false) ||
+                      employerSignURL === ''
+                    "
+                    mat-stroked-button
+                    (click)="openSignatureDialog('Employer')"
+                  >
+                    Click to sign
+                  </button>
+                  <div
+                    *ngIf="
+                      (signEmployerStatus === true && employerSignURL !== '') ||
+                      workEligibilityAndI9FormResult?.employerSignDocumentId
+                    "
+                    class="i-9__sign--img"
+                  >
+                    <button
+                      class="close"
+                      mat-button
+                      color="primary"
+                      type="button"
+                      (click)="deleteSign('Employer')"
+                    >
+                      <mat-icon> close </mat-icon>
+                    </button>
+                    <img [src]="employerSignURL" alt="" />
+                  </div>
+                </div>
+                <p>
+                  <b>Date: {{ signDate | date: 'mediumDate' }}</b>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="i-9-viewer__container"
+            style="border: 1px solid rediphone 14"
+          ></div>
+        </mat-tab>
+        <mat-tab label="Section 3" disabled> Section 3 </mat-tab>
+      </mat-tab-group>
+      <div *ngIf="showPdf" class="i-9__pdf">
+        <button
+          class="i-9__pdf--download"
+          mat-button
+          color="primary"
+          (click)="downloadDocument()"
+        >
+          <mat-icon>download</mat-icon>
+        </button>
+        <div class="i-9__pdf--file">
+          <div class="pdf-viewer">
+            <div *ngIf="isLoadingI9Form" class="spinner">
+              <app-spinner diameter="35"></app-spinner>
+            </div>
+            <pdf-viewer src="{{ docURL }}"></pdf-viewer>
+          </div>
+        </div>
+      </div>
+      <div class="i-9__photo-mach">
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+
+        <!-- Photo Match -->
+        <div *ngIf="showPhotoMatch" class="i-9__info">
+          <div class="i-9__info--photo">
+            <mat-icon> check_circle </mat-icon>
+            <div class="i-9__info--photo--text">
+              <h3><b>Form I-9 has been submitted</b></h3>
+              <p>
+                You have electronically signed and submitted profile
+                successfully.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="showPhotoMatch" class="i-9__card">
+          <div class="photo-verify">
+            <div class="photo-verify__img">
+              <img [src]="empPhoto" />
+            </div>
+            <div class="photo-verify__details">
+              <h2><b>Photo matching required</b></h2>
+              <h3>
+                <b>
+                  Does the photo displayed to match the photo displayed on
+                  <b>{{
+                    workEligibilityAndI9FormResult?.candidateFilledFirstName +
+                      ' ' +
+                      workEligibilityAndI9FormResult?.candidateFilledLastName
+                  }}</b>
+                  U.S Passport or Passport Card</b
+                >
+              </h3>
+              <mat-radio-group
+                aria-labelledby="example-radio-group-label"
+                class="example-radio-group radio-btn-list"
+                (change)="changeRadioBtn($event)"
+              >
+                <mat-radio-button class="example-radio-button" value="Matching">
+                  Yes, this photo matches
+                </mat-radio-button>
+                <mat-radio-button
+                  class="example-radio-button"
+                  value="NotMatching"
+                >
+                  No, this photo dose not match
+                </mat-radio-button>
+                <mat-radio-button class="example-radio-button" value="NoImage">
+                  No photo displayed
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employment Authorized -->
+        <div *ngIf="showAuthConfirm" class="i-9__conformation">
+          <div class="i-9__conformation--img">
+            <img
+              src="./assets/svg/HR Verify Icons/email confirmation.svg"
+              width="140px"
+              alt=""
+            />
+            <h3>Employment Authorization Confirmed</h3>
+            <p>
+              The Employee is eligible to work in the United States and the case
+              has been automatically closed
+            </p>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="openCaseResults()"
+            >
+              View Case Results
+            </button>
+          </div>
+        </div>
+
+        <!-- Final Non-confirmation -->
+        <div *ngIf="showFinalNonConfirm" class="i-9__card">
+          <div class="i-9__card__panel">
+            <div class="panel-body center-align">
+              <div class="title-h5 error">Final Non-confirmation</div>
+              <p>
+                Unfortunately, we were unable to confirm
+                <b>{{
+                  workEligibilityAndI9FormResult?.candidateFilledFirstName +
+                    ' ' +
+                    workEligibilityAndI9FormResult?.candidateFilledLastName
+                }}</b
+                >'s authorization for employment.
+              </p>
+            </div>
+            <div class="panel-footer center-align">
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="openCaseResults()"
+              >
+                View Case Results
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Close Case and Resubmit -->
+        <div *ngIf="showResubmit" class="i-9__card">
+          <div class="i-9__card__panel">
+            <div class="panel-body">
+              <div class="title-h5">Resubmit this Case</div>
+              <p>
+                Something is incorrect in the data submitted. E-Verify needs you
+                to close this case and re-enter
+                <b>{{
+                  workEligibilityAndI9FormResult?.candidateFilledFirstName +
+                    ' ' +
+                    workEligibilityAndI9FormResult?.candidateFilledLastName
+                }}</b
+                >'s information in a new case.
+              </p>
+            </div>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+
+        <!-- Manual Review OR Queued OR Referred-->
+        <div
+          *ngIf="showManualReview || showQueued || showReferred"
+          class="i-9__card"
+        >
+          <div class="i-9__card__panel">
+            <div class="panel-body">
+              <div class="title-h5">E-Verify Needs More Time</div>
+              <p>
+                E-Verify needs more time to confirm that
+                <b>{{
+                  workEligibilityAndI9FormResult?.candidateFilledFirstName +
+                    ' ' +
+                    workEligibilityAndI9FormResult?.candidateFilledLastName
+                }}</b>
+                is authorized to work in the United States. You should not take
+                any action against
+                {{ workEligibilityAndI9FormResult?.candidateFilledFirstName }}
+                while E-verify is reviewing this case.
+              </p>
+              <p>
+                Check back on this case periodically for an update on its
+                status.
+              </p>
+            </div>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+
+        <!-- Tentative NonConfirmation (Pending Referral) -->
+        <div *ngIf="showPendingReferral" class="i-9__card">
+          <form [formGroup]="tncForm">
+            <div class="i-9__card__panel wid-650">
+              <div class="panel-body">
+                <div class="title-h5">Tentative Nonconfirmation</div>
+                <p>
+                  E Verify needs some more information from you before
+                  confirming employment authorization. Here are the next steps
+                  that both will need to take.
+                </p>
+                <div class="form-group">
+                  <mat-checkbox formControlName="tncApplied" color="primary">
+                    I have notified this employee of TNC.
+                  </mat-checkbox>
+                  <div class="form-group-inline">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Language</mat-label>
+                      <mat-select
+                        formControlName="tncLanguage"
+                        (selectionChange)="tncLangDropDownChange($event.value)"
+                      >
+                        <mat-option
+                          *ngFor="let lang of languages"
+                          [value]="lang"
+                          >{{ lang }}</mat-option
+                        >
+                      </mat-select>
+                    </mat-form-field>
+                    <div class="file-download" (click)="downloadFan()">
+                      <div class="file-clm">
+                        <img src="./assets/images/pdf_icon.png" />
+                      </div>
+                      <div>Download Futher Action Notice</div>
+                    </div>
+                  </div>
+                  <label>Employee wants to contest</label>
+                  <div class="form-group-inline">
+                    <div class="radio-options">
+                      <mat-radio-group
+                        formControlName="tncRefer"
+                        (change)="tncRadioBtnChange($event)"
+                        class="i-9__radio-group"
+                      >
+                        <mat-radio-button
+                          class="example-radio-button"
+                          value="1"
+                        >
+                          Yes
+                        </mat-radio-button>
+                        <mat-radio-button
+                          class="example-radio-button"
+                          value="2"
+                        >
+                          No
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="submitFNC()"
+                  [disabled]="
+                    tncForm.invalid ||
+                    tncRadioBtnValue == 2 ||
+                    tncRadioBtnValue == 0
+                  "
+                >
+                  Submit
+                </button>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="hrCommentLength > 0 && tabIndex === 1"
+                  *ngIf="
+                    !showAuthConfirm &&
+                    !showFinalNonConfirm &&
+                    !showResubmit &&
+                    !showManualReview &&
+                    !showPendingReferral &&
+                    !showQueued &&
+                    !showReferred &&
+                    !showNonConfirmSuccess
+                  "
+                  (click)="nextStep(i9Form)"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Tentative NonConfirmation Successfull -->
+        <div *ngIf="showNonConfirmSuccess" class="i-9__card">
+          <div class="i-9__card__panel wid-350">
+            <div class="panel-body center-align">
+              <div class="succues-tick">
+                <mat-icon>done</mat-icon>
+              </div>
+              <div class="title-h5">Successfull</div>
+              <p class="flex-center">
+                This TNC Case Result is successfully notified to the candidate
+              </p>
+              <div class="form-group">
+                <div class="form-group-inline flex-column">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Language</mat-label>
+                    <mat-select
+                      (selectionChange)="tncLangDropDownChange($event.value)"
+                    >
+                      <mat-option
+                        *ngFor="let lang of languages"
+                        [value]="lang"
+                        >{{ lang }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                  <div class="file-download bg-primary" (click)="downloadRdc()">
+                    <div class="file-clm">
+                      <img src="./assets/images/pdf_icon.png" />
+                    </div>
+                    <div>Referral Date Confirmation</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Clossed-->
+        <div *ngIf="showClossed" class="i-9__card">
+          <div class="i-9__card__panel">
+            <div class="panel-body">
+              <div class="title-h5">
+                Case: {{ uscisCreateData?.data?.case_number }} is closed
+              </div>
+            </div>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+
+        <!-- Un-Successful USCIS API Call Message-->
+        <div *ngIf="showUnSuccessfullMsg" class="i-9__card">
+          <div class="i-9__card__panel">
+            <div class="panel-body uscis-error">
+              <img
+                src="./assets/svg/HR Verify Icons/error-uscis.svg"
+                width="100px"
+                alt=""
+              />
+              <div class="title-h5">
+                Error occured while sending data to USCIS:
+              </div>
+              <p class="mr-0">
+                <b>Error Message:</b>
+                <span class="d-flex">{{ unSuccessfullErrorMsg }}</span>
+              </p>
+              <br />
+              <p><b>Please process USCIS manually.</b></p>
+            </div>
+            <div class="panel-footer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="i-9__footer">
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="previousStep()"
+          *ngIf="tabIndex === 1 && showPdf"
+        >
+          Previous
+        </button>
+        <button
+          type="button"
+          mat-raised-button
+          color="primary"
+          [disabled]="
+            (tabIndex === 1 && i9Form?.invalid) ||
+            (tabIndex === 1 && showTabs && hrCommentLength > 0) ||
+            (tabIndex === 1 &&
+              workEligibilityAndI9FormResult?.employerSignDocumentId === null &&
+              signEmployerStatus === false) ||
+            (tabIndex === 1 && employerSignURL === '')
+          "
+          *ngIf="
+            !showAuthConfirm &&
+            !showFinalNonConfirm &&
+            !showResubmit &&
+            !showManualReview &&
+            !showPendingReferral &&
+            !showQueued &&
+            !showReferred &&
+            !showNonConfirmSuccess &&
+            !showUnSuccessfullMsg
+          "
+          (click)="nextStep(i9Form)"
+        >
+          Next
+        </button>
+      </div>
+
+      <div class="mat-menu-parent">
+        <mat-menu
+          #commentMenus="matMenu"
+          xPosition="before"
+          yPosition="below"
+          [overlapTrigger]="false"
+        >
+          <div class="rejection-reasson" (click)="$event.stopPropagation()">
+            <form [formGroup]="commentForm" (ngSubmit)="onSave()">
+              <div class="rejection-reasson__header">
+                <h4>Rejection Reason</h4>
+                <div
+                  class="rejection-reasson__header--btns"
+                  *ngIf="hrCommentsMap.has(commentKey)"
+                >
+                  <button
+                    type="button"
+                    (click)="deleteComment('Single', $event)"
+                    mat-button
+                    color="warn"
+                    matTooltip="Delete"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="rejection-reasson__content">
+                <textarea
+                  formControlName="comment"
+                  matInput
+                  cols="30"
+                  rows="4"
+                ></textarea>
+              </div>
+              <div class="rejection-reasson__footer">
+                <button
+                  type="button"
+                  (click)="closeMenu()"
+                  mat-stroked-button
+                  color="primary"
+                >
+                  Close
+                </button>
+                <button
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="commentForm?.invalid || commentForm?.pristine"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </mat-menu>
+      </div>
+
+      <ng-template #showUpdateBtn>
+        <button
+          mat-raised-button
+          color="warn"
+          matTooltip="Update Reason"
+          [matMenuTriggerFor]="commentMenus"
+          class="rejection rejection__update"
+        >
+          <mat-icon> chat_bubble </mat-icon>
+        </button>
+      </ng-template>
+
+      <ng-template #showAddBtn>
+        <button
+          mat-raised-button
+          color="warn"
+          matTooltip="Reject"
+          (click)="$event.stopPropagation()"
+          [matMenuTriggerFor]="commentMenus"
+          class="rejection rejection__add"
+        >
+          <mat-icon> close </mat-icon>
+        </button>
+      </ng-template>
+    </div>
+  </mat-expansion-panel>
+</form>

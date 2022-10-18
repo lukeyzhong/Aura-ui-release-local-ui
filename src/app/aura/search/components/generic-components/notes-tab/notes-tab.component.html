@@ -1,0 +1,64 @@
+<div class="employee-details-parent">
+  <!-- Notes Begin -->
+  <div class="employee-details">
+    <div class="employee-details__tabs-content">
+      <div class="employee-details__content-header">
+        <h3><b>Notes</b></h3>
+        <button mat-button color="primary" (click)="addNotes()">Add New</button>
+      </div>
+      <div class="card-parent">
+        <div class="card" *ngIf="isLoading; else notesData">
+          <div class="spinner">
+            <app-spinner diameter="25"></app-spinner>
+          </div>
+        </div>
+        <ng-template #notesData>
+          <div
+            class="card card-no-data"
+            *ngIf="totalNotes === 0; else notesInfo"
+          >
+            <div class="no-data">
+              <mat-icon> find_in_page </mat-icon>
+              <h4>Information Not Added</h4>
+            </div>
+          </div>
+          <ng-template #notesInfo>
+            <div class="card">
+              <div class="notes-parent">
+                <div class="notes" *ngFor="let note of notesResult">
+                  <div class="notes__description">
+                    <label for="" class="notes__description--label"
+                      >Description</label
+                    >
+                    <div
+                      class="parse-innerHtml"
+                      [innerHtml]="note?.comment"
+                    ></div>
+                  </div>
+                  <div class="notes__on">
+                    <label for="" class="notes__description--label"
+                      >Added On</label
+                    >
+                    <p class="notes__description--value">
+                      {{ note?.createdDateTime | date: 'M-d-yyyy h:mm a' }}
+                    </p>
+                  </div>
+                  <div class="notes__by">
+                    <label for="" class="notes__description--label"
+                      >Added By</label
+                    >
+                    <p class="notes__description--value">
+                      {{ note?.activityBy }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes End -->
+</div>

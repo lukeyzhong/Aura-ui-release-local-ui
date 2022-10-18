@@ -1,0 +1,798 @@
+<form [formGroup]="i9Form">
+  <div class="form-l-group__header-hr">
+    <h3>
+      <img src="./assets/svg/Id.svg" alt="" /><b>Work Eligibility & I9</b>
+    </h3>
+    <hr />
+    <button
+      mat-mini-fab
+      color="primary"
+      *ngIf="previewI9 === false"
+      (click)="editI9Form()"
+      class="small-round"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+  <div class="we-card" *ngIf="previewI9">
+    <div *ngIf="isLoading" class="spinner">
+      <app-spinner diameter="35"></app-spinner>
+    </div>
+    <div class="we-card__section">
+      <div class="we-card__section--header">
+        <h3><b>Section 1</b></h3>
+        <hr />
+      </div>
+      <div class="we-card__section--info">
+        <h4>Employee Information and Attestation</h4>
+        <p>
+          ( Employee must Complete and sign section 1 of Form I-9 no later then
+          the First day of Employment, But not before accepting a job offer. )
+        </p>
+      </div>
+      <div class="form-l-group__header-hr sub-hd">
+        <h3><b>Employee Information and Attestation</b></h3>
+        <hr />
+      </div>
+      <div class="form-l-group">
+        <div class="form-l-group__form">
+          <label for="">First Name</label>
+          <p>
+            {{
+              piObj?.firstName
+                ? piObj?.firstName
+                : workEligibilityAndI9FormResult?.candidateFilledFirstName
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Last Name</label>
+          <p>
+            {{
+              piObj?.lastName
+                ? piObj?.lastName
+                : workEligibilityAndI9FormResult?.candidateFilledLastName
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Middle Initial </label>
+          <p>
+            {{ workEligibilityAndI9FormResult?.candidateFilledMiddleInitial }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Other last Names Used (if any)</label>
+          <p>
+            {{ workEligibilityAndI9FormResult?.candidateFilledOtherLastNames }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Address (Street Number And Name )</label>
+          <p>
+            {{
+              piObj?.addressLine1
+                ? piObj?.addressLine1 + ' ' + piObj?.addressLine2
+                  ? piObj?.addressLine2
+                  : ''
+                : workEligibilityAndI9FormResult?.address
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Apartment Number</label>
+          <p>{{ workEligibilityAndI9FormResult?.unitOrApartmentNumber }}</p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">City or Town</label>
+          <p>
+            {{
+              piObj?.city ? piObj?.city : workEligibilityAndI9FormResult?.city
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">State</label>
+          <p *ngIf="workEligibilityAndI9FormResult?.state !== undefined">
+            {{
+              piObj?.state
+                ? piObj?.state
+                : getStateFullName(workEligibilityAndI9FormResult?.state)
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">ZIP Code</label>
+          <p>
+            {{
+              piObj?.postalCode
+                ? piObj?.postalCode
+                : workEligibilityAndI9FormResult?.zip
+            }}
+          </p>
+        </div>
+
+        <div class="form-l-group__form">
+          <label for="">Date Of Birth</label>
+          <p>
+            {{
+              piObj?.dateOfBirth
+                ? (piObj?.dateOfBirth | date: 'mediumDate')
+                : (workEligibilityAndI9FormResult?.dateOfBirth
+                  | date: 'mediumDate')
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">U.S Social Security Number</label>
+          <p>
+            {{ ssn ? ssn : workEligibilityAndI9FormResult?.ssn }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Employee’s Email Address</label>
+          <p>
+            {{
+              piObj?.email
+                ? piObj?.email
+                : workEligibilityAndI9FormResult?.email
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Employee’s Telephone Number</label>
+          <p>
+            {{
+              piObj?.cellPhoneNumber
+                ? piObj?.cellPhoneNumber
+                : parsePhoneNumberToShow(
+                    workEligibilityAndI9FormResult?.phoneNumber === null
+                      ? ''
+                      : workEligibilityAndI9FormResult?.phoneNumber
+                  )
+            }}
+          </p>
+        </div>
+      </div>
+      <div class="we-card__options">
+        <p>
+          <b
+            >I am aware that federal law provides for imprisonment and/or fines
+            for false statements or use of false documents in connection with
+            the completion of this form.</b
+          >
+        </p>
+        <p>
+          <b
+            >I attest, under penalty of perjury , that i am (check one of the
+            following boxes):</b
+          >
+        </p>
+        <section class="select-section">
+          <mat-radio-group
+            formControlName="citizenshipStatusCode"
+            (change)="selectCitizenOption($event.value)"
+          >
+            <div class="select-section__list">
+              <mat-radio-button value="65"
+                >1. A citizen of the United States
+              </mat-radio-button>
+            </div>
+            <div class="select-section__list">
+              <mat-radio-button value="66"
+                >2. A noncitizen national of the United States (See Instructions
+                )
+              </mat-radio-button>
+            </div>
+
+            <div class="select-section__list">
+              <mat-radio-button value="67"
+                >3. A lawful permanent resident
+              </mat-radio-button>
+
+              <span class="check-option" *ngIf="citizenLawResident">
+                <div class="form-fld-group">
+                  <mat-form-field
+                    appearance="outline"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.uscisNumber'
+                      )
+                    }"
+                  >
+                    <mat-label
+                      >Alien Registration Number / USCIS Number</mat-label
+                    >
+                    <input
+                      formControlName="uscisNumber"
+                      required
+                      matInput
+                      placeholder="Alien Registration Number / USCIS Number"
+                      maxlength="14"
+                    />
+                    <span matPrefix class="static-a">A&nbsp;</span>
+                    <mat-icon
+                      class="info"
+                      *ngIf="hrCommentsMap.has('workEligibilityI9.uscisNumber')"
+                      [mdePopoverTriggerFor]="hrCommentPopupContent"
+                      (mouseover)="
+                        showHRComment('workEligibilityI9.uscisNumber')
+                      "
+                    >
+                      info</mat-icon
+                    >
+                    <mat-error
+                      *ngIf="i9Form.controls['uscisNumber'].errors?.required"
+                      >This field is mandatory.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="i9Form.controls['uscisNumber'].errors?.pattern"
+                      >Invalid Alien Registration Number / USCIS Number.
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field
+                    appearance="outline"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.foriegnPassportNumber'
+                      )
+                    }"
+                  >
+                    <mat-label>Foreign Passport Number</mat-label>
+                    <input
+                      matInput
+                      required
+                      formControlName="foriegnPassportNumber"
+                      placeholder="Foreign Passport Number"
+                      maxlength="12"
+                    />
+                    <mat-icon
+                      class="info"
+                      *ngIf="
+                        hrCommentsMap.has(
+                          'workEligibilityI9.foriegnPassportNumber'
+                        )
+                      "
+                      [mdePopoverTriggerFor]="hrCommentPopupContent"
+                      (mouseover)="
+                        showHRComment('workEligibilityI9.foriegnPassportNumber')
+                      "
+                    >
+                      info</mat-icon
+                    >
+                    <mat-error
+                      *ngIf="
+                        i9Form.controls['foriegnPassportNumber'].errors
+                          ?.required
+                      "
+                      >This field is mandatory.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        i9Form.controls['foriegnPassportNumber'].errors?.pattern
+                      "
+                      >Invalid Passport Number.
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field
+                    appearance="outline"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.foriegnPassportIssuanceCountry'
+                      )
+                    }"
+                  >
+                    <mat-label>Country of Issuance </mat-label>
+                    <mat-select
+                      required
+                      formControlName="foriegnPassportIssuanceCountry"
+                    >
+                      <mat-option
+                        *ngFor="let entry of mapCountry | keyvalue"
+                        [value]="entry.key"
+                        >{{ entry.value }}</mat-option
+                      >
+                    </mat-select>
+                    <mat-icon
+                      class="info"
+                      *ngIf="
+                        hrCommentsMap.has(
+                          'workEligibilityI9.foriegnPassportIssuanceCountry'
+                        )
+                      "
+                      [mdePopoverTriggerFor]="hrCommentPopupContent"
+                      (mouseover)="
+                        showHRComment(
+                          'workEligibilityI9.foriegnPassportIssuanceCountry'
+                        )
+                      "
+                    >
+                      info</mat-icon
+                    >
+                    <mat-error
+                      *ngIf="
+                        i9Form.controls['foriegnPassportIssuanceCountry'].errors
+                          ?.required
+                      "
+                      >This field is mandatory.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </span>
+            </div>
+            <div class="select-section__list">
+              <mat-radio-button class="mat-radio-cut" value="68">
+                <div class="d-flex align-flex-start p-r-35">
+                  4. An alien authorised to work - until (expiration date, if
+                  applicable , MM/DD/YYYY) &nbsp; <br />Some aliens may write
+                  "N/A" in the Expiration date field. (See Instructions )
+                </div>
+                <div class="form-fld-group">
+                  <mat-form-field
+                    appearance="outline"
+                    *ngIf="citizenAlienAuthorized"
+                  >
+                    <mat-label>Expiration Date</mat-label>
+                    <input
+                      required
+                      matInput
+                      min="{{ minDate }}"
+                      max="{{ maxDate }}"
+                      formControlName="alienAuthorizedToWorkExpiryDate"
+                      [matDatepicker]="expirationDate"
+                      placeholder="MM/DD/YYYY"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="expirationDate"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #expirationDate></mat-datepicker>
+                    <mat-error
+                      *ngIf="
+                        i9Form.controls['alienAuthorizedToWorkExpiryDate']
+                          .errors?.required
+                      "
+                      >This field is mandatory.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </mat-radio-button>
+
+              <p class="select-section__list--note"></p>
+              <span class="check-option" *ngIf="citizenAlienAuthorized">
+                <p class="select-section__list--note">
+                  Aliens authorised to work must provide only one of the
+                  following document number to complete Form i-9
+                </p>
+                <p class="select-section__list--note">
+                  An alien Registration number / USCIS Number OR Form i-94
+                  Admission number or Foreign Passport Number.
+                </p>
+                <div class="form-fld-group">
+                  <mat-form-field
+                    appearance="outline"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.uscisNumber'
+                      )
+                    }"
+                  >
+                    <mat-label
+                      >Alien Registration Number / USCIS Number</mat-label
+                    >
+                    <input
+                      required
+                      formControlName="uscisNumber"
+                      matInput
+                      maxlength="14"
+                      placeholder="Alien Registration Number / USCIS Number"
+                      (change)="disableI94()"
+                      (keyup)="disableI94()"
+                    />
+                    <span matPrefix class="static-a">A&nbsp;</span>
+                    <mat-icon
+                      class="info"
+                      *ngIf="hrCommentsMap.has('workEligibilityI9.uscisNumber')"
+                      [mdePopoverTriggerFor]="hrCommentPopupContent"
+                      (mouseover)="
+                        showHRComment('workEligibilityI9.uscisNumber')
+                      "
+                    >
+                      info</mat-icon
+                    >
+                    <mat-error
+                      *ngIf="i9Form.controls['uscisNumber'].errors?.required"
+                      >This field is mandatory.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="i9Form.controls['uscisNumber'].errors?.pattern"
+                      >Invalid Alien Registration Number / USCIS Number.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="select-section__list">
+                  --------------------------- OR ---------------------------
+                </div>
+                <div class="form-fld-group">
+                  <mat-form-field
+                    appearance="outline"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has('workEligibilityI9.i94Number')
+                    }"
+                  >
+                    <mat-label>Form i-94 Admission Number</mat-label>
+                    <input
+                      matInput
+                      required
+                      maxlength="11"
+                      formControlName="i94Number"
+                      placeholder="Form i-94 Admission Number"
+                      (change)="disableUSCIS()"
+                      (keyup)="disableUSCIS()"
+                    />
+                    <mat-icon
+                      class="info"
+                      *ngIf="hrCommentsMap.has('workEligibilityI9.i94Number')"
+                      [mdePopoverTriggerFor]="hrCommentPopupContent"
+                      (mouseover)="showHRComment('workEligibilityI9.i94Number')"
+                    >
+                      info</mat-icon
+                    >
+                    <mat-error
+                      *ngIf="i9Form.controls['i94Number'].errors?.required"
+                      >This field is mandatory.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="i9Form.controls['i94Number'].errors?.pattern"
+                      >Maximum 11 characters allowed & must be numeric.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="check-option__dual form-fld-group">
+                  <mat-form-field
+                    appearance="outline"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.foriegnPassportNumber'
+                      )
+                    }"
+                  >
+                    <mat-label>Foreign Passport Number</mat-label>
+                    <input
+                      matInput
+                      required
+                      formControlName="foriegnPassportNumber"
+                      placeholder="Foreign Passport Number"
+                      maxlength="12"
+                    />
+                    <mat-icon
+                      class="info"
+                      *ngIf="
+                        hrCommentsMap.has(
+                          'workEligibilityI9.foriegnPassportNumber'
+                        )
+                      "
+                      [mdePopoverTriggerFor]="hrCommentPopupContent"
+                      (mouseover)="
+                        showHRComment('workEligibilityI9.foriegnPassportNumber')
+                      "
+                    >
+                      info</mat-icon
+                    >
+                    <mat-error
+                      *ngIf="
+                        i9Form.controls['foriegnPassportNumber'].errors
+                          ?.required
+                      "
+                      >This field is mandatory.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        i9Form.controls['foriegnPassportNumber'].errors?.pattern
+                      "
+                      >Invalid Passport Number.
+                    </mat-error>
+                  </mat-form-field>
+                  <mat-form-field
+                    appearance="outline"
+                    [ngClass]="{
+                      rejected: hrCommentsMap.has(
+                        'workEligibilityI9.foriegnPassportIssuanceCountry'
+                      )
+                    }"
+                  >
+                    <mat-label>Country of Issuance </mat-label>
+                    <mat-select
+                      required
+                      formControlName="foriegnPassportIssuanceCountry"
+                    >
+                      <mat-option
+                        *ngFor="let entry of mapCountry | keyvalue"
+                        [value]="entry.key"
+                        >{{ entry.value }}</mat-option
+                      >
+                    </mat-select>
+                    <mat-icon
+                      class="info"
+                      *ngIf="
+                        hrCommentsMap.has(
+                          'workEligibilityI9.foriegnPassportIssuanceCountry'
+                        )
+                      "
+                      [mdePopoverTriggerFor]="hrCommentPopupContent"
+                      (mouseover)="
+                        showHRComment(
+                          'workEligibilityI9.foriegnPassportIssuanceCountry'
+                        )
+                      "
+                    >
+                      info</mat-icon
+                    >
+                    <mat-error
+                      *ngIf="
+                        i9Form.controls['foriegnPassportIssuanceCountry'].errors
+                          ?.required
+                      "
+                      >This field is mandatory.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </span>
+            </div>
+          </mat-radio-group>
+        </section>
+      </div>
+      <div class="we-card__footer align-flex-start">
+        <div class="we-card__footer--sign">
+          <label for="Employee Signature ">Employee Signature</label>
+          <div
+            class="click-sign-clm"
+            *ngIf="
+              workEligibilityAndI9FormResult?.candidateSignDocumentId ===
+                null &&
+              (signEmpStatus === false || candSignURL === '')
+            "
+          >
+            <button
+              mat-raised-button
+              color="primary"
+              type="button"
+              (click)="openSignatureDialog('Employee')"
+            >
+              Click to Sign
+            </button>
+          </div>
+          <div
+            class="we-card__footer--sign-img"
+            *ngIf="
+              (signEmpStatus === true && candSignURL !== '') ||
+              workEligibilityAndI9FormResult?.candidateSignDocumentId !== null
+            "
+          >
+            <button
+              class="close"
+              mat-button
+              color="warn"
+              type="button"
+              (click)="deleteSign('Employee')"
+            >
+              <mat-icon> close </mat-icon>
+            </button>
+            <img [src]="candSignURL" alt="" />
+          </div>
+        </div>
+        <div class="we-card__footer--date">
+          <p>Date: {{ signDate | date: 'mediumDate' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="we-card" *ngIf="previewI9">
+    <div *ngIf="isLoadingState" class="spinner">
+      <app-spinner diameter="35"></app-spinner>
+    </div>
+    <div class="we-card__section--info">
+      <h4>Preparer and/or Translator Certification (Check one)</h4>
+      <section class="example-section">
+        <mat-radio-group
+          formControlName="preparerUsed"
+          (change)="selectPreparerOption($event.value)"
+        >
+          <mat-radio-button class="example-margin p-r-20" value="no"
+            >I did not use a preparer or translator.
+          </mat-radio-button>
+          <mat-radio-button class="example-margin" value="yes"
+            >A preparer(s) and/or translator(s) assisted the employee in
+            completing Section 1.</mat-radio-button
+          >
+        </mat-radio-group>
+      </section>
+      <p>
+        (Fields below must be completed and signed when Preparers and/or
+        Translators assist an employee in completing Section 1.)
+      </p>
+    </div>
+    <div class="form-fld-group" *ngIf="preparer">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input
+          matInput
+          formControlName="preparerFirstName"
+          placeholder="First Name"
+          maxlength="50"
+        />
+        <mat-error *ngIf="i9Form.controls['preparerFirstName'].errors?.pattern"
+          >Must contain only characters. Minimum 1 and Maximum 50 characters
+          allowed.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input
+          matInput
+          maxlength="50"
+          formControlName="preparerLastName"
+          placeholder="Last Name"
+        />
+        <mat-error *ngIf="i9Form.controls['preparerLastName'].errors?.pattern"
+          >Must contain only characters. Minimum 1 and Maximum 50 characters
+          allowed.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Address</mat-label>
+        <input
+          matInput
+          maxlength="200"
+          formControlName="preparerAddress"
+          placeholder="Address"
+        />
+        <mat-error *ngIf="i9Form.controls['preparerAddress'].errors?.pattern"
+          >Maximum 200 characters allowed.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>City</mat-label>
+        <input
+          matInput
+          formControlName="preparerCity"
+          placeholder="City"
+          maxlength="50"
+        />
+        <mat-error *ngIf="i9Form.controls['preparerCity'].errors?.pattern"
+          >Only alphabets are allowed.
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>State</mat-label>
+        <mat-select formControlName="preparerState">
+          <mat-option
+            *ngFor="let entry of mapState | keyvalue"
+            [value]="entry.key"
+            >{{ entry.value }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Zipcode</mat-label>
+        <input
+          matInput
+          maxlength="5"
+          formControlName="preparerZIPCode"
+          placeholder="Zip code"
+        />
+        <mat-error *ngIf="i9Form.controls['preparerZIPCode'].errors?.pattern"
+          >Invalid Postal Code e.g. 50234</mat-error
+        >
+      </mat-form-field>
+    </div>
+
+    <div class="we-card__footer align-flex-start" *ngIf="preparer">
+      <div class="we-card__footer--sign">
+        <label for="Preparer Signature "
+          >Preparer/or Translator Signature</label
+        >
+        <div
+          class="click-sign-clm"
+          *ngIf="signPreparerStatus === false || prepSignURL === ''"
+        >
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            (click)="openSignatureDialog('Preparer')"
+          >
+            Click to Sign
+          </button>
+        </div>
+        <div
+          class="we-card__footer--sign-img"
+          *ngIf="signPreparerStatus === true && prepSignURL !== ''"
+        >
+          <button
+            class="close"
+            mat-button
+            color="warn"
+            type="button"
+            (click)="deleteSign('Preparer')"
+          >
+            <mat-icon> close </mat-icon>
+          </button>
+          <img [src]="prepSignURL" alt="" />
+        </div>
+      </div>
+      <div class="we-card__footer--date">
+        <p>Date: {{ signDate | date: 'mediumDate' }}</p>
+      </div>
+    </div>
+    <div class="we-card__footer--btn">
+      <button
+        type="button"
+        mat-stroked-button
+        color="primary"
+        (click)="onPrevious()"
+      >
+        Previous
+      </button>
+
+      <button
+        *ngIf="preparer === false"
+        mat-raised-button
+        [disabled]="i9Form?.invalid || candSignURL === ''"
+        color="primary"
+        (click)="saveI9Form()"
+      >
+        Save & Preview
+      </button>
+      <button
+        *ngIf="preparer === true"
+        mat-raised-button
+        [disabled]="i9Form?.invalid || candSignURL === '' || prepSignURL === ''"
+        color="primary"
+        (click)="saveI9Form()"
+      >
+        Save & Preview
+      </button>
+    </div>
+  </div>
+</form>
+<mde-popover
+  #hrCommentPopupContent="mdePopover"
+  mdePopoverPositionX="after"
+  [mdePopoverOffsetX]="0"
+  [mdePopoverOffsetY]="27"
+  [mdeFocusTrapEnabled]="false"
+  [mdeFocusTrapAutoCaptureEnabled]="false"
+>
+  <div class="hr-comment">
+    <div>{{ commentValue }}</div>
+  </div>
+</mde-popover>
+<div class="i-9-viewer" *ngIf="previewI9 === false">
+  <div class="i-9-viewer__container">
+    <div class="pdf-viewer">
+      <div *ngIf="isLoadingI9Form" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <pdf-viewer src="{{ docURL }}" [original-size]="false"></pdf-viewer>
+    </div>
+  </div>
+  <div class="i-9-viewer__footer">
+    <button mat-stroked-button color="primary" (click)="onPrevious()">
+      Previous
+    </button>
+    <button
+      type="button"
+      mat-stroked-button
+      color="primary"
+      (click)="goToDashboard()"
+    >
+      Close
+    </button>
+    <button mat-raised-button color="primary" (click)="stepper.next()">
+      Continue
+    </button>
+  </div>
+</div>

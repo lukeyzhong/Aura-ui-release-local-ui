@@ -1,0 +1,198 @@
+@import '../../../../../styles/utilities/variables';
+@import '../../../../../styles/utilities/form-group';
+.Additional-erng {
+  &:last-child {
+    hr {
+      display: none;
+    }
+  }
+}
+.si__content {
+  flex: 1;
+}
+.p-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+}
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-prefix {
+  top: 0 !important;
+}
+.delete-earnings {
+  cursor: pointer;
+}
+.form-info {
+  position: relative;
+
+  mat-icon {
+    position: absolute;
+    right: -37px;
+    top: -7px;
+    color: $primary;
+    cursor: pointer;
+    &.right-side {
+      &:hover {
+        &::after {
+          top: 2;
+          left: 0;
+          position: absolute;
+          margin: auto 0;
+          width: 0;
+          height: 0;
+          border-top: 10px solid transparent;
+          border-right: 13px solid rgb(22, 49, 96);
+          border-bottom: 10px solid transparent;
+          left: 14px;
+        }
+      }
+    }
+    &:hover {
+      &::after {
+        content: '';
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 10px solid rgb(22, 49, 96);
+        display: block;
+        position: absolute;
+        top: 23px;
+        left: 0;
+        right: 0;
+        margin: auto;
+      }
+      & + .field-info {
+        display: block;
+      }
+    }
+  }
+}
+.additional-ear {
+  padding-right: 40px;
+  position: relative;
+  button {
+    &.dlt-btn {
+      position: absolute;
+      right: 0;
+      top: 24px;
+      border-radius: 20px;
+      background-color: #e5f7ff;
+      border: none;
+      color: $primary;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+    &:hover {
+      background-color: #92d7f5;
+    }
+  }
+}
+.si {
+  &__field {
+    label {
+      color: #828282;
+    }
+    p {
+      color: #000;
+    }
+    span {
+      font-size: 9px;
+      color: #8e8e8e;
+    }
+  }
+
+  &__content {
+    &--doc-parent {
+      display: flex;
+    }
+
+    &--form {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+      gap: 0 40px;
+    }
+    &--fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(20%, 1fr));
+      gap: 25px 35px;
+      margin-bottom: 15px;
+    }
+    ::ng-deep .mat-form-field {
+      margin-top: 5px;
+    }
+  }
+}
+.field-info {
+  height: auto;
+  overflow: auto;
+  position: absolute;
+  display: none;
+  z-index: 111111;
+  background: rgb(0, 138, 204);
+  background: linear-gradient(
+    144deg,
+    rgba(0, 138, 204, 1) 0%,
+    rgba(22, 49, 96, 1) 100%
+  );
+
+  width: 400px;
+  right: -58px;
+  top: 26px;
+  border-radius: 10px !important;
+  color: #fff;
+  padding: 10px 15px;
+  h4 {
+    display: flex;
+    justify-content: center;
+  }
+  &--top {
+    bottom: 0;
+    top: 0;
+    margin: auto 0;
+    height: fit-content;
+    right: -444px;
+  }
+  &__form {
+    display: flex;
+    margin-bottom: 5px;
+    label {
+      font-weight: 500;
+      font-size: 12px;
+      color: #fff;
+      text-align: right;
+      margin-right: 5px;
+      min-width: 30%;
+      box-sizing: border-box;
+    }
+    p {
+      font-size: 12px;
+      color: #fff;
+      display: flex;
+      flex-grow: 1;
+    }
+  }
+}
+
+.card__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+  button {
+    margin-left: 15px;
+  }
+  .disable-btn {
+    background-color: white;
+  }
+}
+.form-fld-group {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}

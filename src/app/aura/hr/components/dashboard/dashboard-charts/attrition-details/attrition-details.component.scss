@@ -1,0 +1,9 @@
+@import '../../dashboard-charts/active-emp-details/active-emp-details.component.scss';
+
+.g-card {
+    &__box {   
+      &--50 {
+        width: 49%;
+      }    
+    }
+}

@@ -1,0 +1,62 @@
+<mat-tab-group>
+  <mat-tab label="Identification">
+    <app-summary-tab
+      [personId]="personId"
+      [id]="id"
+      [personName]="personName"
+    ></app-summary-tab>
+  </mat-tab>
+  <mat-tab label="Education & Skills">
+    <app-education-skills-tab
+      [personId]="personId"
+      [id]="id"
+      [personName]="personName"
+    ></app-education-skills-tab>
+  </mat-tab>
+  <mat-tab label="Certifications">
+    <app-certifications-tab
+      [personId]="personId"
+      [id]="id"
+      [personName]="personName"
+    ></app-certifications-tab>
+  </mat-tab>
+  <mat-tab label="Immigration">
+    <app-employee-immigration-tab
+      [personId]="personId"
+      [personName]="personName"
+    ></app-employee-immigration-tab>
+  </mat-tab>
+  <mat-tab label="Contracts">
+    <app-employee-contracts-tab
+      [personId]="personId"
+      [employeeId]="id"
+      [personName]="personName"
+    ></app-employee-contracts-tab
+  ></mat-tab>
+  <mat-tab label="Employment & Agreements">
+    <app-employee-employment-aggreement-tab
+      [personId]="personId"
+      [employeeId]="id"
+      [personName]="personName"
+    ></app-employee-employment-aggreement-tab>
+  </mat-tab>
+  <mat-tab label="Vacation">
+    <app-employee-vacation-tab
+      [employeeId]="id"
+      [personId]="personId"
+    ></app-employee-vacation-tab>
+  </mat-tab>
+  <mat-tab label="Additional Documents">
+    <app-employee-additional-documents
+      [employeeId]="id"
+      [personName]="personName"
+    ></app-employee-additional-documents>
+  </mat-tab>
+  <mat-tab label="Notes">
+    <app-notes-tab
+      [personId]="personId"
+      [id]="id"
+      [personName]="personName"
+    ></app-notes-tab>
+  </mat-tab>
+</mat-tab-group>

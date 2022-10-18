@@ -1,0 +1,266 @@
+<div class="employee-details__content-header">
+  <div class="modal-popup">
+    <form
+      class="pop-inner"
+      [formGroup]="educationForm"
+      (ngSubmit)="saveEducation()"
+    >
+      <div class="modal-popup__header">
+        <h3>{{ headerTitle }}</h3>
+        <button
+          (click)="onCancel($event, educationForm)"
+          mat-button
+          color="primary"
+          type="button"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="modal-popup__content">
+        <div *ngIf="isLoading" class="spinner">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div class="form-fld-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Degree Name</mat-label>
+            <mat-select required formControlName="degreeName">
+              <mat-option
+                *ngFor="let entry of mapDegree | keyvalue"
+                [value]="entry.key"
+                >{{ entry.value }}</mat-option
+              >
+            </mat-select>
+            <mat-error
+              *ngIf="educationForm.controls['degreeName'].errors?.required"
+              >This field is mandatory.
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Institution Name</mat-label>
+            <input
+              required
+              matInput
+              [formControl]="universityName"
+              [matAutocomplete]="universityAuto"
+              maxlength="100"
+              placeholder="Institution Name"
+            />
+            <mat-autocomplete #universityAuto="matAutocomplete">
+              <mat-option
+                *ngFor="let entry of mapUniversityName | keyvalue"
+                [value]="entry.value"
+                >{{ entry.value }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="universityName.errors?.required"
+              >This field is mandatory.</mat-error
+            >
+            <mat-error *ngIf="universityName.errors?.isFoundInList"
+              >Invalid University Name.</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="date-error">
+            <mat-label> Start Date</mat-label>
+            <input
+              required
+              matInput
+              formControlName="startDate"
+              #startDate
+              min="{{ minDate }}"
+              max="{{ issueMaxDate }}"
+              [matDatepicker]="educationStartDate"
+              placeholder="MM/DD/YYYY"
+              (dateInput)="
+              checkForValidEndDate(startDate.value, endDate.value)
+              "
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="educationStartDate"
+            ></mat-datepicker-toggle>
+
+            <mat-datepicker #educationStartDate></mat-datepicker>
+            <mat-error
+              *ngIf="educationForm.controls['startDate'].errors?.required"
+              >Please Select Start Date</mat-error
+            >
+            <small
+              class="error_message-date"
+              *ngIf="educationForm.hasError('educationDatesNotValid')"
+            >
+              <span class="material-icons"> error_outline </span> Start Date
+              should be before End Date
+            </small>
+            <small class="error_message-date" *ngIf="startDateIsBig">
+              <span class="material-icons"> error_outline </span> Start Date
+              should be before End Date
+            </small>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label> End Date </mat-label>
+            <input
+              required
+              matInput
+              formControlName="endDate"
+              #endDate
+              min="{{ minDate }}"
+              max="{{ expiryMaxDate }}"
+              [matDatepicker]="educationEndDate"
+              placeholder="MM/DD/YYYY"
+              (dateInput)="
+                checkForValidEndDate(startDate.value, endDate.value)
+              "
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="educationEndDate"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #educationEndDate></mat-datepicker>
+            <mat-error
+              *ngIf="educationForm.controls['endDate'].errors?.required"
+              >Please Select End Date</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Major 1</mat-label>
+            <input
+              required
+              matInput
+              [formControl]="majorType"
+              [matAutocomplete]="majorAuto"
+              placeholder="Major Type"
+            />
+            <mat-autocomplete #majorAuto="matAutocomplete">
+              <mat-option
+                *ngFor="let entry of mapMajorType | keyvalue"
+                [value]="entry.value"
+                >{{ entry.value }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="majorType.errors?.required"
+              >This field is mandatory.</mat-error
+            >
+            <mat-error *ngIf="majorType.errors?.isFoundInList"
+              >Invalid Major Type.</mat-error
+            >
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Major 2</mat-label>
+            <input
+              matInput
+              [formControl]="majorType1"
+              [matAutocomplete]="major1Auto"
+              placeholder="Major Type1"
+            />
+            <mat-autocomplete #major1Auto="matAutocomplete">
+              <mat-option
+                *ngFor="let entry of mapMajorType1 | keyvalue"
+                [value]="entry.value"
+                >{{ entry.value }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Stem Flag</mat-label>
+            <mat-select required formControlName="stemFlag">
+              <mat-option [value]="true">Yes</mat-option>
+              <mat-option [value]="false">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf="totalFiles > 0" class="width-100 full-width form-fld-group">
+          <div
+            formArrayName="docProperty"
+            class="modal-popup__uploaded-file"
+            *ngFor="let doc of docProperty.controls; let i = index"
+          >
+            <div [formGroupName]="i" class="width-100 flex-between">
+              <mat-form-field
+                *ngIf="actionType !== 'Add' && actionType !== 'Edit'"
+                appearance="outline"
+                class="file-name"
+              >
+                <mat-label>Document ID</mat-label>
+                <input
+                  matInput
+                  formControlName="documentId"
+                  placeholder="File Name"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="file-name">
+                <mat-label>Change File Name</mat-label>
+                <input
+                  matInput
+                  formControlName="displayName"
+                  placeholder="File Name"
+                />
+                <div class="file-format">
+                  {{ doc?.get('fileExtension')?.value }}
+                </div>
+                <mat-error *ngIf="doc?.get('displayName')?.errors?.maxlength"
+                  >Maximum 100 characters allowed.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="description">
+                <mat-label> Description</mat-label>
+                <input
+                  matInput
+                  formControlName="fileDescription"
+                  placeholder="File Description"
+                />
+                <mat-error
+                  *ngIf="doc?.get('fileDescription')?.errors?.maxlength"
+                  >Maximum 500 characters allowed.
+                </mat-error>
+              </mat-form-field>
+              <mat-icon (click)="deleteFile(doc, i)">delete</mat-icon>
+            </div>
+          </div>
+        </div>
+        <div class="form-fld-group">
+          <div class="modal-popup__file-upload">
+            <input
+              type="file"
+              title=" "
+              accept="image/*,.pdf"
+              multiple="multiple"
+              formControlName="documentInfo"
+              (change)="uploadfiles($event)"
+            />
+            <button class="btn">BROWSE FILE</button>
+            <P>Drag & Drop File here</P>
+            <P class="file-format-msg"
+              >*Supported File Format (.pdf, .jpg, .jpeg, .png, .bmp)</P
+            >
+          </div>
+        </div>
+      </div>
+      <div class="modal-popup__footer">
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="onCancel($event, educationForm)"
+          type="button"
+        >
+          Cancel
+        </button>
+
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="
+            educationForm.invalid ||
+            universityName.invalid ||
+            majorType.invalid ||
+            startDateIsBig
+          "
+        >
+          Save
+        </button>
+      </div>
+      <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+    </form>
+  </div>
+  <div class="overlay"></div>
+</div>

@@ -1,0 +1,165 @@
+@import '../../../../../../styles/utilities/variables';
+@import '../../../../../../styles/utilities/form-group';
+table {
+  width: 100%;
+  box-shadow: none !important;
+}
+.modal-popup {
+  width: 92%;
+}
+.btn-excel {
+  height: 55px;
+}
+.modal-popup__content {
+  padding: 15px;
+  .tbl-responsive {
+    max-height: Calc(100vh - 230px);
+    @media (min-width: 1370px) {
+      max-height: Calc(100vh - 250px);
+    }
+    overflow: auto;
+  }
+}
+.tbl-header {
+  display: flex;
+  justify-content: space-between;
+  &__search {
+    cursor: pointer;
+  }
+  &__controls {
+    flex-grow: 1;
+  }
+}
+.project-onboarding-table {
+  border-radius: 10px;
+  tr {
+    td {
+      padding: 10px !important;
+      &:first-child {
+        text-align: left;
+      }
+      &:nth-child(2) {
+        border-right: none;
+        padding: 10px 5px 10px 15px !important;
+        text-align: right !important;
+      }
+      &:nth-child(3) {
+        text-align: left !important;
+        padding: 10px 10px 10px 5px !important;
+        color: $primary;
+      }
+      &:nth-child(6) {
+        min-width: 10% !important;
+      }
+      &:nth-child(7),
+      &:nth-child(8) {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
+      }
+      &:last-child {
+        max-width: 14% !important;
+      }
+    }
+    th {
+      font-family: 'ProximaNova-semibold' !important;
+      text-align: left !important;
+      &:nth-child(2) {
+        border-right: none;
+        padding: 10px 5px 10px 15px !important;
+        text-align: right !important;
+      }
+      &:nth-child(3) {
+        text-align: left !important;
+        padding: 10px 10px 10px 0px !important;
+      }
+    }
+    &:first-child {
+      th {
+        padding: 10px 15px;
+        text-align: center;
+        &:first-child {
+          border-top-left-radius: 10px;
+        }
+        &:last-child {
+          border-top-right-radius: 10px;
+        }
+      }
+    }
+    &:last-child {
+      td {
+        text-align: left;
+        &:first-child {
+          border-bottom-left-radius: 10px;
+        }
+        &:last-child {
+          border-bottom-right-radius: 10px;
+          width: 20%;
+        }
+      }
+    }
+  }
+}
+.mr-3 {
+  margin-right: 15px;
+}
+::ng-deep .mat-form-field-appearance-outline {
+  margin-right: 15px;
+  .mat-form-field-infix {
+    padding: 10px 0 1em 0;
+  }
+  .mat-form-field-label {
+    top: 16px;
+  }
+}
+::ng-deep
+  .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float
+  .mat-form-field-outline-gap,
+::ng-deep .mat-form-field-label {
+  display: none;
+}
+
+::ng-deep .mat-paginator-container {
+  justify-content: space-between !important;
+}
+::ng-deep .mat-paginator-range-actions {
+  button {
+    background-color: transparent !important;
+    border: transparent !important;
+  }
+}
+.no-data-display {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.54);
+  border: 1px solid #ccc;
+  border-radius: 0 0 10px 10px;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.employee {
+  display: flex;
+  align-items: center;
+  img {
+    border-radius: 40px;
+  }
+  label {
+    color: blue;
+  }
+}
+
+.spinner {
+  height: 460px;
+}
+
+.error_message {
+  color: red;
+}
+.form-fld-group {
+  padding: 0;
+}

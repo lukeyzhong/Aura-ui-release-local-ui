@@ -1,0 +1,304 @@
+<mat-expansion-panel class="accordion-parent">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="accordion-header">
+        <img src="./assets/svg/HR Verify Icons/tax-info.svg" width="" alt="" />
+        <h3>Tax Information</h3>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="doc-card">
+    <div class="doc-card__container disable">
+      <!-- Federal Tax -->
+      <div *ngIf="showFederalTax" class="doc-card__container--pdf">
+        <div class="doc-card__container--pdf--header">
+          <h4><b>Federal Tax Withholding</b></h4>
+          <mat-icon
+            class="pointer"
+            (click)="
+              downloadFederalTaxWithHolding(
+                federalTaxWithHoldingFormsList[0].resourceValue
+              )
+            "
+            >file_download</mat-icon
+          >
+        </div>
+        <div class="doc-card__container--pdf-view">
+          <div class="taxPdf">
+            <div class="pdf-viewer">
+              <div class="spinner" *ngIf="isLoading; else federalTaxView">
+                <app-spinner diameter="35"></app-spinner>
+              </div>
+              <ng-template #federalTaxView>
+                <pdf-viewer
+                  [src]="federalTaxURL"
+                  [original-size]="false"
+                  [render-text]="false"
+                >
+                </pdf-viewer>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- State Tax -->
+      <div *ngIf="showStateTax" class="doc-card__container--pdf">
+        <div class="doc-card__container--pdf--header">
+          <h4><b>State Tax Withholding</b></h4>
+          <div class="statetax-files">
+            <div
+              *ngFor="let stateForm of stateTaxWithHoldingFormsList"
+              (click)="openStateTaxForm(stateForm)"
+              class="file-download"
+            >
+              View State Tax Form
+              <img src="./assets/svg/icn-pdf.svg" wdith="30px" />
+            </div>
+          </div>
+        </div>
+        <mat-tab-group
+          mat-align-tabs="start"
+          (selectedTabChange)="tabChanged($event)"
+          [(selectedIndex)]="selectedIndex"
+        >
+          <mat-tab label="Personal Information">
+            <div class="form-l-group__header-hr">
+              <h3><b>Step 1: Personal Information</b></h3>
+              <hr />
+            </div>
+            <div class="form-l-group">
+              <div class="form-l-group__form">
+                <label for="">First Name</label>
+                <p>{{ taxInformationResult?.firstName }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Last Name</label>
+                <p>{{ taxInformationResult?.lastName }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">SSN</label>
+                <p>{{ taxInformationResult?.ssn }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">City</label>
+                <p>{{ taxInformationResult?.city }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">State</label>
+                <p>{{ taxInformationResult?.state }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Country</label>
+                <p>{{ taxInformationResult?.country }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Zip Code</label>
+                <p>{{ taxInformationResult?.postalCode }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Marital Status</label>
+                <p>{{ taxInformationResult?.maritalStatus }}</p>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="State and Locality Tax's">
+            <div class="form-l-group__header-hr">
+              <h3><b>State Tax</b></h3>
+              <hr />
+            </div>
+            <div class="form-l-group">
+              <div class="form-l-group__form">
+                <label for="">Filing Status</label>
+                <p>{{ taxInformationResult?.stateFilingStatus }}</p>
+              </div>
+              <div class="form-l-group__form"></div>
+              <div class="form-l-group__form"></div>
+            </div>
+            <div class="form-l-group">
+              <div class="form-l-group__form">
+                <label for="">Worked State </label>
+                <p>{{ taxInformationResult?.workedState }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Total exemptions worked State</label>
+                <p>{{ taxInformationResult?.exemptionInWorkedState }}</p>
+              </div>
+              <div class="form-l-group__form"></div>
+            </div>
+            <div class="form-l-group">
+              <div class="form-l-group__form">
+                <label for="">Lived in State</label>
+                <p>{{ taxInformationResult?.livedInCity }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Total exemptions Lived in State</label>
+                <p>{{ taxInformationResult?.exemptionsInLivedInState }}</p>
+              </div>
+              <div class="form-l-group__form"></div>
+            </div>
+            <div class="form-l-group">
+              <div class="form-l-group__form">
+                <label for="">Total exemptions for Age and blindness</label>
+                <p>{{ taxInformationResult?.totalExemptionsForAgeOrBlind }}</p>
+              </div>
+              <div class="form-l-group__form amountFont">
+                <label for="">Additional Taxes Amount</label>
+                <p>
+                  <span matPrefix>$&nbsp;</span
+                  >{{ taxInformationResult?.stateAdditionalTaxAmount }}
+                </p>
+              </div>
+              <div></div>
+            </div>
+            <div class="form-l-group">
+              <div class="form-l-group__form"></div>
+            </div>
+            <div class="form-l-group__header-hr">
+              <h3><b>Locality Tax</b></h3>
+              <hr />
+            </div>
+            <div class="form-l-group">
+              <div class="form-l-group__form">
+                <label for="">Worked in City</label>
+                <p>{{ taxInformationResult?.workedinCity }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Exemptions Worked in City</label>
+                <p>{{ taxInformationResult?.exemptionsInWorkedCity }}</p>
+              </div>
+              <div class="form-l-group__form">
+                <label for="">Exemptions Worked in City</label>
+                <p>{{ taxInformationResult?.livedInCity }}</p>
+              </div>
+              <div class="form-l-group__form"></div>
+              <div class="form-l-group__form"></div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+      <!-- FICA Tax -->
+      <div *ngIf="showFicaTax" class="doc-card__container--pdf">
+        <div class="doc-card__container--pdf--header flex-col">
+          <h4><b>Other Tax Information</b></h4>
+        </div>
+        <div class="doc-card__container--pdf-view">
+          <form [formGroup]="ficaTaxForm">
+            <div class="tax-form-body">
+              <div class="form-l-group__header-hr">
+                <h3><b>FICA Tax</b></h3>
+                <hr />
+              </div>
+              <div class="form-fld-group">
+                <mat-form-field appearance="outline">
+                  <mat-label>Work Authorization Type</mat-label>
+                  <mat-select formControlName="workAuthorizationType">
+                    <mat-option
+                      *ngFor="let entry of mapWorkAuth | keyvalue"
+                      [value]="entry.key"
+                      >{{ entry.value }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="form-l-group__form"></div>
+                <div class="form-l-group__form"></div>
+              </div>
+              <div class="form-l-group">
+                <div class="form-l-group__form">
+                  <mat-radio-group formControlName="lived" 
+                    class="i-9__radio-group"
+                    (change)="changeRadioBtn($event)"
+                  >
+                    <div class="radio-options">
+                      <mat-radio-button
+                        formControlName="livedForFiveYearsInUSA"
+                        ngDefaultControl
+                        class="example-radio-button"
+                        [checked]="taxInformationResult?.livedForFiveYearsInUSA"
+                        aria-labelledby="example-radio-group-label"
+                        value="1"
+                      >
+                        Lived For Five Years In USA
+                      </mat-radio-button>
+                    </div>
+                    <div class="radio-options">
+                      <mat-radio-button
+                        formControlName="notLivedForFiveYearsInUSA"
+                        ngDefaultControl
+                        class="example-radio-button"
+                        [checked]="taxInformationResult?.notLivedForFiveYearsInUSA"
+                        aria-labelledby="example-radio-group-label"
+                        value="2"
+                      >
+                        Not Lived For Five Years In USA
+                      </mat-radio-button>
+                    </div>
+                  </mat-radio-group>
+                </div>
+              </div>
+              <div *ngIf="showNotLiableForFICA || taxInformationResult?.notLivedForFiveYearsInUSA" class="form-l-group">
+                <h4>
+                  <b>If Not Lived For Five Years in USA</b> - Not Liable for
+                  FICA Taxes
+                </h4>
+              </div>
+              <div *ngIf="showNotLiableForFICA || taxInformationResult?.notLivedForFiveYearsInUSA" class="form-l-group">
+                <div class="form-l-group__form">
+                  <div class="i-9__radio-group">
+                    <div class="radio-options">
+                      <mat-checkbox
+                        formControlName="ignoreSSNCalculation"
+                        color="primary"
+                        >Do not calculate Social Security
+                      </mat-checkbox>
+                    </div>
+                    <div class="radio-options">
+                      <mat-checkbox
+                        formControlName="ignoreMedicareCalculation"
+                        color="primary"
+                        >Do not calculate medicare
+                      </mat-checkbox>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-l-group__form"></div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="doc-card__container--pdf-list">
+        <ul>
+          <li [ngClass]="{ active: showFederalTax }" (click)="onFederalTax()">
+            Federal Tax Withholding
+          </li>
+          <li [ngClass]="{ active: showStateTax }" (click)="onStateTax()">
+            State Tax Withholding
+          </li>
+          <li [ngClass]="{ active: showFicaTax }" (click)="onFicaTax()">
+            FICA Tax Information
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="doc-card__footer">
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="movePrevious()"
+        *ngIf="linkIndex >= 1 || showStateTax || showFicaTax"
+      >
+        Previous
+      </button>
+      <button
+        type="button"
+        [disabled]="(ficaTaxForm.invalid && linkIndex === 3)"      
+        mat-raised-button
+        color="primary"        
+        (click)="moveNext()"
+      >
+       <span *ngIf="!showFicaTax">Next</span> 
+       <span *ngIf="showFicaTax">Save</span> 
+      </button>
+    </div>
+  </div>
+</mat-expansion-panel>

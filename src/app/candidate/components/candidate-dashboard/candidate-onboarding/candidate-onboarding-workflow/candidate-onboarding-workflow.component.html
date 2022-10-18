@@ -1,0 +1,139 @@
+<div class="cnd-onboard-form" *ngIf="submitStatus === false">
+  <div class="c-profile">
+    <div class="c-profile__parent">
+      <div class="c-profile--cnt">
+        <div class="c-profile__img">
+          <div *ngIf="isLoading" class="spinner">
+            <app-spinner diameter="25"></app-spinner>
+          </div>
+          <img
+            [src]="imageUrl"
+            class="default-pic"
+            *ngIf="
+              imageUrl === './assets/svg/candidate-onboard/profile-pic.svg'
+            "
+          />
+          <img
+            class="db-pic"
+            [src]="imageUrl"
+            (click)="zoomIn()"
+            *ngIf="
+              imageUrl !== './assets/svg/candidate-onboard/profile-pic.svg'
+            "
+          />
+        </div>
+
+        <p class="c-profile__upload">
+          <input
+            type="file"
+            accept="image/*"
+            (change)="uploadProfilePic($event)"
+          />
+          <button mat-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+        </p>
+      </div>
+      <p class="c-profile__name">{{ candidateName }}</p>
+    </div>
+    <div class="c-profile__popup" *ngIf="zoom">
+      <span class="material-icons c-profile__popup__zoomOut" (click)="zoomOut()"
+        >cancel</span
+      >
+      <img [src]="imageUrl" class="c-profile__popup__zoomIn" />
+      <div class="c-profile__popup__overlay"></div>
+    </div>
+  </div>
+
+  <div class="onboard-info">
+    <app-onboarding-information
+      [employeeOnboardingId]="employeeOnboardingId"
+      (sendPersonId)="setPersonId($event)"
+    >
+    </app-onboarding-information>
+  </div>
+  <mat-horizontal-stepper
+    #stepper
+    class="cnd-onboard"
+    [ngClass]="{
+      activeStepper: status === 'active',
+      inactiveStepper: status === 'inactive'
+    }"
+  >
+    <mat-step [stepControl]="personalGroup">
+      <ng-template matStepLabel>Personal Information </ng-template>
+      <app-candidate-personal-information-tab
+        [stepper]="stepper"
+        [employeeOnboardingId]="employeeOnboardingId"
+      >
+      </app-candidate-personal-information-tab>
+    </mat-step>
+    <mat-step [stepControl]="emergencyGroup">
+      <ng-template matStepLabel>Emergency Contacts </ng-template>
+      <app-candidate-emergency-contact
+        [stepper]="stepper"
+        [employeeOnboardingId]="employeeOnboardingId"
+      >
+      </app-candidate-emergency-contact>
+    </mat-step>
+    <mat-step [stepControl]="banksGroup">
+      <ng-template matStepLabel>Banks & Paychecks </ng-template>
+      <app-banks-paychecks
+        [employeeOnboardingId]="employeeOnboardingId"        
+        [stepper]="stepper"
+      >
+      </app-banks-paychecks>
+    </mat-step>
+    <mat-step [stepControl]="taxGroup" *ngIf="hideTaxTab">
+      <ng-template matStepLabel>Tax Information </ng-template>
+      <app-tax-information
+        [stepper]="stepper"
+        [employeeOnboardingId]="employeeOnboardingId"
+      ></app-tax-information>
+    </mat-step>
+
+    <mat-step [stepControl]="i9Group">
+      <ng-template matStepLabel>Work Eligibility & I9</ng-template>
+      <app-work-eligibilty-i9
+        [stepper]="stepper"
+        [employeeOnboardingId]="employeeOnboardingId"
+      >
+      </app-work-eligibilty-i9>
+    </mat-step>
+
+    <mat-step [stepControl]="candOnboardDocGroup">
+      <ng-template matStepLabel>Documents</ng-template>
+      <app-candidate-onboarding-documents-tab
+        [stepper]="stepper"
+        (enableSideBarNav)="setSideBarNavStatus($event)"
+        [employeeOnboardingId]="employeeOnboardingId"
+      ></app-candidate-onboarding-documents-tab>
+    </mat-step>
+
+    <mat-step [stepControl]="previewGroup">
+      <ng-template matStepLabel>Preview</ng-template>
+      <app-candidate-preview-tab
+        [stepper]="stepper"
+        [employeeOnboardingId]="employeeOnboardingId"
+        (candidateSubmit)="getSubmitStatus($event)"
+      ></app-candidate-preview-tab>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>
+<div class="confirmation" *ngIf="submitStatus">
+  <img src="./assets/svg/email_confirmation.svg" width="300px" alt="" />
+  <p>
+    You have successfully completed your Candidate Onboarding Form. <br />HR
+    will review and connect with you for the next steps. <br /><br />
+    For any issues and concerns, Please contact
+    <span class="primary">hr@antra.com</span>
+  </p>
+  <button
+    type="button"
+    mat-raised-button
+    color="primary"
+    (click)="goToCandidateDashboard()"
+  >
+    Go To Dashboard
+  </button>
+</div>

@@ -1,0 +1,11 @@
+<svg id="Group_3701" data-name="Group 3701" xmlns="http://www.w3.org/2000/svg" width="20.53" height="17.41" viewBox="0 0 20.53 17.41">
+  <path id="circle2859" d="M7.273,290.908a4.328,4.328,0,0,0-2.489,7.868A7.035,7.035,0,0,0,.36,305.3a.683.683,0,0,0,1.365,0,5.657,5.657,0,0,1,8.634-4.812.685.685,0,1,0,.72-1.165,6.993,6.993,0,0,0-1.248-.592,4.324,4.324,0,0,0-2.557-7.819Zm0,1.367a2.965,2.965,0,1,1-2.963,2.968A2.961,2.961,0,0,1,7.273,292.274Z" transform="translate(-0.36 -290.908)" fill="#008acc"/>
+  <path id="Path_15306" data-name="Path 15306" d="M7985.213,2232" transform="translate(-7977.422 -2215.854)" fill="none" stroke="#707070" stroke-width="1"/>
+  <g id="Pencil" transform="translate(7.744 14.216) rotate(-46)">
+    <g id="Group_3699" data-name="Group 3699" transform="translate(11.83 0)">
+      <line id="Line_94" data-name="Line 94" y2="3.837" transform="translate(0 0)" fill="none" stroke="#008acc" stroke-miterlimit="10" stroke-width="1"/>
+    </g>
+    <path id="Path_15307" data-name="Path 15307" d="M.563,0H11.05a.581.581,0,0,1,.614.563v2.2a.568.568,0,0,1-.563.563H.563A.511.511,0,0,1,0,2.762V.563A.568.568,0,0,1,.563,0Z" transform="translate(2.008 0.256)" fill="none" stroke="#008acc" stroke-miterlimit="10" stroke-width="1"/>
+    <path id="Path_15308" data-name="Path 15308" d="M2.008,2.594.115,1.462a.253.253,0,0,1,0-.424L2.008,0Z" transform="translate(0 0.604)" fill="none" stroke="#008acc" stroke-miterlimit="10" stroke-width="1"/>
+  </g>
+</svg>

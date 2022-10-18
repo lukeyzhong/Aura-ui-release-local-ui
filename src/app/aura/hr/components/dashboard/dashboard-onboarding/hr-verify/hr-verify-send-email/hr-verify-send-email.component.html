@@ -1,0 +1,76 @@
+<form *ngIf="!showDashboardLinkAfterEmailSent" [formGroup]="sendEmailForm" (ngSubmit)="onSaveSendEmail()">
+  <div class="si__content">
+    <div class="email-tmp">
+        <div class="spinner" *ngIf="isLoading">
+            <app-spinner diameter="35"></app-spinner>
+        </div>
+      <div class="email-tmp__to">
+        <p>To</p>
+        <mat-icon>arrow_right</mat-icon>
+        <mat-form-field class="example-chip-list" appearance="fill">
+          <mat-chip-list #chipList aria-label="Receipient Emails">
+            <mat-chip
+              [ngClass]="{ 'mat-chip-invalid': item.invalid === true }"
+              *ngFor="let item of toEmailList"
+              (removed)="removeReceipient(item)"
+            >
+              {{ item.value }}
+              <button matChipRemove>
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input
+              placeholder="Receipient Email"
+              [matChipInputFor]="chipList"
+              [matChipInputAddOnBlur]="true"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="addReceipient($event)"
+            />
+          </mat-chip-list>
+        </mat-form-field>
+      </div>
+      <div class="email-tmp__to">
+        <p>Subject</p>
+        <mat-icon>arrow_right</mat-icon>
+        <input
+          type="text"
+          matInput
+          formControlName="subject"
+          placeholder="Subject"
+        />
+      </div>
+      <div
+        class="email-tmp__cnt"
+        [innerHtml]="rejectionEmailContentResult?.body"
+      ></div>
+    </div>
+  </div>
+  <div class="card__footer">  
+    <button mat-stroked-button color="primary" (click)="movePreviousScreen()">
+        Previous
+    </button> 
+    <button
+      [disabled]="sendEmailForm.invalid || toEmailList.length === 0"
+      mat-raised-button
+      color="primary"
+    >
+      Send Email
+    </button>
+  </div>
+  <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+</form>
+
+<div *ngIf="showDashboardLinkAfterEmailSent" class="si-content__card--confirmation">                 
+    <img src="./assets/svg/email_confirmation.svg" width="300px" alt="" />
+    <p>                  
+        <b>Onboarding form is successfully verified and resent to the candidate for updating the errors.</b>
+    </p>              
+    <button
+      type="button"
+      mat-raised-button
+      color="primary"
+      (click)="goToHrDashboard()"
+    >
+      Go To Dashboard
+    </button>
+</div>

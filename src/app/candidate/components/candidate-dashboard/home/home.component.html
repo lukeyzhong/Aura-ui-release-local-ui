@@ -1,0 +1,98 @@
+<div class="candidate-dboard">
+  <div class="can-db__banner">
+    <div>
+      <p class="can-db__wlcm-note">
+        Welcome
+        <span>{{
+          this.dashboardProfileInfoResult?.personData?.firstName
+        }}</span>
+      </p>
+    </div>
+  </div>
+  <div class="cnd-content">
+    <div class="job-card aura-widget">
+      <app-basic-info
+        [infoType]="infoType"
+        [profileInfoResult]="dashboardProfileInfoResult"
+      ></app-basic-info>
+
+      <div class="job-card__about">
+        <h3 class="job-card__about--header">About Antra</h3>
+        <p>
+          Antra, Inc is a leading information technology services provider. The
+          company helps businesses to address the critical gaps between modern
+          technology adaptation, supports their growth and helps companies reach
+          their targets. Our services combine technical knowledge and business
+          requirements to enhance IT capabilities in a cost-effective manner.
+          Antra delivers high-quality and cost-effective IT services to clients
+          across all industries. We complement our vast technology skills with a
+          focus on business solutions. Our services also include process
+          frameworks and application outsourcing
+        </p>
+        <p>
+          <b>Mission: </b> Antra’s mission is to deliver exceptional, dependable
+          and cost-effective IT services to clients across all industries.
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="row__card aura-widget">
+        <div class="row__card--header">
+          <h3>Applied Jobs</h3>
+          <button mat-button>
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </div>
+
+        <div class="apld-jobs">
+          <div class="apld-jobs__content">
+            <!-- it will come when there is no jobs Applied  -->
+            <div class="no-jobs__alert">
+              <div class="no-jobs">
+                <img
+                  src="./assets/svg/candidate-dashboard/no jobs.svg"
+                  width="100px"
+                  alt=""
+                />
+                <h4>No jobs Applied</h4>
+              </div>
+            </div>
+            <!-- it will come when there is no jobs Applied  End -->
+          </div>
+        </div>
+      </div>
+      <div class="row__card aura-widget">
+        <div class="row__card--header">
+          <h3>Recommended Jobs</h3>
+          <button mat-button>
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </div>
+        <div class="apld-jobs">
+          <div class="apld-jobs__content">
+            <!-- it will come when there is no jobs Applied  -->
+            <div class="no-jobs__alert">
+              <div class="no-jobs">
+                <img
+                  src="./assets/svg/candidate-dashboard/no jobs.svg"
+                  width="100px"
+                  alt=""
+                />
+                <h4>No Recommended jobs</h4>
+              </div>
+            </div>
+            <!-- it will come when there is no jobs Applied  End -->
+          </div>
+        </div>
+      </div>
+
+      <app-generic-tasks
+        [dashboardAssignmentsResult]="dashboardAssignmentsResult"
+        [infoType]="infoType"
+        [onboardingId]="onboardingId"
+        [jobTitle]="jobTitle"
+        class="tasks"
+      ></app-generic-tasks>
+    </div>
+  </div>
+</div>

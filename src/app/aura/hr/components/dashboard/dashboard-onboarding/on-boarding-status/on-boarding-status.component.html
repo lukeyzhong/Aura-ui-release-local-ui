@@ -1,0 +1,58 @@
+<div class="modal-popup">
+  <div class="modal-popup__header">
+    <h3>{{ statusType }}</h3>
+    <button (click)="onCancel($event)" mat-button color="primary">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <form [formGroup]="onBoardStatusForm">
+    <div class="modal-popup__content">
+      <div class="onboarding-statuses">
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">Candidate ID</label>
+            <p>{{ onboardCandidate?.candidateCode }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Candidate Name</label>
+            <p>{{ onboardCandidate?.fullName }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Recruiter Name</label>
+            <p>{{ onboardCandidate?.recruiterName }}</p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Job Title</label>
+            <p>{{ onboardCandidate?.jobTitle }}</p>
+          </div>
+        </div>
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Add Reason </mat-label>
+          <textarea
+            formControlName="comments"
+            matInput
+            placeholder="Comments..."
+          ></textarea>
+          <mat-error
+            *ngIf="onBoardStatusForm.controls['comments'].errors?.required"
+            >This field is mandatory.</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="modal-popup__footer">
+      <button mat-stroked-button color="primary" (click)="onCancel($event)">
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        [disabled]="onBoardStatusForm.invalid"
+        (click)="onSubmit(statusType)"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

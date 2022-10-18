@@ -1,0 +1,65 @@
+<div class="can-db">
+  <header class="header">
+    <div class="header-logo" (click)="goToDashboard()">
+      <img
+        src="./assets/svg/candidate-dashboard/Antra logo.png"
+        width="100px"
+        alt=""
+      />
+    </div>
+
+    <div></div>
+
+    <div class="header-nav">
+      <div class="header-nav__item">
+        <span class="material-icons"> notifications_none </span>
+      </div>
+
+      <div
+        class="header-nav__item header-nav__userpic"
+        [matMenuTriggerFor]="menu"
+      >
+        <div
+          *ngIf="!this.user?.avatarUrl; else profilePictureDB"
+          class="header-nav__dbpic"
+        >
+          <img class="userprofile__pic" src="./assets/images/user.png" />
+        </div>
+        <ng-template #profilePictureDB>
+          <div class="header-nav__dbpic">
+            <img class="userprofile__pic" src="{{ this.user?.avatarUrl }}" />
+          </div>
+        </ng-template>
+      </div>
+
+      <mat-menu #menu="matMenu" class="">
+        <div class="userprofile">
+          <div>
+            <span class="userprofile__name">{{ this.user?.fullName }}</span>
+            <span class="userprofile__email">{{
+              this.user?.emailAddress
+            }}</span>
+          </div>
+          <mat-divider></mat-divider>
+          <button mat-menu-item>
+            <mat-icon class="">perm_contact_calendar</mat-icon>
+            <span class="">Profile</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item>
+            <mat-icon class="">settings_applications</mat-icon>
+            <span class="">Settings</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logOut()">
+            <mat-icon class="">power_settings_new</mat-icon>
+            <span class="">Logout</span>
+          </button>
+        </div>
+      </mat-menu>
+    </div>
+  </header>
+  <div class="rout-cnt">
+    <router-outlet></router-outlet>
+  </div>
+</div>

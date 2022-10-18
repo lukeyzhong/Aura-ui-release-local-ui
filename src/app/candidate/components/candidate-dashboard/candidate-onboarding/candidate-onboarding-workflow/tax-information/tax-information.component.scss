@@ -1,0 +1,507 @@
+@import '../../../../../../styles/utilities/form-group';
+@import '../../../../../../styles/utilities/variables';
+@import '../../../../../../styles/utilities/_tabs';
+.tax-info {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  &__sign {
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    padding: 10px 15px;
+    justify-content: space-between;
+    position: relative;
+    &--btn {
+      label {
+        color: $primary;
+        padding-bottom: 5px;
+      }
+    }
+    &--img {
+      margin-top: 10px;
+      width: 250px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      border: 2px dotted rgb(197, 197, 197);
+      background-color: #fafafa;
+      img {
+        max-height: 100%;
+        max-width: 100%;
+      }
+    }
+    &--img-close {
+      margin-top: 10px;
+      width: 250px;
+      height: 100px;
+      border: 1px dotted #ccc;
+      border-radius: 5px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+      button {
+        width: 14px;
+        min-width: auto;
+        padding: 0;
+        height: 14px;
+        background: #ccc;
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &:hover {
+          background: #d34d4d;
+        }
+        mat-icon {
+          font-size: 10px;
+          height: 10px;
+          width: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+        }
+      }
+    }
+  }
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    background-color: #fff;
+    border-radius: 5px;
+  }
+  &__sub {
+    padding: 0 15px;
+  }
+  &__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    &--form {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    &--header {
+      display: flex;
+      align-items: center;
+      h3 {
+        display: flex;
+        align-items: center;
+        margin-right: 15px !important;
+        img {
+          width: 40px;
+          margin-right: 15px;
+        }
+      }
+      hr {
+        flex-grow: 1;
+      }
+    }
+  }
+  &__info {
+    background-color: #ddf8ff;
+    padding: 10px 15px;
+    border-radius: 10px;
+    line-height: 20px;
+    font-family: 'ProximaNova-Regular' !important;
+    margin-bottom: 20px;
+    font-size: 14px;
+    ::ng-deep .mat-form-field-appearance-outline {
+      .mat-form-field-infix {
+        padding: 8px 0;
+        height: 46px;
+      }
+      .mat-form-field-label {
+        top: 21px;
+      }
+      &.mat-form-field-can-float.mat-form-field-should-float {
+        .mat-form-field-label {
+          transform: translateY(-19px) scale(0.75);
+        }
+      }
+    }
+    &--title {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+      h3 {
+        font-size: 14px;
+        font-family: 'ProximaNova-semibold' !important;
+      }
+    }
+    p {
+      margin-bottom: 10px !important;
+      font-family: 'ProximaNova-Regular' !important;
+      b {
+        margin-right: 5px;
+        font-family: 'ProximaNova-semibold' !important;
+      }
+      &.list {
+        display: flex;
+        align-items: baseline;
+        b {
+          margin-right: 5px;
+          font-family: 'ProximaNova-semibold' !important;
+        }
+      }
+    }
+  }
+  &--note {
+    font-size: 14px;
+    font-family: 'ProximaNova-Regular' !important;
+    margin-bottom: 20px !important;
+    b {
+      font-family: 'ProximaNova-semibold' !important;
+    }
+  }
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+    button {
+      margin-left: 10px;
+    }
+  }
+  &__forms {
+    margin-top: 10px;
+    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    &--files {
+      display: flex;
+      align-items: flex-end;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 3px;
+      p {
+        font-family: 'ProximaNova-semibold' !important;
+        font-size: 12px;
+        color: #000;
+        white-space: nowrap;
+      }
+      img {
+        margin-left: 10px;
+        width: 20px;
+      }
+    }
+    &--file {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    &--tabs {
+      padding: 10px;
+      flex-grow: 1;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      .tax-tabs {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        .mat-tab-group {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
+      }
+      mat-tab-group {
+        ::ng-deep .mat-tab-body-wrapper {
+          border-radius: 10px;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          .mat-tab-body-content {
+            display: flex !important;
+            flex-direction: column !important;
+            flex: 1 !important;
+          }
+        }
+      }
+    }
+    &--list {
+      width: 20%;
+      padding: 10px 0 10px 15px;
+      ul {
+        padding: 0;
+        li {
+          color: $primary;
+          font-size: 12px;
+          display: flex;
+          padding: 5px 0;
+          align-items: center;
+          pointer-events: none !important;
+
+          span {
+            visibility: hidden;
+            font-size: 12px;
+            margin-right: 10px;
+            width: 16px;
+            height: 16px;
+            mat-icon {
+              vertical-align: top;
+              font-size: 16px;
+              height: 16px;
+              width: 16px;
+            }
+          }
+          p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          &.active {
+            position: relative;
+            &::before {
+              content: '';
+              width: 9px;
+              height: 2px;
+              background-color: $primary;
+              border-radius: 3px;
+              position: absolute;
+              top: 13px;
+              left: 4px;
+            }
+            p {
+              font-weight: bold;
+              position: relative;
+            }
+          }
+          &.verified {
+            display: flex;
+            align-items: center;
+            color: #35b54d;
+            &.active {
+              &::before {
+                content: '';
+                width: 0px;
+              }
+            }
+
+            span {
+              visibility: visible;
+            }
+          }
+        }
+      }
+    }
+    &--header {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      h2 {
+        color: $primary;
+        font-family: 'ProximaNova-semibold' !important;
+        font-size: 16px;
+      }
+    }
+    .example-section {
+      display: flex;
+      align-content: center;
+      align-items: center;
+      height: 60px;
+    }
+
+    .example-margin {
+      margin: 0 10px;
+    }
+    ::ng-deep .mat-radio-group {
+      .mat-radio-label {
+        padding: 10px 15px;
+        font-size: 14px;
+      }
+    }
+    .mat-radio-label-content {
+      font-size: 14px !important;
+      line-height: 18px;
+    }
+  }
+  &__footer {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  ::ng-deep .mat-tab-body-content {
+    border: transparent;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 10px 15px;
+    .tax-personal-info {
+      flex: 1;
+    }
+  }
+  ::ng-deep .mat-tab-labels {
+    margin-left: 20px;
+    pointer-events: none;
+  }
+  ::ng-deep .mat-checkbox-layout {
+    white-space: unset;
+  }
+  &__cnt {
+    padding: 10px 15px;
+  }
+  &__pdf {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    ::ng-deep .ng2-pdf-viewer-container {
+      height: 100% !important;
+      top: 0 !important;
+    }
+    .pdf-viewer {
+      flex: 1;
+
+      height: 100%;
+      position: relative;
+    }
+  }
+}
+.total-jobs {
+  display: flex;
+  align-items: center;
+  mat-checkbox {
+    padding-bottom: 15px;
+  }
+  mat-form-field {
+    margin-left: 30px;
+  }
+}
+.multi-section {
+  display: flex;
+  flex-direction: column;
+  padding-left: 50px;
+  p {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}
+.form-fld-group {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  width: 100%;
+}
+.form-l-group {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  width: 100%;
+}
+
+.claims {
+  p {
+    b {
+      font-family: 'ProximaNova-semibold' !important;
+    }
+  }
+  ul {
+    padding-left: 40px;
+    li {
+      font-family: 'ProximaNova-light' !important;
+      font-size: 14px;
+    }
+  }
+  font-size: 14px;
+  &__cnt {
+    padding: 5px 15px;
+    display: flex;
+    ::ng-deep .mat-form-field-appearance-outline {
+      .mat-form-field-infix {
+        padding: 8px 0;
+        height: 46px;
+      }
+      .mat-form-field-label {
+        top: 21px;
+      }
+      &.mat-form-field-can-float.mat-form-field-should-float {
+        .mat-form-field-label {
+          transform: translateY(-19px) scale(0.75);
+        }
+      }
+    }
+    // &--info {
+    // }
+    &--divider {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      color: $primary;
+      padding: 0 10px;
+      p {
+        margin: 0 10px 10px 15px !important;
+        font-size: 14px;
+        color: #000;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+.state-tax {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  .mat-tab-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    .mat-tab-body.mat-tab-body-active {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+  }
+}
+.form-l-group {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.tax-form {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.s-tax-section {
+  display: flex;
+  flex-direction: column;
+  ::ng-deep .mat-checkbox-label {
+    font-size: 14px !important;
+  }
+}
+.filing-status-code {
+  .mat-form-field {
+    width: 70%;
+  }
+}
+
+.disable-mat-tab-navigation {
+  .mat-tab-label {
+    pointer-events: none;
+  }
+}
+.enable-mat-tab-navigation {
+  .mat-tab-label {
+    pointer-events: auto;
+  }
+}
+.spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}

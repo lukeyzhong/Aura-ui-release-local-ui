@@ -1,0 +1,150 @@
+@import '../personal-info/personal-info.component.scss';
+@import '../../../../../../../styles/component/accordions';
+.card__footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.card__footer button {
+  margin-left: 15px;
+}
+
+.doc-card {
+  &__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    h3 {
+      display: flex;
+      align-items: center;
+      margin-right: 10px !important;
+      img {
+        height: 40px;
+        width: 40px;
+        margin-right: 15px;
+      }
+    }
+
+    hr {
+      flex-grow: 1;
+    }
+  }
+
+  &__container {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    min-height: Calc(100vh - 295px);
+    display: flex;
+    gap: 15px;
+    &--pdf {
+      padding: 10px 15px;
+      background-color: #f8f9fa;
+      flex-grow: 1;
+      border-radius: 10px;
+      &--header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: $primary;
+        div {
+          display: flex;
+          button {
+            margin-left: 10px;
+            min-width: 32px;
+            height: 32px;
+            width: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 32px;
+            mat-icon {
+              font-size: 18px;
+              height: 18px;
+              width: 18px;
+            }
+          }
+        }
+      }
+    }
+
+    &--pdf-view {
+      position: relative;
+      height: Calc(100vh - 365px);
+      ::ng-deep .ng2-pdf-viewer-container {
+        height: calc(100vh - 355px) !important;
+      }
+    }
+
+    &--pdf-list {
+      width: 17%;
+      ul {
+        padding: 0;
+        li {
+          color: $primary;
+          font-size: 12px;
+          mat-icon {
+            visibility: hidden;
+            font-size: 12px;
+            margin-right: 10px;
+            width: 12px;
+            height: 12px;
+          }
+          &.link-Color {
+            color: #0176ad !important;
+            font-weight: bold;
+            position: relative;
+            &::before{
+              content: "";
+              width: 8px;
+              height: 2px;
+              left: 7px;
+              top: 10px;
+              background-color: #0182c1;
+              position: absolute;
+            }
+          }
+          
+          &.verified {
+            display: flex;
+            align-items: center;
+            color: #5bdd73;
+            mat-icon {
+              visibility: visible;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      margin-left: 15px;
+    }
+  }
+
+  &__sign {
+    padding: 5px 10px;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.spinner {
+  top: 220px;
+}
+
+li:hover {
+  cursor: pointer;
+}
+
+li {
+  color: rgb(0, 153, 255);
+}
+

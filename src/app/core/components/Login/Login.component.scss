@@ -1,0 +1,93 @@
+.login-bg {
+  min-height: 100vh;
+  background: linear-gradient(rgba(0, 75, 115, 0.8), rgba(0, 75, 115, 0.8)),
+    url('^assets/images/welcome_splash.webp');
+  background-size: cover;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login {
+  background: rgba($color: #000000, $alpha: 0.5);
+  border-radius: 20px;
+  padding: 20px 10px 10px 10px;
+  display: inline-block;
+  position: relative;
+}
+
+.login_logo {
+  text-align: center;
+}
+
+.login-form {
+  background: white;
+  border-radius: 15px;
+}
+
+// Overwriting Antra Lib
+::ng-deep .form-container {
+  background: white !important;
+  height: auto !important;
+}
+
+::ng-deep .btn-danger {
+  background-color: unset;
+  width: 100% !important;
+  color: #dc3545 !important;
+  border-color: #dc3545 !important;
+}
+
+::ng-deep .form-container__error {
+  div {
+    display: flex;
+    align-items: center;
+    span {
+      margin-right: 5px;
+    }
+  }
+  text-align: left !important;
+}
+
+::ng-deep .btn-danger:hover {
+  color: #dc3545 !important;
+  background-color: #f4f4f4;
+  border-color: #dc3545;
+}
+
+::ng-deep .btn-danger:focus,
+::ng-deep .btn-danger.focus {
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5);
+}
+
+::ng-deep .btn-primary:focus,
+::ng-deep .btn-primary.focus {
+  box-shadow: 0 0 0 0.2rem #0083caa1;
+}
+
+::ng-deep .form__button-img {
+  border-radius: 0px !important;
+}
+
+::ng-deep .custom-snackbar {
+  color: #ff0000 !important;
+  background-color: white;
+
+  .mat-simple-snackbar-action {
+    color: #ff0000 !important;
+  }
+}
+
+.spinner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(22 49 96 / 0.3);
+  border-radius: 20px;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 111;
+}

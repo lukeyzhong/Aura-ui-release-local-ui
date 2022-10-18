@@ -1,0 +1,567 @@
+@import '../personal-info/personal-info.component.scss';
+@import '../../../../../../../styles/component/accordions';
+@import '../../../../../../../styles/utilities/_tabs';
+@import '../../../../../../../styles/utilities/variables';
+.i-9 {
+  position: relative;
+  &__section {
+    padding: 10px;
+  }
+  &__info {
+    padding: 10px 15px;
+    background-color: #ddf8ff;
+    border-radius: 10px;
+    margin: 10px 0;
+    &--photo {
+      display: flex;
+      align-items: center;
+      mat-icon {
+        font-size: 40px;
+        color: green;
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+      }
+    }
+  }
+  &__conformation {
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #f6fbfe;
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &--img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+  }
+
+  &__card {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f6fbfe;
+
+    min-height: 40vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__panel {
+      min-height: 30vh;
+      max-width: 500px;
+      box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+        0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+      padding: 30px;
+      border-radius: 10px;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      &.wid-650 {
+        max-width: 700px;
+      }
+      &.wid-350 {
+        max-width: 350px;
+      }
+      .panel-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        &.center-align {
+          justify-content: center;
+          align-items: center;
+        }
+        .title-h5 {
+          font-size: 16px;
+          font-weight: bold;
+          padding-bottom: 10px;
+
+          &.error {
+            color: #d54a4a;
+          }
+        }
+        p {
+          color: #444444;
+        }
+      }
+      .panel-footer {
+        justify-content: flex-end;
+        display: flex;
+        &.mrg-30 {
+          margin: 0 -30px -30px;
+        }
+        &.center-align {
+          justify-content: center;
+          align-items: center;
+        }
+
+        button {
+          margin: 0 10px;
+        }
+      }
+    }
+  }
+  &__header {
+    position: absolute;
+  }
+  &__section {
+    &--header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      h2 {
+        color: $primary;
+      }
+    }
+  }
+  ::ng-deep .mat-tab-labels {
+    margin-left: 160px;
+  }
+
+  &__footer {
+    button {
+      margin-left: 15px;
+    }
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    .mrg-0 {
+      margin: 0 -30px;
+    }
+  }
+  &__pdf {
+    border-radius: 10px;
+    min-height: 400px;
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    margin-top: 15px;
+    position: relative;
+    overflow: auto;
+    &--file {
+      ::ng-deep .ng2-pdf-viewer-container {
+        height: auto;
+        top: 15px;
+        bottom: 15px;
+        right: 0;
+        left: 0;
+      }
+    }
+
+    &--download {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      min-width: 32px;
+      width: 32px;
+      height: 32px;
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 111111;
+      &:hover {
+        background-color: #ccc;
+        mat-icon {
+          color: $primary;
+        }
+      }
+      mat-icon {
+        color: #ccc;
+      }
+    }
+  }
+  &__photo-mach {
+    padding: 10px;
+    border-radius: 10px;
+  }
+}
+p {
+  margin: 10px 0 !important;
+}
+.i-9 {
+  &__radio-group {
+    margin: 10px 0;
+  }
+}
+.i-9__sign {
+  display: flex;
+  justify-content: space-between;
+  &__sig {
+    display: flex;
+    flex-direction: column;
+    button {
+      width: fit-content;
+    }
+    h4 {
+      color: $primary;
+      margin-right: 10px !important;
+      margin-bottom: 10px !important;
+      color: $primary;
+    }
+  }
+  &--img {
+    width: 200px;
+    height: 100px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    position: relative;
+    position: relative;
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+    button {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      padding: 0;
+      min-width: 18px;
+      width: 18px;
+      height: 18px;
+      border-radius: 18px;
+      background-color: #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      ::ng-deep .mat-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      &:hover {
+        background-color: rgb(199, 80, 80);
+        mat-icon {
+          color: #fff;
+        }
+      }
+      mat-icon {
+        font-size: 10px;
+        height: 10px;
+        width: 10px;
+      }
+    }
+  }
+}
+.form-l-group {
+  grid-template-columns: repeat(auto-fit, minmax(201px, 1fr));
+  &__form {
+    p {
+      margin: 0 !important;
+    }
+    label {
+      background-color: #f8f9fa;
+    }
+  }
+}
+.disable {
+  .form-l-group {
+    grid-template-columns: repeat(auto-fit, minmax(201px, 1fr));
+
+    &__form {
+      p {
+        margin: 0 !important;
+      }
+      label {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+      }
+      .i-9__radio-group {
+        display: flex;
+        gap: 100px;
+        ::ng-deep .mat-radio-label-content {
+          display: flex;
+          gap: 20px;
+          align-items: center;
+          padding-left: 10px;
+        }
+        p {
+          color: #000;
+          margin: 0;
+          padding: 0;
+        }
+        span {
+          margin: 0 !important;
+          padding: 0 !important;
+          color: #838383;
+          font-size: 10px;
+        }
+      }
+      &:hover {
+        p {
+          border-color: transparent;
+        }
+      }
+      label {
+        background-color: transparent;
+      }
+    }
+  }
+}
+.mat-radio-button {
+  padding: 10px 0;
+  margin-right: 20px;
+}
+.radio-options {
+  display: flex;
+  align-items: center;
+  ::ng-deep .mat-radio-label-content {
+    p {
+      border: none !important;
+      padding: 5px 0 !important;
+    }
+  }
+}
+
+.mat-menu-parent {
+  ::ng-deep .mat-menu-panel {
+    .mat-menu-content:not(:empty) {
+      padding: 5px;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+    }
+  }
+}
+.emp-info {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  &.form-fld-group {
+    &__form {
+      label {
+        width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+
+.list-a {
+  &__adds {
+    margin-top: 15px;
+    background-color: #f2f2f2;
+    padding: 5px 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    .form-fld-group {
+      padding-bottom: 0;
+      width: 100%;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      ::ng-deep .mat-form-field-wrapper {
+        padding-bottom: 10px;
+      }
+    }
+    &--close {
+      background-color: #fff;
+      color: #0182c1;
+      min-width: 32px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 15px;
+      ::ng-deep .mat-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.selected-options {
+  p {
+    margin-left: 100px !important;
+  }
+  .form-l-group {
+    &__form {
+      max-width: 300px;
+      p {
+        margin-left: 0px !important;
+      }
+    }
+  }
+}
+
+.list-checks {
+  p {
+    border: none !important;
+  }
+}
+.photo-verify {
+  display: flex;
+  align-items: center;
+  padding: 10px 30px;
+  &__img {
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    border: 2px solid $primary;
+    margin-right: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+  &__details {
+    h2 {
+      color: $primary;
+    }
+  }
+}
+.radio-btn-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+
+.form-group-inline {
+  display: flex;
+  flex-direction: row;
+  &.flex-column {
+    flex-direction: column;
+  }
+  mat-radio-group {
+    margin: 0 20px 0 0;
+  }
+}
+
+.file-download {
+  background: #ddf8fe;
+  font-size: 13px;
+  display: flex;
+  flex-direction: row;
+  padding: 7px 15px;
+  align-items: center;
+  border-radius: 5px;
+  margin: 4px 0 0 15px;
+  height: 40px;
+  cursor: pointer;
+  &.bg-primary {
+    background: #0182c1;
+    color: #fff;
+  }
+  .file-clm {
+    margin-right: 15px;
+  }
+}
+.panle-notification {
+  background: #f4fafc;
+  min-height: 40px;
+  display: flex;
+  width: 100%;
+  padding: 15px 30px;
+  border-radius: 0 0 10px 10px;
+  color: #05c305;
+  font-size: 14px;
+  align-items: center;
+
+  .file-clm {
+    width: 30px;
+    height: 30px;
+    background: #05c305;
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+  }
+}
+
+.succues-tick {
+  width: 45px;
+  height: 45px;
+  background: #1ed11e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.drivers-id {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
+  h3 {
+    font-family: 'ProximaNova-semibold' !important;
+  }
+  .form-fld-group {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.mr-0 {
+  margin: 0 !important;
+}
+.uscis-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .title-h5 {
+    color: $error;
+  }
+  p {
+    text-align: center;
+  }
+}
+.radio-options{
+  .mat-radio-button{
+    padding: 10px 50px 10px 10px;
+   
+    }
+  .form-l-group__form{
+    .rejection{
+      top: 16px;
+      right: 28px;
+    }
+    &:hover{
+      .mat-radio-button{
+        border-radius: 10px;
+        padding: 9px 49px 9px 9px;
+        border: 1px solid red !important;
+      }
+    }
+  }
+  .rejected{
+    .mat-radio-group{
+      .mat-radio-button{
+        border: 1px solid red;
+      border-radius: 10px;
+     
+      }
+    }
+  }
+  
+}
+
+

@@ -1,0 +1,45 @@
+@import '../summary-tab/summary-tab.component.scss';
+
+.notes-parent {
+  width: 100%;
+}
+.notes {
+  display: flex;
+  width: 100%;
+  font-size: 12px;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+  &__description {
+    padding-right: 10px;
+    width: 60%;
+    &--label {
+      color: #a1a1a1;
+    }
+    &--value {
+      color: #1c1c1c;
+      font-size: 13px;
+    }
+  }
+  &__on {
+    width: 20%;
+    padding: 0 5px;
+  }
+  &__by {
+    width: 20%;
+    padding: 0 5px;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+.parse-innerHtml {
+  ::ng-deep ul {
+    padding: 10px 30px;
+    list-style-type: disc;
+  }
+  ::ng-deep ol {
+    padding: 10px 30px;
+    list-style-type: auto;
+  }
+}

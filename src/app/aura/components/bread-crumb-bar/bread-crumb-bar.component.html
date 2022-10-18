@@ -1,0 +1,14 @@
+<div class="breadcrumb">
+    <div class="breadcrumb__home">
+        <img src="./assets/svg/global-module-navigation/home.svg" width="90px" (click)="goToHome('home','me')" />
+    </div>
+    <div><span class="material-icons">keyboard_arrow_right</span></div>
+    <div class="breadcrumb__item breadcrumb__item--link" (click)="goToModule(moduleName)">{{moduleName}}</div>
+    <div *ngFor="let menu of menuName" class="breadcrumb__subitem">
+        <div><span class="material-icons">keyboard_arrow_right</span></div>
+        <div class=" breadcrumb__item--active">{{menu | titlecase}}</div>
+    </div>
+</div>
+<div class="dashboard">
+    <hr class="aura-divider-xs" />
+</div>

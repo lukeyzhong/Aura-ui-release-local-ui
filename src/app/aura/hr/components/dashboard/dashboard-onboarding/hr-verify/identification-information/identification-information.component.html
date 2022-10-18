@@ -1,0 +1,881 @@
+<mat-expansion-panel (afterExpand)="getComments()" class="accordion-parent">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="accordion-header">
+        <img
+          src="./assets/svg/HR Verify Icons/Identification-info.svg"
+          width=""
+          alt=""
+        />
+        <h3>Identification Information</h3>
+        <div *ngIf="countKeysIdentificationInfo !== 0" class="comment">
+          HR Comments
+          <div class="count">
+            <p>{{ countKeysIdentificationInfo }}</p>
+          </div>
+        </div>
+        <div *ngIf="countKeysIdentificationInfo !== 0" class="comment">
+          <button
+            class="delete"
+            type="button"
+            (click)="deleteComment('All', $event)"
+            mat-button
+            color="warn"
+            matTooltip="Delete All Comments"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="identification-info">
+    <div class="form-l-group__header-hr">
+      <h3><b>SSN</b></h3>
+      <hr />
+    </div>
+    <div class="form-l-group">
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.socialSecurityNumber'
+          )
+        }"
+      >
+        <label for="">SSN Number</label>
+        <p
+          id="identificationInformation.socialSecurityNumber"
+          #ssn
+          (mouseenter)="onHover(ssn.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.ssnInfo?.socialSecurityNumber?.substr(
+              0,
+              3
+            ) +
+              '-' +
+              identificationImmigrationInformationResult?.ssnInfo?.socialSecurityNumber?.substr(
+                3,
+                3
+              ) +
+              '-' +
+              identificationImmigrationInformationResult?.ssnInfo?.socialSecurityNumber?.substr(
+                6,
+                4
+              )
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        *ngFor="
+          let ssnDoc of identificationImmigrationInformationResult?.ssnInfo
+            ?.documents;
+          let i = index
+        "
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.ssnDocument' + ssnDoc.documentId
+          )
+        }"
+      >
+        <label for="">Document</label>
+        <p
+          id="{{ 'identificationInformation.ssnDocument' + ssnDoc.documentId }}"
+          class="file"
+          #ssnDocs
+          (mouseenter)="onHover(ssnDocs.id)"
+        >
+          <img
+            *ngIf="ssnDoc?.fileExtension === '.pdf'"
+            src="./assets/svg/icn-pdf.svg"
+            width="18px"
+            alt=""
+          />
+          <img
+            *ngIf="fileExtO.includes(ssnDoc?.fileExtension!.toLowerCase())"
+            src="./assets/svg/icn-image.svg"
+            width="18px"
+            alt=""
+          />
+          {{ ssnDoc?.displayName }}
+        </p>
+        <button
+          mat-raised-button
+          color="primary"
+          class="btn-sm btn-sm__white file-actions download"
+          (click)="downloadDocument(ssnDoc)"
+        >
+          <mat-icon matTooltip="Download">get_app</mat-icon>
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          class="btn-sm btn-sm__white view"
+          matTooltip="Preview"
+          (click)="previewDocument(ssnDoc)"
+        >
+          <mat-icon>remove_red_eye</mat-icon>
+        </button>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+    </div>
+    <div class="form-l-group__header-hr">
+      <h3><b>Passport Information</b></h3>
+      <hr />
+    </div>
+    <div class="form-l-group">
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.passportNumber'
+          )
+        }"
+      >
+        <label for="">Passport Number</label>
+        <p
+          id="identificationInformation.passportNumber"
+          #passportNumer
+          (mouseenter)="onHover(passportNumer.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.passportInfo
+              ?.passportNumber
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.passportIssueDate'
+          )
+        }"
+      >
+        <label for="">Issue Date</label>
+        <p
+          id="identificationInformation.passportIssueDate"
+          #passportIssueDte
+          (mouseenter)="onHover(passportIssueDte.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.passportInfo
+              ?.passportIssueDate | date: 'MM/dd/yyyy'
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.passportExpiryDate'
+          )
+        }"
+      >
+        <label for="">Expiry Date</label>
+        <p
+          id="identificationInformation.passportExpiryDate"
+          #passportExpiryDte
+          (mouseenter)="onHover(passportExpiryDte.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.passportInfo
+              ?.passportExpiryDate | date: 'MM/dd/yyyy'
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.passportIssuedCity'
+          )
+        }"
+      >
+        <label for="">Issue City</label>
+        <p
+          id="identificationInformation.passportIssuedCity"
+          #passportIssuCity
+          (mouseenter)="onHover(passportIssuCity.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.passportInfo
+              ?.passportIssuedCity
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.passportIssueCountry'
+          )
+        }"
+      >
+        <label for="">Issue Country</label>
+        <p
+          id="identificationInformation.passportIssueCountry"
+          #passportIssuedCountry
+          (mouseenter)="onHover(passportIssuedCountry.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.passportInfo
+              ?.passportIssueCountry
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        *ngFor="
+          let passportDoc of identificationImmigrationInformationResult
+            ?.passportInfo?.documents;
+          let i = index
+        "
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.passportDocument' +
+              passportDoc.documentId
+          )
+        }"
+      >
+        <label for="">Document</label>
+        <p
+          id="{{
+            'identificationInformation.passportDocument' +
+              passportDoc.documentId
+          }}"
+          class="file"
+          #passportDocs
+          (mouseenter)="onHover(passportDocs.id)"
+        >
+          <img
+            *ngIf="passportDoc?.fileExtension === '.pdf'"
+            src="./assets/svg/icn-pdf.svg"
+            width="18px"
+            alt=""
+          />
+          <img
+            *ngIf="fileExtO.includes(passportDoc?.fileExtension!.toLowerCase())"
+            src="./assets/svg/icn-image.svg"
+            width="18px"
+            alt=""
+          />
+          {{ passportDoc?.displayName }}
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-sm btn-sm__white file-actions download"
+            (click)="downloadDocument(passportDoc)"
+          >
+            <mat-icon matTooltip="Download">get_app</mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-sm btn-sm__white view"
+            (click)="previewDocument(passportDoc)"
+          >
+            <mat-icon matTooltip="Preview">remove_red_eye</mat-icon>
+          </button>
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+    </div>
+    <div class="form-l-group__header-hr">
+      <h3><b>Driving License Information</b></h3>
+      <hr />
+    </div>
+    <div class="form-l-group">
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.drivingLicenseNo'
+          )
+        }"
+      >
+        <label for="">License Number</label>
+        <p
+          id="identificationInformation.drivingLicenseNo"
+          #licenseNumer
+          (mouseenter)="onHover(licenseNumer.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.drivingLicenseInfo
+              ?.drivingLicenseNo
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.drivingLicenseIssueDate'
+          )
+        }"
+      >
+        <label for="">Issue Date</label>
+        <p
+          id="identificationInformation.drivingLicenseIssueDate"
+          #licenseIssueDte
+          (mouseenter)="onHover(licenseIssueDte.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.drivingLicenseInfo
+              ?.issueDate | date: 'MM/dd/yyyy'
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.drivingLicenseExpiryDate'
+          )
+        }"
+      >
+        <label for="">Expiry Date</label>
+        <p
+          id="identificationInformation.drivingLicenseExpiryDate"
+          #licenseExpiryDte
+          (mouseenter)="onHover(licenseExpiryDte.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.drivingLicenseInfo
+              ?.expiryDate | date: 'MM/dd/yyyy'
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.drivingLicenseCity'
+          )
+        }"
+      >
+        <label for="">City</label>
+        <p
+          id="identificationInformation.drivingLicenseCity"
+          #licenseCity
+          (mouseenter)="onHover(licenseCity.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.drivingLicenseInfo
+              ?.location?.city
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.drivingLicenseState'
+          )
+        }"
+      >
+        <label for="">State</label>
+        <p
+          id="identificationInformation.drivingLicenseState"
+          #licenseState
+          (mouseenter)="onHover(licenseState.id)"
+        >
+          {{
+            mapState.get(
+              identificationImmigrationInformationResult?.drivingLicenseInfo
+                ?.location?.stateCode!
+            )
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.drivingLicenseZip'
+          )
+        }"
+      >
+        <label for="">Zip Code</label>
+        <p
+          id="identificationInformation.drivingLicenseZip"
+          #licenseZip
+          (mouseenter)="onHover(licenseZip.id)"
+        >
+          {{
+            identificationImmigrationInformationResult?.drivingLicenseInfo
+              ?.location?.zip
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        *ngFor="
+          let licenseDoc of identificationImmigrationInformationResult
+            ?.drivingLicenseInfo?.documents;
+          let i = index
+        "
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.licenseDocument' + licenseDoc.documentId
+          )
+        }"
+      >
+        <label for="">Document</label>
+        <p
+          id="{{
+            'identificationInformation.licenseDocument' + licenseDoc.documentId
+          }}"
+          class="file"
+          #licenseDocs
+          (mouseenter)="onHover(licenseDocs.id)"
+        >
+          <img
+            *ngIf="licenseDoc?.fileExtension === '.pdf'"
+            src="./assets/svg/icn-pdf.svg"
+            width="18px"
+            alt=""
+          />
+          <img
+            *ngIf="fileExtO.includes(licenseDoc?.fileExtension!.toLowerCase())"
+            src="./assets/svg/icn-image.svg"
+            width="18px"
+            alt=""
+          />
+          {{ licenseDoc?.displayName }}
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-sm btn-sm__white file-actions download"
+            (click)="downloadDocument(licenseDoc)"
+          >
+            <mat-icon matTooltip="Download">get_app</mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-sm btn-sm__white file-actions view"
+            (click)="previewDocument(licenseDoc)"
+          >
+            <mat-icon matTooltip="Preview">remove_red_eye</mat-icon>
+          </button>
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+    </div>
+    <div class="form-l-group__header-hr">
+      <h3><b>Immigration Information</b></h3>
+      <hr />
+    </div>
+    <div class="form-l-group"
+    *ngFor="
+    let immiInfo of identificationImmigrationInformationResult?.immigrationData;
+    let i = index
+  "
+  >
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.immigrationWorkAuthorizationType' + i)
+        }"
+      >
+        <label for="">Work Authorisation</label>
+        <p
+          id="{{'identificationInformation.immigrationWorkAuthorizationType' + i }}"
+          #immigrationWorkAuthType
+          (mouseenter)="onHover(immigrationWorkAuthType.id)"
+        >
+          {{
+            immiInfo?.immigrationInfo?.workAuthorizationType
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div *ngIf="immiInfo?.immigrationInfo?.workAuthorizationTypeCode === 2"
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.eadCategoryCode' + i
+          )
+        }"
+      >
+        <label for="">EAD Code</label>
+        <p
+          id="{{ 'identificationInformation.eadCategoryCode' + i }}"
+          #eadCode
+          (mouseenter)="onHover(eadCode.id)"
+        >
+          {{
+            immiInfo?.immigrationInfo?.eadabbr
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div *ngIf="immiInfo?.immigrationInfo?.workAuthorizationTypeCode === 2"
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('identificationInformation.eadCategory' + i)
+        }"
+      >
+      <label for="">EAD Category</label>
+      <p
+        id="{{ 'identificationInformation.eadCategory' + i }}"
+        #eadCategoryName
+        (mouseenter)="onHover(eadCategoryName.id)"
+      >
+      {{
+        immiInfo?.immigrationInfo?.eadCategory
+      }}
+      </p>
+      <div
+        *ngIf="
+          showUpdateButton === false;
+          then showAddBtn;
+          else showUpdateBtn
+        "
+      ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.immigrationWorkAuthorizationNumber' + i
+          )
+        }"
+      >
+        <label for="">Work Authorisation Number</label>
+        <p
+          id="{{ 'identificationInformation.immigrationWorkAuthorizationNumber' + i }}"
+          #immigrationWorkAuthNum
+          (mouseenter)="onHover(immigrationWorkAuthNum.id)"
+        >
+          {{
+            immiInfo?.immigrationInfo?.workAuthorizationNumber
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.immigrationWorkAuthorizationStartDate' + i
+          )
+        }"
+      >
+        <label for="">Validity From Date</label>
+        <p
+          id="{{ 'identificationInformation.immigrationWorkAuthorizationStartDate' + i }}"
+          #workAuthValidityFrom
+          (mouseenter)="onHover(workAuthValidityFrom.id)"
+        >
+          {{
+            immiInfo?.immigrationInfo?.workAuthorizationStartDate | date: 'MM/dd/yyyy'
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.immigrationWorkAuthorizationExpiryDate' + i
+          )
+        }"
+      >
+        <label for="">Validity Expiry Date</label>
+        <p
+          id="{{ 'identificationInformation.immigrationWorkAuthorizationExpiryDate' + i }}"
+          #workAuthValidityExpiry
+          (mouseenter)="onHover(workAuthValidityExpiry.id)"
+        >
+          {{
+            immiInfo?.immigrationInfo?.workAuthorizationExpiryDate | date: 'MM/dd/yyyy'
+          }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        *ngFor="
+          let immigrationDoc of immiInfo?.immigrationInfo?.documents;
+          let j = index
+        "
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'identificationInformation.immigrationDocument' +
+              immigrationDoc.documentId
+          )
+        }"
+      >
+        <label for="">Document</label>
+        <p
+          id="{{
+            'identificationInformation.immigrationDocument' +
+              immigrationDoc.documentId
+          }}"
+          class="file"
+          #immigrationDocs
+          (mouseenter)="onHover(immigrationDocs.id)"
+        >
+          <img
+            *ngIf="immigrationDoc?.fileExtension === '.pdf'"
+            src="./assets/svg/icn-pdf.svg"
+            width="18px"
+            alt=""
+          />
+          <img
+            *ngIf="
+              fileExtO.includes(immigrationDoc?.fileExtension!.toLowerCase())
+            "
+            src="./assets/svg/icn-image.svg"
+            width="18px"
+            alt=""
+          />
+          {{ immigrationDoc?.displayName }}
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-sm btn-sm__white file-actions download"
+            (click)="downloadDocument(immigrationDoc)"
+          >
+            <mat-icon matTooltip="Download">get_app</mat-icon>
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="previewDocument(immigrationDoc)"
+            class="btn-sm btn-sm__white view"
+            matTooltip="Preview"
+          >
+            <mat-icon>remove_red_eye </mat-icon>
+          </button>
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mat-menu-parent">
+    <mat-menu
+      #commentMenus="matMenu"
+      xPosition="before"
+      yPosition="below"
+      class="mt-menu"
+      [overlapTrigger]="false"
+    >
+      <div class="rejection-reasson" (click)="$event.stopPropagation()">
+        <form [formGroup]="commentForm" (ngSubmit)="onSave()">
+          <div class="rejection-reasson__header">
+            <h4>Rejection Reason</h4>
+            <div
+              class="rejection-reasson__header--btns"
+              *ngIf="hrCommentsMap.has(commentKey)"
+            >
+              <button
+                type="button"
+                (click)="deleteComment('Single', $event)"
+                mat-button
+                color="warn"
+                matTooltip="Delete"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="rejection-reasson__content">
+            <textarea
+              formControlName="comment"
+              matInput
+              cols="30"
+              rows="4"
+            ></textarea>
+          </div>
+          <div class="rejection-reasson__footer">
+            <button
+              type="button"
+              (click)="closeMenu()"
+              mat-stroked-button
+              color="primary"
+            >
+              Close
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="commentForm.invalid || commentForm?.pristine"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-menu>
+  </div>
+
+  <ng-template #showUpdateBtn>
+    <button
+      mat-raised-button
+      color="warn"
+      matTooltip="Update Reason"
+      [matMenuTriggerFor]="commentMenus"
+      class="rejection rejection__update"
+    >
+      <mat-icon> chat_bubble </mat-icon>
+    </button>
+  </ng-template>
+
+  <ng-template #showAddBtn>
+    <button
+      mat-raised-button
+      color="warn"
+      matTooltip="Reject"
+      (click)="$event.stopPropagation()"
+      [matMenuTriggerFor]="commentMenus"
+      class="rejection rejection__add"
+    >
+      <mat-icon> close </mat-icon>
+    </button>
+  </ng-template>
+</mat-expansion-panel>

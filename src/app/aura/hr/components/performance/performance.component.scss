@@ -1,0 +1,11 @@
+.under-dev-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: Calc(100vh - 150px);
+  h2 {
+    font-family: 'ProximaNova-bold' !important;
+    color: #6ab1d4;
+  }
+}

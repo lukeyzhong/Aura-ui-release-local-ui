@@ -1,0 +1,107 @@
+// =============================================================================
+// String Replace
+// =============================================================================
+
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace +
+      str-replace(
+        str-slice($string, $index + str-length($search)),
+        $search,
+        $replace
+      );
+  }
+
+  @return $string;
+}
+
+// =============================================================================
+// Font Face
+// =============================================================================
+
+@mixin font-face(
+  $name,
+  $path,
+  $weight: null,
+  $style: null,
+  $exts: eot woff2 woff ttf svg
+) {
+  $src: null;
+
+  $extmods: (
+    eot: '?',
+    svg: '#' + str-replace($name, ' ', '_'),
+  );
+
+  $formats: (
+    otf: 'opentype',
+    ttf: 'truetype',
+  );
+
+  @each $ext in $exts {
+    $extmod: if(
+      map-has-key($extmods, $ext),
+      $ext + map-get($extmods, $ext),
+      $ext
+    );
+    $format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+    $src: append(
+      $src,
+      url(quote($path + '.' + $extmod)) format(quote($format)),
+      comma
+    );
+  }
+
+  @font-face {
+    font-family: quote($name);
+    font-style: $style;
+    font-weight: $weight;
+    src: $src;
+  }
+}
+
+@font-face {
+  font-family: 'ProximaNova-light';
+  font-style: normal;
+  font-weight: normal;
+  src: url('ProximaNova/ProximaNova-Light.eot') format('eot'),
+    url('ProximaNova/ProximaNova-Light.woff2') format('woff2'),
+    url('ProximaNova/ProximaNova-Light.woff') format('woff'),
+    url('ProximaNova/ProximaNova-Light.ttf') format('truetype'),
+    url('ProximaNova/ProximaNova-Light.svg') format('svg');
+}
+
+@font-face {
+  font-family: 'ProximaNova-Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: url('ProximaNova/ProximaNova-Regular.eot') format('eot'),
+    url('ProximaNova/ProximaNova-Regular.woff2') format('woff2'),
+    url('ProximaNova/ProximaNova-Regular.woff') format('woff'),
+    url('ProximaNova/ProximaNova-Regular.ttf') format('truetype'),
+    url('ProximaNova/ProximaNova-Regular.svg') format('svg');
+}
+
+@font-face {
+  font-family: 'ProximaNova-semibold';
+  font-style: normal;
+  font-weight: normal;
+  src: url('ProximaNova/ProximaNova-Semibold.eot') format('eot'),
+    url('ProximaNova/ProximaNova-Semibold.woff2') format('woff2'),
+    url('ProximaNova/ProximaNova-Semibold.woff') format('woff'),
+    url('ProximaNova/ProximaNova-Semibold.ttf') format('truetype'),
+    url('ProximaNova/ProximaNova-Semibold.svg') format('svg');
+}
+
+@font-face {
+  font-family: 'ProximaNova-bold';
+  font-style: normal;
+  font-weight: normal;
+  src: url('ProximaNova/ProximaNova-Bold.eot') format('eot'),
+    url('ProximaNova/ProximaNova-Bold.woff2') format('woff2'),
+    url('ProximaNova/ProximaNova-Bold.woff') format('woff'),
+    url('ProximaNova/ProximaNova-Bold.ttf') format('truetype'),
+    url('ProximaNova/ProximaNova-Bold.svg') format('svg');
+}

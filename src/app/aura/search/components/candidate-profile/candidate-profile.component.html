@@ -1,0 +1,354 @@
+<div class="aura-page-container">
+  <div class="employee-top-wrap">
+    <div class="employee-card aura-widget candidate">
+      <div
+        *ngIf="isLoadingImage; else loadingImage"
+        class="employee-card aura-widget spinner header-spinner"
+      >
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <ng-template #loadingImage>
+        <div class="candidate__label">Candidate</div>
+        <div class="dflex flex-col flex-center">
+          <div
+            *ngIf="isLoading; else topLeft"
+            class="aura-widget employee-card spinner header-spinner"
+          >
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <ng-template #topLeft>
+            <div class="employee-card__userpic" (click)="zoomIn()">
+              <img [src]="profileSrc" />
+            </div>
+            <div class="employee-profile-popup" *ngIf="show">
+              <span
+                class="material-icons employee-profile-popup__zoomOut"
+                (click)="zoomOut()"
+                >cancel</span
+              >
+              <img [src]="profileSrc" class="employee-profile-popup__zoomIn" />
+              <div class="employee-profile-popup__overlay"></div>
+            </div>
+            <div class="employee-card__actions">
+              <button mat-button [matMenuTriggerFor]="menu">
+                Action <span class="material-icons"> expand_more </span>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                  <mat-icon>groups</mat-icon>Schedule Interview
+                </button>
+                <button mat-menu-item>
+                  <mat-icon>group_add</mat-icon>Initiate Onboarding
+                </button>
+                <button mat-menu-item>
+                  <mat-icon>description</mat-icon>Request Documents
+                </button>
+              </mat-menu>
+            </div>
+          </ng-template>
+        </div>
+        <div class="dflex flex-col">
+          <p class="employee-card__firstlast">{{ personData?.alias }}</p>
+          <p class="employee-card__lastname">
+            {{ personData?.firstName }}&nbsp;{{ personData?.lastName }}
+          </p>
+          <p class="employee-card__jobtitle">
+            CAN ID: {{ candidateProfileResult?.candidateCode }}
+          </p>
+          <hr class="aura-divider-xs" *ngIf="isLoading === false" />
+          <p class="employee-card__number">
+            <span class="material-icons">phone_iphone</span>
+            {{ mobileNO }}
+            <mat-icon
+              *ngIf="phoneNumber.size > 0"
+              class="employee-card__number--drop"
+              [matMenuTriggerFor]="phoneNumbers"
+              >arrow_drop_down</mat-icon
+            >
+          </p>
+          <div class="phoneNumber-dropdown">
+            <mat-menu #phoneNumbers="matMenu">
+              <div
+                class="number-dropdown"
+                *ngFor="
+                  let entry of phoneNumber
+                    | keyvalue
+                    | slice: 0:phoneNumber.size
+                "
+              >
+                <button mat-menu-item *ngIf="entry.key === 3">
+                  <mat-icon>home</mat-icon>{{ entry.value }}
+                </button>
+                <button mat-menu-item *ngIf="entry.key === 9">
+                  <mat-icon>work</mat-icon>{{ entry.value }},
+                  <b> Ext : </b> &nbsp;
+                  {{ contactAddrExt }}
+                </button>
+              </div>
+            </mat-menu>
+          </div>
+
+          <p>
+            <span class="material-icons">email</span>
+            {{ email }}
+          </p>
+          <p>
+            <span class="material-icons">room</span
+            ><span *ngIf="livingAddress?.city">
+              {{ livingAddress?.city + ', ' }}</span
+            >
+            <span>{{ livingAddrStateName }}</span>
+          </p>
+        </div>
+        <div class="employee-card__useractive" *ngIf="isLoading === false">
+          <span
+            class="material-icons"
+            (click)="openUserActivity()"
+            matTooltip="User Activity"
+            ><img
+              src="./assets/svg/candidate-activity-icon.svg"
+              class="user--activity-icon"
+          /></span>
+        </div>
+      </ng-template>
+    </div>
+    <div class="employee-quickinfo-wrap aura-widget">
+      <div
+        *ngIf="isLoading; else data"
+        class="aura-widget spinner header-spinner"
+      >
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+
+      <ng-template #data>
+        <div class="employee-quickinfo">
+          <div class="employee-quickinfo__heading">
+            <h4>PRIMARY</h4>
+            <span></span>
+          </div>
+          <ul class="border-right">
+            <li class="li-50">
+              <p class="employee-quickinfo__label">SSN:</p>
+              <p class="employee-quickinfo__value">
+                {{ personData?.socialSecurityNumber }}
+                <span
+                  class="material-icons employee-quickinfo__visible-icn"
+                  (click)="showSSN(personData.socialSecurityNumber)"
+                >
+                  visibility
+                </span>
+              </p>
+            </li>
+            <li class="li-50">
+              <p class="employee-quickinfo__label">Marital Status</p>
+              <p class="employee-quickinfo__value">
+                {{ personData?.maritalStatus }}
+              </p>
+            </li>
+            <li class="li-50">
+              <p class="employee-quickinfo__label">Gender:</p>
+              <p class="employee-quickinfo__value">{{ personData?.gender }}</p>
+            </li>
+            <li class="li-50">
+              <p class="employee-quickinfo__label">Date of Birth:</p>
+              <p class="employee-quickinfo__value">
+                {{ personData?.dateOfBirth | date: 'mediumDate' }}
+              </p>
+            </li>
+            <li class="li-50">
+              <p class="employee-quickinfo__label">Living Address:</p>
+              <p class="employee-quickinfo__value" *ngIf="livingAddress">
+                {{ livingAddress?.addressLine1 }},<br />
+                <span *ngIf="livingAddress?.addressLine2">
+                  {{ livingAddress?.addressLine2 + ', ' }}</span
+                >
+                <span *ngIf="livingAddress?.addressLine3">
+                  {{ livingAddress?.addressLine3 + ', ' }}</span
+                >
+                {{ livingAddress?.city }}, {{ livingAddrStateName }},
+                {{ livingAddress?.postalCode }}
+              </p>
+            </li>
+
+            <li class="li-50">
+              <p class="employee-quickinfo__label">Candidate Type:</p>
+              <p class="employee-quickinfo__value">
+                {{ candidateProfileResult?.candidateType }}
+              </p>
+            </li>
+          </ul>
+        </div>
+        <div class="employee-quickinfo">
+          <div class="employee-quickinfo__heading">
+            <h4>CANDIDATE PROFILE</h4>
+            <span></span>
+          </div>
+          <ul>
+            <li>
+              <p class="employee-quickinfo__label">Employment Type</p>
+              <p class="employee-quickinfo__value">
+                {{ candidateProfileResult?.employmentType }}
+              </p>
+            </li>
+            <li>
+              <p class="employee-quickinfo__label">Work Auth Status</p>
+              <p class="employee-quickinfo__value">
+                {{ candidateProfileResult?.workAuthorizationStatus }}
+              </p>
+            </li>
+            <li>
+              <p class="employee-quickinfo__label">Source</p>
+              <p class="employee-quickinfo__value">
+                {{ candidateProfileResult?.sourceType }}
+              </p>
+            </li>
+
+            <li>
+              <p class="employee-quickinfo__label">Recruiter</p>
+              <p class="employee-quickinfo__value">
+                {{ this.candidateProfileResult?.recruiterName }}
+              </p>
+            </li>
+            <li>
+              <p class="employee-quickinfo__label">Willing to relocate</p>
+              <p class="employee-quickinfo__value">
+                {{
+                  candidateProfileResult?.relocationFlag === true ? 'Yes' : 'No'
+                }}
+              </p>
+            </li>
+            <li>
+              <p class="employee-quickinfo__label">Willing to Telecommute</p>
+              <p class="employee-quickinfo__value">
+                {{
+                  candidateProfileResult?.telecommuteFlag === true
+                    ? 'Yes'
+                    : 'No'
+                }}
+              </p>
+            </li>
+
+            <li>
+              <p class="employee-quickinfo__label">Availability</p>
+              <p class="employee-quickinfo__value">
+                {{ candidateProfileResult?.availability }}
+              </p>
+            </li>
+            <li>
+              <p class="employee-quickinfo__label">Security Clearance</p>
+              <div class="employee-quickinfo__value">
+                <ul *ngFor="let securityClearance of securityClearances">
+                  <li>
+                    {{ securityClearance?.securityClearanceLevel }}
+                    <mat-icon
+                      [mdePopoverTriggerFor]="securityContent"
+                      class="color-primary info-icon-popover"
+                      >info</mat-icon
+                    >
+                  </li>
+                  <mde-popover
+                    #securityContent="mdePopover"
+                    mdePopoverPositionX="after"
+                    [mdeFocusTrapEnabled]="false"
+                    [mdeFocusTrapAutoCaptureEnabled]="false"
+                    [mdePopoverOffsetX]="110"
+                    [mdePopoverOffsetY]="20"
+                  >
+                    <div class="security">
+                      <div class="security-pop-arrow"></div>
+                      <div class="security__field">
+                        <div class="security__field--label">Polygraph</div>
+                        <div class="security__field--value">
+                          {{
+                            getSecurityClearancePolyGraphTypes(
+                              securityClearance?.polygraphType!
+                            )
+                          }}
+                        </div>
+                      </div>
+                    </div>
+                  </mde-popover>
+                </ul>
+              </div>
+            </li>
+            <li>
+              <p class="employee-quickinfo__label">Candidate Status</p>
+              <p class="employee-quickinfo__value">
+                {{ candidateProfileResult?.candidateStatus }}
+              </p>
+            </li>
+            <li>
+              <p class="employee-quickinfo__label">Social Profiles</p>
+              <div class="employee-quickinfo__value">
+                <ul class="social-profiles">
+                  <li *ngFor="let socialProfile of socialMediaLinks">
+                    <div *ngIf="socialProfile?.socialMediaLink === 'Linkedin'">
+                      <a href="{{ socialProfile?.url }}" target="_blank">
+                        <img
+                          width="18px"
+                          src="./assets/svg/linkedin-sm.svg"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                    <div *ngIf="socialProfile?.socialMediaLink === 'Twitter'">
+                      <a href="{{ socialProfile?.url }}" target="_blank">
+                        <img
+                          width="18px"
+                          src="./assets/svg/twitter-sm.svg"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                    <div *ngIf="socialProfile?.socialMediaLink === 'Facebook'">
+                      <a href="{{ socialProfile?.url }}" target="_blank">
+                        <img
+                          width="18px"
+                          src="./assets/svg/facebook-sm.svg"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                    <div *ngIf="socialProfile?.socialMediaLink === 'Youtube'">
+                      <a href="{{ socialProfile?.url }}" target="_blank">
+                        <img
+                          width="18px"
+                          src="./assets/svg/youtube-sm.svg"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                    <div *ngIf="socialProfile?.socialMediaLink === 'Web'">
+                      <a href="{{ socialProfile?.url }}" target="_blank">
+                        <img
+                          width="18px"
+                          src="./assets/svg/web-sm.svg"
+                          alt=""
+                        />
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+          <div class="employee-quickinfo__edit-icn">
+            <span class="material-icons" (click)="editProfile('Edit')">
+              edit
+            </span>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <div class="candidate-profile">
+    <app-candidate-details-panel
+      [personId]="personId"
+      [personName]="personName"
+      [id]="candidateId"
+      [resumeDocumentId]="resumeDocumentId"
+      [displayName]="displayName"
+      class="candidate-profile-padding"
+    ></app-candidate-details-panel>
+  </div>
+</div>

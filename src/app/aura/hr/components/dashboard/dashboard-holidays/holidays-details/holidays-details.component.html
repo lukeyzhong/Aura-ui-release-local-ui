@@ -1,0 +1,118 @@
+<div class="holidays">
+  <div class="holidays__glasses">
+    <img src="./assets/svg/holidays-icons/glasses.svg" width="100px" alt="" />
+  </div>
+  <div class="holidays__umbrella">
+    <img src="./assets/svg/holidays-icons/umbrella.svg" width="60px" alt="" />
+  </div>
+  <div class="holidays__shell">
+    <img src="./assets/svg/holidays-icons/shell.svg" width="60px" alt="" />
+  </div>
+  <div class="holidays__header">
+    <h2>Holidays</h2>
+    <button (click)="onCancel($event)" mat-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="upcoming-parent">
+    <div class="overflow-icon">
+      <img src="./assets/svg/holidays-icons/Starfish.svg" alt="" />
+    </div>
+    <div class="holidays__upcoming">
+      <div class="holidays__upcoming--bottom">
+        <img src="./assets/images/holidays/{{imageName}}" alt="" />
+      </div>
+      <div class="holidays__upcoming--top-left">
+        <img src="./assets/svg/holidays-icons/left.svg" alt="" />
+      </div>
+      <div class="holidays__upcoming--top-right">
+        <img src="./assets/svg/holidays-icons/right.svg" alt="" />
+      </div>
+      <div class="holidays__upcoming--next">
+        <button mat-mini-fab color="primary" [style.visibility]="!isMovingForward ? 'hidden' : 'visible'"
+          (click)="movingForkward()">
+          <span class="material-icons"> arrow_forward_ios </span>
+        </button>
+      </div>
+      <div class="holidays__upcoming--previous">
+        <button mat-mini-fab color="primary" [style.visibility]="!isMovingBackward ? 'hidden' : 'visible'"
+          (click)="movingBackward()">
+          <span class="material-icons"> arrow_back_ios_new </span>
+        </button>
+      </div>
+      <div class="holidays__txt">
+        <h2 class="holidays__date" [ngClass]="{
+          fontColor:
+            name === Holidays.NewYearDay || 
+            name === Holidays.Diwali ||            
+            name === Holidays.ThanksgivingDay ||
+            name === Holidays.BlackFriday ||
+            name === Holidays.ChristmasEve ||
+            name === Holidays.MartinLutherKing
+        }">
+          {{ month }} {{ date?.toString()?.length === 1 ? '0' + date : date }}
+        </h2>
+        <h1 class="holidays__name">{{ name }}</h1>
+        <p class="holidays__week" [ngClass]="{
+            fontColor:
+              name === Holidays.NewYearDay || 
+              name === Holidays.Diwali ||            
+              name === Holidays.ThanksgivingDay ||
+              name === Holidays.BlackFriday ||
+              name === Holidays.ChristmasEve ||
+              name === Holidays.MartinLutherKing
+          }">
+          {{ day }}
+        </p>
+      </div>
+
+    </div>
+  </div>
+  <div class="holidays__table">
+    <div class="holidays__table--export">
+      <app-download-icon (downloadBtnClicked)="download($event)"></app-download-icon>
+    </div>
+    <div *ngIf="isLoadSpinner" class="spinner">
+      <app-spinner diameter="35"></app-spinner>
+    </div>
+    <table *ngIf="!isLoadSpinner" mat-table [dataSource]="dataSource" class="my-table mat-elevation-z8">
+      <!-- Serial Number -->
+      <ng-container matColumnDef="S.No">
+        <th mat-header-cell *matHeaderCellDef>S.No</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          {{ i + 1 }}
+        </td>
+      </ng-container>
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="Date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.month }} {{ element.date }}
+        </td>
+      </ng-container>
+
+      <!-- Holiday Column -->
+      <ng-container matColumnDef="Holiday">
+        <th mat-header-cell *matHeaderCellDef>Holiday</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.name }}
+        </td>
+      </ng-container>
+
+      <!-- Day Column -->
+      <ng-container matColumnDef="Day">
+        <th mat-header-cell *matHeaderCellDef>Day</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.day }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <h4 class="no-data-display" *ngIf="!isLoadSpinner && dataSource?.data?.length === 0">
+      No Data to Display
+    </h4>
+  </div>
+</div>

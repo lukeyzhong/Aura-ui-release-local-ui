@@ -1,0 +1,130 @@
+<div class="modal-popup">
+    <div class="modal-popup__header">
+        <h3><b>Case Results</b></h3>
+        <div>
+            <button mat-button [mat-dialog-close]="true">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div class="modal-popup__content">
+        <div *ngIf="isLoading" class="spinner">
+            <app-spinner diameter="35"></app-spinner>
+        </div>
+        <div class="case-results">
+            <div class="case-results__header">
+                <h3><b>Case Varification Number: {{viewCaseResults?.caseNumber}} </b></h3>
+                <div class="case-results__header--download">
+                    <p>Report Prepared: {{reportDate | date: 'MM/dd/yyyy'}}</p>
+                    <button mat-button color='primary' (click)="downloadReport()">
+                        <mat-icon>download</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="case-results__info">
+                <div class="form-l-group__header-hr">
+                    <h3><b>Company Information</b></h3>
+                    <hr>
+                </div>
+                <div class="form-l-group">
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Company ID </b></label>
+                        <p>{{viewCaseResults?.userAccountId}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Company Name </b></label>
+                        <p>{{viewCaseResults?.userAccountName}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Client Company ID </b></label>
+                        <p>{{viewCaseResults?.userAccountId}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Client Company Name </b></label>
+                        <p>{{viewCaseResults?.userAccountName}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="case-results__info">
+                <div class="form-l-group__header-hr">
+                    <h3><b>Employee Information</b></h3>
+                    <hr>
+                </div>
+                <div class="form-l-group">
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Name </b></label>
+                        <p>{{viewCaseResults?.employeeInformation?.firstName + ' ' + viewCaseResults?.employeeInformation?.lastName}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Date Of Birth </b></label>
+                        <p>{{viewCaseResults?.employeeInformation?.dateOfBirth | date: 'MM/dd/yyyy'}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>U.S Social Security Number</b></label>
+                        <p>{{viewCaseResults?.employeeInformation?.ssn}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Employee's First Day of Employment </b></label>
+                        <p>{{viewCaseResults?.additionalDetails?.dateOfHire | date: 'MM/dd/yyyy'}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Citizenship Status </b></label>
+                        <p>{{viewCaseResults?.employeeInformation?.citizenshipStatusDescription}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Alien /USCIS Number </b></label>
+                        <p>{{viewCaseResults?.employeeInformation?.alienNumber}}</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="case-results__info">
+                <div class="form-l-group__header-hr">
+                    <h3><b>Document Information</b></h3>
+                    <hr>
+                </div>
+                <div class="form-l-group" *ngFor="let doc of viewCaseResults?.documentDetails?.documents; let i = index">
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>{{doc?.documentCategoryDisplay}} Document </b></label>
+                        <p>{{doc?.documentTypeDisplay}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Document Number </b></label>
+                        <p>{{doc?.documentNumber}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Expiration Date </b></label>
+                        <p>{{doc?.expirationDate | date: 'MM/dd/yyyy'}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="case-results__info">
+                <div class="form-l-group__header-hr">
+                    <h3><b>Case Information</b></h3>
+                    <hr>
+                </div>
+                <div class="form-l-group">
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Case Status</b></label>
+                        <p>{{viewCaseResults?.caseStatus?.statusDescription}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Case submitted By </b></label>
+                        <p>{{viewCaseResults?.createdByDetails?.firstName + ' ' + viewCaseResults?.createdByDetails?.lastName}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Current Case Result </b></label>
+                        <p>{{viewCaseResults?.caseStatus?.caseEligibilityStatement}}</p>
+                    </div>
+                    <div class="form-l-group__form">
+                        <label for="Company ID "> <b>Reason For Closure </b></label>
+                        <p>{{caseClosureReason}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-popup__footer">
+        <button mat-raised-button color="primary" [mat-dialog-close]="true">Close</button>
+    </div>  
+</div>

@@ -1,0 +1,55 @@
+@import '../../../../../../../styles/utilities/variables';
+.expand-e-verify { 
+  display: flex;
+  font-size: 14px;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 15px;
+  span {
+    border: 1px solid $primary;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 40px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+}
+.card-parent {
+  padding: 10px 15px;
+}
+table {
+  background-color: #fff !important;
+  td {
+    padding: 0 10px;
+  }
+}
+.adl-docs {
+  display: flex;
+  gap: 10px;
+  .reverify {
+    background-color: #ccc;
+    padding: 5px 15px;
+    color: rgb(94, 93, 93);
+    border-radius: 10px;    
+    white-space: nowrap;
+  }
+  .results {
+    background-color: $primary;
+    padding: 5px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    white-space: nowrap;
+  }
+}
+.other-degrees {
+  margin-top: -10px;
+}
+.open{
+    background-color: $primary;
+    color: #fff;
+    transform: rotate(180deg);
+}

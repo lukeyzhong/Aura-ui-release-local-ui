@@ -1,0 +1,129 @@
+@import '../../../../app/styles/utilities/variables';
+.my-docs {
+  flex: 1;
+  min-height: 549px;
+  overflow: auto;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  &__card {
+    padding: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    &--header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      hr {
+        flex-grow: 1;
+        margin: 0 10px;
+      }
+      button {
+        font-family: 'ProximaNova-semibold' !important;
+      }
+      h3 {
+        color: #000;
+        font-size: 14px;
+        font-family: 'ProximaNova-semibold' !important;
+      }
+    }
+    &--content {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 20%;
+      gap: 10px;
+    }
+  }
+  &__img {
+    &--viewer {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  &__pdf {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    &--header {
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      font-family: 'ProximaNova-semibold' !important;
+    }
+    &--viewer {
+      flex: 1;
+      position: relative;
+    }
+  }
+  &__pdf-list {
+    ul {
+      li {
+        height: 35px;
+        padding: 5px 10px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        justify-content: space-between;
+        cursor: pointer;
+        border-radius: 10px;
+        margin-bottom: 3px;
+        &:hover,
+        &.active-doc {
+          background-color: #ddf8ff;
+          button {
+            display: flex;
+          }
+          p {
+            font-family: 'ProximaNova-semibold' !important;
+          }
+        }
+        p {
+          color: $primary;
+          padding: 5px 30px 5px 0;
+          width: 100%;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        button {
+          display: none;
+          background-color: #fff;
+          min-width: auto;
+          width: 24px;
+          height: 24px;
+          padding: 0;
+          align-items: center;
+          justify-content: center;
+          border-radius: 20px;
+          -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+          -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+          ::ng-deep .mat-button-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          mat-icon {
+            font-size: 18px;
+            color: $primary;
+          }
+        }
+      }
+    }
+  }
+}
+
+.no-document {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

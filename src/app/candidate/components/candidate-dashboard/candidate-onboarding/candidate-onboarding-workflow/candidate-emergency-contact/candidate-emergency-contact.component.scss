@@ -1,0 +1,98 @@
+@import '../../../../../../styles/utilities/form-group';
+.emergency-contacts-cnt {
+  padding: 0 15px;
+}
+
+.emergency-contacts {
+  &--footer {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      margin-left: 10px;
+    }
+  }
+}
+.phone-code {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  &__ext {
+    display: flex;
+    justify-content: space-between;
+    &--number {
+      width: 50%;
+    }
+  }
+  &--code {
+    width: 20%;
+  }
+  &--number {
+    flex-grow: 1;
+  }
+  &--ext {
+    width: 25%;
+  }
+}
+.rejected {
+  position: relative;
+  mat-icon {
+    &.info {
+      width: 20px;
+      height: 30px;
+      position: absolute;
+      right: -38px;
+      bottom: 10px;
+      min-width: 25px;
+      padding: 0px;
+      margin: 0;
+      min-height: 18px;
+      color: #0b82c2;
+      cursor: pointer;
+    }
+  }
+}
+div.rejected {
+  color: #f58a8a;
+  background-color: #f7f7f7;
+  border-radius: 5px;
+  border: 1px solid #f58a8a;
+  mat-icon {
+    &.info {
+      right: -30px;
+      bottom: 6px;
+    }
+  }
+}
+
+.rejected {
+  .mat-datepicker-input + mat-datepicker + mat-icon,
+  .mat-datepicker-input + mat-icon {
+    &.info {
+      right: -76px;
+      bottom: 6px;
+    }
+  }
+}
+
+.hr-comment {
+  height: auto;
+  overflow: auto;
+  z-index: 111111;
+  background: #008acc;
+  background: linear-gradient(144deg, #008acc 0%, #163160 100%);
+  width: auto;
+  border-radius: 10px !important;
+  color: #fff;
+  font-size: 13px;
+  padding: 10px 15px;
+}
+.spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+

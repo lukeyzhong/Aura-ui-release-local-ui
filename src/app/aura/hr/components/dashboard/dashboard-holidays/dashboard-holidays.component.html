@@ -1,0 +1,30 @@
+<button class="dashboard__schedules--open-new" (click)="holidayDetails()" mat-button>
+    <span class="material-icons">open_in_new</span>
+</button>
+<div *ngIf="isLoadSpinner; else holidays" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+</div>
+<ng-template #holidays>
+<h4 class="card-title">Holidays</h4>
+<div class="holiday">
+    <div class="holiday__Previous">
+        <button mat-button [style.visibility]="!isMovingBackward ? 'hidden': 'visible'" (click)="movingBackward()">
+            <span class="material-icons">
+                arrow_back_ios_new
+            </span>
+        </button>
+    </div>
+    <div class="holiday__date">
+        <h4>{{name}}</h4>
+        <h3>{{month?.slice(0, 3)}} {{date?.toString()?.length === 1 ? '0' + date : date }}</h3>
+        <h5>{{day}}</h5>
+    </div>
+    <div class="holiday__next">
+        <button mat-button [style.visibility]="!isMovingForward ? 'hidden': 'visible'" (click)="movingForkward()">
+            <span class="material-icons">
+                arrow_forward_ios
+            </span>
+        </button>
+    </div>
+</div>
+</ng-template>

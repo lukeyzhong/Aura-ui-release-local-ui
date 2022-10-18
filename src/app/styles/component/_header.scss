@@ -1,0 +1,24 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 60px;
+    background-image: linear-gradient(to right,
+            rgb(22, 49, 96),
+            rgb(10, 150, 227));
+    padding: 10px;
+
+    justify-content: space-between;
+    width: 100%;
+    
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+
+    img {
+        cursor: pointer;
+        outline: none;
+    }
+}

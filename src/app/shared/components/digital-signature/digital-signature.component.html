@@ -1,0 +1,178 @@
+<div class="signature-parent" [ngClass]="{ preparer: signType === 'Preparer' }">
+  <div class="modal-popup">
+    <div class="modal-popup__content">
+      <div *ngIf="isLoadingSign" class="spinnerSign">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <div class="signature">
+        <h2 class="signature__header">Signature</h2>
+        <mat-tab-group
+          #signOptions
+          animationDuration="0ms"
+          (focusChange)="tabChanged($event)"
+          [selectedIndex]="0"
+          class="signature"
+        >
+          <mat-tab label="Type">
+            <button
+              class="sign-drag__refresh"
+              (click)="clearTypeSign()"
+              mat-button
+              color="primary"
+            >
+              <mat-icon>autorenew</mat-icon>
+            </button>
+            <div class="sign-type">
+              <div #screen class="sign-type--parent">
+                <p
+                  #typeSign
+                  name="typeSign"
+                  (keyup)="clearSign()"
+                  style="border: none"
+                  contenteditable="true"
+                ></p>
+              </div>
+              <div id="download">
+                <div #canvas></div>
+              </div>
+              <hr />
+            </div>
+            <div class="sign-drag__save">
+              <mat-checkbox
+                color="primary"
+                (change)="saveSignatureStatus('Type', $event)"
+                class="example-margin"
+                [checked]="isSignSaved"
+                [disabled]="disableSaveSign"
+                >Save Signature
+              </mat-checkbox>
+            </div>
+          </mat-tab>
+          <mat-tab label="Draw">
+            <button
+              class="sign-drag__refresh"
+              (click)="clearPad()"
+              mat-button
+              color="primary"
+            >
+              <mat-icon>autorenew</mat-icon>
+            </button>
+            <div class="sign-drag" (click)="clearActiveSignSelection()">
+              <canvas #drawCanvas width="400px" height="220px"></canvas>
+            </div>
+
+            <div class="sign-drag__save">
+              <mat-checkbox
+                color="primary"
+                class="example-margin"
+                (change)="saveSignatureStatus('Draw', $event)"
+                [checked]="isSignSaved"
+                [disabled]="disableSaveSign"
+                >Save Signature
+              </mat-checkbox>
+            </div>
+          </mat-tab>
+          <mat-tab label="Upload">
+            <button
+              class="sign-upload__refresh upload-sign__refresh"
+              (click)="imageUrl = ''"
+              mat-button
+              color="primary"
+            >
+              <mat-icon>autorenew</mat-icon>
+            </button>
+            <div class="upload-sign">
+              <div class="modal-popup__file-upload" *ngIf="!imageUrl">
+                <input
+                  type="file"
+                  accept="image/*"
+                  (change)="uploadSignature($event)"
+                />
+                <button class="btn">BROWSE FILE</button>
+                <P>Drag & Drop File here</P>
+                <P class="file-format-msg"
+                  >*Supported File Format (.jpg, .jpeg, .png, .bmp)</P
+                >
+              </div>
+
+              <img
+                width="60%"
+                *ngIf="imageUrl"
+                [src]="imageUrl"
+                class="image"
+              />
+            </div>
+            <div class="sign-drag__save">
+              <mat-checkbox
+                color="primary"
+                class="disable-save"
+                (change)="saveSignatureStatus('Upload', $event)"
+                [checked]="isSignSaved"
+                [disabled]="disableSaveSign"
+                >Save Signature
+              </mat-checkbox>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+        <div class="signature__saved">
+          <div class="signature__saved--header">
+            <h3>Saved Signatures</h3>
+          </div>
+
+          <div class="spinner" *ngIf="isLoading; else signaturesList">
+            <app-spinner diameter="35"></app-spinner>
+          </div>
+          <ng-template #signaturesList>
+            <div class="signature__saved--list">
+              <div *ngIf="errorMessage" class="no-signs-text">
+                <p>
+                  Please logout and
+                  <a href="/login"> {{ errorMessage }}</a> again..!
+                </p>
+              </div>
+              <div *ngFor="let sign of candidateSignatureListResult">
+                <div
+                  class="signature__saved--item-added"
+                  *ngIf="sign?.documentId"
+                  (click)="activeSignature = sign; selectSign(sign)"
+                  [ngClass]="{
+                    'active-sign': activeSignature === sign
+                  }"
+                >
+                  <button
+                    mat-button
+                    color="warn"
+                    (click)="deleteSignature(sign.documentId)"
+                  >
+                    <mat-icon> close </mat-icon>
+                  </button>
+
+                  <div class="signature__saved--img">
+                    <img src="{{ sign.imageBase64String }}" />
+                  </div>
+                </div>
+                <div
+                  *ngIf="!sign?.documentId"
+                  class="signature__saved--item"
+                ></div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="modal-popup__footer">
+      <button mat-stroked-button color="primary" (click)="closePreview()">
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="saveCandidateSignature()"
+      >
+        Add Signature
+      </button>
+    </div>
+  </div>
+</div>

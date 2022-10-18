@@ -1,0 +1,1029 @@
+<div class="employee-details-parent">
+  <div class="employee-details">
+    <div class="employee-details__tabs-content">
+      <!-- PASSPORT INFORMATION BEGIN -->
+      <div class="employee-details__content-header">
+        <h3><b>Passport Information</b></h3>
+        <button mat-button color="primary" (click)="addPassportInfo('Add')">
+          Add New
+        </button>
+      </div>
+      <div class="card-parent">
+        <div class="card" *ngIf="isLoading; else passportData">
+          <div class="spinner">
+            <app-spinner diameter="25"></app-spinner>
+          </div>
+        </div>
+        <ng-template #passportData>
+          <div
+            class="card card-no-data"
+            *ngIf="totalPassportDocs === 0; else PassportDocs"
+          >
+            <div class="no-data">
+              <mat-icon> find_in_page </mat-icon>
+              <h4>Information Not Added</h4>
+            </div>
+          </div>
+          <ng-template #PassportDocs>
+            <div class="card">
+              <div
+                class="card__edit-icon"
+                matTooltip="Edit"
+                (click)="editPassportInfo('Edit', latestPassportInfo)"
+                aria-label="Button that displays a tooltip when focused or hovered over"
+              >
+                <mat-icon>edit</mat-icon>
+              </div>
+              <!-- LATEST PASSPORT INFO BEGIN -->
+              <div class="card-fields">
+                <ul>
+                  <li>
+                    <p class="card-fields__label">Passport Number</p>
+                    <p class="card-fields__value">
+                      {{ latestPassportInfo?.passportNumber }}
+                    </p>
+                  </li>
+                  <li>
+                    <p class="card-fields__label">Issue Date</p>
+                    <p class="card-fields__value">
+                      {{
+                        latestPassportInfo?.passportIssueDate
+                          | date: 'MM-dd-yyyy'
+                      }}
+                    </p>
+                  </li>
+                  <li>
+                    <p class="card-fields__label">Expiry Date</p>
+                    <p class="card-fields__value">
+                      {{
+                        latestPassportInfo?.passportExpiryDate
+                          | date: 'MM-dd-yyyy'
+                      }}
+                    </p>
+                  </li>
+
+                  <li>
+                    <p class="card-fields__label">Issued City</p>
+                    <p class="card-fields__value">
+                      {{ latestPassportInfo?.passportIssuedCity }}
+                    </p>
+                  </li>
+                  <li>
+                    <p class="card-fields__label">Issued Country</p>
+                    <p class="card-fields__value">
+                      {{ latestPassportInfo?.passportIssueCountry }}
+                    </p>
+                  </li>
+                  <li>
+                    <button
+                      [mdePopoverTriggerFor]="passportContent"
+                      class="more-info"
+                    >
+                      <span></span><span></span><span></span>
+                    </button>
+
+                    <mde-popover
+                      #passportContent="mdePopover"
+                      mdePopoverPositionX="after"
+                      [mdeFocusTrapEnabled]="false"
+                      [mdeFocusTrapAutoCaptureEnabled]="false"
+                      [mdePopoverOffsetX]="0"
+                      [mdePopoverOffsetY]="30"
+                    >
+                      <!-- <div class="popover-arrow" id="popover-arrow"></div> -->
+                      <div class="gs-moreinfo">
+                        <div class="gs-moreinfo__row">
+                          <div>
+                            <div class="gs-moreinfo__title">
+                              <b>More Info</b>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="gs-moreinfo__row">
+                          <div>
+                            <div class="gs-moreinfo__lable">Uploaded On</div>
+                            <div class="gs-moreinfo__value">
+                              {{
+                                latestPassportInfo?.createdDateTime
+                                  | date: 'M-d-yyyy h:mm a'
+                              }}
+                            </div>
+                          </div>
+                          <div>
+                            <div class="gs-moreinfo__lable">Uploaded By</div>
+                            <div class="gs-moreinfo__value">
+                              {{ personName }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </mde-popover>
+                  </li>
+                </ul>
+
+                <div class="file-area">
+                  <div
+                    class="document-table"
+                    [ngClass]="{ 'rows-collapse': toggleMoreLessPassport }"
+                    *ngIf="latestPassportInfo?.documents?.length! > 0"
+                  >
+                    <table cellspacing="0">
+                      <tr>
+                        <th width="45%">Document Name</th>
+                        <th width="20%">Description</th>
+                        <th width="20%">Uploaded On</th>
+                        <th>Uploaded By</th>
+                      </tr>
+                      <tr
+                        *ngFor="
+                          let passportDoc of latestPassportInfo?.documents
+                        "
+                      >
+                        <td class="file-name">
+                          <div *ngIf="passportDoc?.fileExtension === '.pdf'">
+                            <img
+                              width="24px"
+                              src="./assets/svg/icn-pdf.svg"
+                              alt=""
+                            />
+                          </div>
+                          <div
+                            *ngIf="
+                              fileExt.includes(passportDoc?.fileExtension!)
+                            "
+                          >
+                            <img
+                              width="24px"
+                              src="./assets/svg/icn-image.svg"
+                              alt=""
+                            />
+                          </div>
+                          <p>{{ passportDoc.displayName }}</p>
+                          <span>
+                            <mat-icon
+                              matTooltip="Preview"
+                              (click)="previewDocument(passportDoc)"
+                              >remove_red_eye
+                            </mat-icon> </span
+                          ><span>
+                            <mat-icon
+                              matTooltip="Download"
+                              (click)="downloadDocument(passportDoc)"
+                              >get_app</mat-icon
+                            >
+                          </span>
+                        </td>
+                        <td>
+                          {{
+                            passportDoc?.fileDescription === 'null'
+                              ? ''
+                              : passportDoc?.fileDescription
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            passportDoc?.createdDateTime
+                              | date: 'M-d-yyyy h:mm a'
+                          }}
+                        </td>
+                        <td>
+                          {{ personName }}
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div
+                    class="min-rows"
+                    *ngIf="latestPassportInfo?.documents?.length! > 1"
+                  >
+                    <button class="show-more-btn" (click)="showMoreLess(1)">
+                      {{ btnMoreLessPassText }}
+                      <mat-icon
+                        [ngClass]="{ less: btnMoreLessPassText === 'Less' }"
+                        >expand_more</mat-icon
+                      >
+                    </button>
+                  </div>
+                  <div
+                    class="no-files"
+                    *ngIf="latestPassportInfo?.documents?.length === 0"
+                  >
+                    <img
+                      src="./assets/svg/no-doc-attached.svg"
+                      width="24px"
+                      alt=""
+                    />
+                    <h4>Documents Not Uploaded</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- LATEST PASSPORT INFO END -->
+
+            <!-- PREVIOUS PASSPORT INFO BEGIN -->
+            <div
+              class="other-degrees"
+              *ngIf="previousPassportDocumentsLength > 0"
+            >
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <h4>
+                      <i class="fas fa-xs fa-info-circle"></i> Previous
+                      Documents
+                      <span class="previous-document-count">{{
+                        previousPassportDocumentsLength
+                      }}</span>
+                    </h4>
+                  </mat-expansion-panel-header>
+                  <ng-template matExpansionPanelContent>
+                    <div>
+                      <div
+                        *ngFor="
+                          let previousPassport of previousPassportResult;
+                          let i = index
+                        "
+                      >
+                        <div class="card">
+                          <div class="card__edit-icon" title="Edit">
+                            <mat-icon
+                              (click)="
+                                editPassportInfo('Edit', previousPassport)
+                              "
+                              >edit</mat-icon
+                            >
+                          </div>
+                          <div class="card-fields">
+                            <ul>
+                              <li>
+                                <p class="card-fields__label">
+                                  Passport Number
+                                </p>
+                                <p class="card-fields__value">
+                                  {{ previousPassport?.passportNumber }}
+                                </p>
+                              </li>
+                              <li>
+                                <p class="card-fields__label">Issue Date</p>
+                                <p class="card-fields__value">
+                                  {{
+                                    previousPassport?.passportIssueDate
+                                      | date: 'MM-dd-yyyy'
+                                  }}
+                                </p>
+                              </li>
+                              <li>
+                                <p class="card-fields__label">Expiry Date</p>
+                                <p class="card-fields__value">
+                                  {{
+                                    previousPassport?.passportExpiryDate
+                                      | date: 'MM-dd-yyyy'
+                                  }}
+                                </p>
+                              </li>
+                              <li>
+                                <p class="card-fields__label">Issued City</p>
+                                <p class="card-fields__value">
+                                  {{ previousPassport?.passportIssuedCity }}
+                                </p>
+                              </li>
+                              <li>
+                                <p class="card-fields__label">Issued Country</p>
+                                <p class="card-fields__value">
+                                  {{ previousPassport?.passportIssueCountry }}
+                                </p>
+                              </li>
+                              <li class="more-info">
+                                <button
+                                  [mdePopoverTriggerFor]="passportContent"
+                                >
+                                  <span></span><span></span><span></span>
+                                </button>
+
+                                <mde-popover
+                                  #passportContent="mdePopover"
+                                  mdePopoverPositionX="after"
+                                  [mdeFocusTrapEnabled]="false"
+                                  [mdeFocusTrapAutoCaptureEnabled]="false"
+                                  [mdePopoverOffsetX]="155"
+                                  [mdePopoverOffsetY]="30"
+                                >
+                                  <div
+                                    class="popover-arrow"
+                                    id="popover-arrow"
+                                  ></div>
+                                  <div class="gs-moreinfo">
+                                    <div class="gs-moreinfo__row">
+                                      <div>
+                                        <div class="gs-moreinfo__title">
+                                          <b>More Info</b>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="gs-moreinfo__row">
+                                      <div>
+                                        <div class="gs-moreinfo__lable">
+                                          Uploaded On
+                                        </div>
+                                        <div class="gs-moreinfo__value">
+                                          {{
+                                            previousPassport?.createdDateTime
+                                              | date: 'M-d-yyyy h:mm a'
+                                          }}
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <div class="gs-moreinfo__lable">
+                                          Uploaded By
+                                        </div>
+                                        <div class="gs-moreinfo__value">
+                                          {{ personName }}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </mde-popover>
+                              </li>
+                            </ul>
+
+                            <div class="file-area">
+                              <div
+                                class="document-table"
+                                [ngClass]="{
+                                  'rows-collapse': passportMoreOrLess[i]
+                                }"
+                                *ngIf="previousPassport?.documents?.length! > 0"
+                              >
+                                <table cellspacing="0">
+                                  <tr>
+                                    <th width="45%">Document Name</th>
+                                    <th width="20%">Description</th>
+                                    <th width="20%">Uploaded On</th>
+                                    <th>Uploaded By</th>
+                                  </tr>
+                                  <tr
+                                    *ngFor="
+                                      let previousPassportDoc of previousPassport?.documents
+                                    "
+                                  >
+                                    <td class="file-name">
+                                      <div
+                                        *ngIf="
+                                          previousPassportDoc?.fileExtension ===
+                                          '.pdf'
+                                        "
+                                      >
+                                        <img
+                                          width="24px"
+                                          src="./assets/svg/icn-pdf.svg"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div
+                                        *ngIf="
+                                          fileExt.includes(
+                                            previousPassportDoc?.fileExtension!
+                                          )
+                                        "
+                                      >
+                                        <img
+                                          width="24px"
+                                          src="./assets/svg/icn-image.svg"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <p>
+                                        {{ previousPassportDoc.displayName }}
+                                      </p>
+                                      <span>
+                                        <mat-icon
+                                          matTooltip="Preview"
+                                          (click)="
+                                            previewDocument(previousPassportDoc)
+                                          "
+                                          >remove_red_eye</mat-icon
+                                        > </span
+                                      ><span>
+                                        <mat-icon
+                                          matTooltip="Download"
+                                          (click)="
+                                            downloadDocument(
+                                              previousPassportDoc
+                                            )
+                                          "
+                                          >get_app</mat-icon
+                                        >
+                                      </span>
+                                    </td>
+                                    <td>
+                                      {{
+                                        previousPassportDoc?.fileDescription ===
+                                        'null'
+                                          ? ''
+                                          : previousPassportDoc?.fileDescription
+                                      }}
+                                    </td>
+                                    <td>
+                                      {{
+                                        previousPassportDoc?.createdDateTime
+                                          | date: 'M-d-yyyy h:mm a'
+                                      }}
+                                    </td>
+                                    <td>
+                                      {{ personName }}
+                                    </td>
+                                  </tr>
+                                </table>
+                              </div>
+                              <div
+                                class="min-rows"
+                                *ngIf="previousPassport?.documents?.length! > 1"
+                              >
+                                <button
+                                  class="show-more-btn"
+                                  (click)="
+                                    passportMoreOrLess[i] =
+                                      !passportMoreOrLess[i];
+                                    showMoreLessPassport(i)
+                                  "
+                                >
+                                  {{ btnMoreLessPassportText[i] }}
+                                  <mat-icon
+                                    [ngClass]="{
+                                      less:
+                                        btnMoreLessPassportText[i] === 'Less'
+                                    }"
+                                    >expand_more</mat-icon
+                                  >
+                                </button>
+                              </div>
+                              <div
+                                class="no-files"
+                                *ngIf="
+                                  previousPassport?.documents?.length === 0
+                                "
+                              >
+                                <img
+                                  src="./assets/svg/no-doc-attached.svg"
+                                  width="24px"
+                                  alt=""
+                                />
+                                <h4>Documents Not Uploaded</h4>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </ng-template>
+        </ng-template>
+        <!-- PREVIOUS PASSPORT INFO END -->
+      </div>
+      <!-- PASSPORT INFORMATION END -->
+
+      <hr />
+      <!-- SSN INFORMATION BEGIN -->
+      <div class="employee-details__content-header">
+        <h3><b>SSN Information</b></h3>
+      </div>
+      <div class="card-parent">
+        <div class="card" *ngIf="isLoading; else ssnData">
+          <div class="spinner">
+            <app-spinner diameter="25"></app-spinner>
+          </div>
+        </div>
+        <ng-template #ssnData>
+          <div class="card card-no-data" *ngIf="ssn === null; else SSNDocs">
+            <div class="no-data">
+              <mat-icon> find_in_page </mat-icon>
+              <h4>Information Not Added</h4>
+            </div>
+          </div>
+          <ng-template #SSNDocs>
+            <div class="card">
+              <div class="card-fields">
+                <ul>
+                  <li>
+                    <p class="card-fields__label">SSN Number</p>
+                    <p class="card-fields__value">
+                      {{ ssn }}
+                    </p>
+                  </li>
+                  <li>
+                    <p class="card-fields__label">Document Purpose</p>
+                    <p class="card-fields__value">SSN</p>
+                  </li>
+                  <li>
+                    <p class="card-fields__label">Description</p>
+                    <p class="card-fields__value">SSN Information</p>
+                  </li>
+                  <li>
+                    <p class="card-fields__label">Uploaded On</p>
+                    <p class="card-fields__value">
+                      {{
+                        ssnDocumentInfo
+                          ? (ssnDocumentInfo[0]?.createdDateTime
+                            | date: 'M-d-yyyy h:mm a')
+                          : '-'
+                      }}
+                    </p>
+                  </li>
+                  <li>
+                    <p class="card-fields__label">Uploaded By</p>
+                    <p class="card-fields__value">
+                      {{ personName }}
+                    </p>
+                  </li>
+                </ul>
+
+                <div class="file-area">
+                  <div
+                    class="document-table"
+                    [ngClass]="{ 'rows-collapse': toggleMoreLessSSN }"
+                    *ngIf="totalSSNFiles > 0"
+                  >
+                    <table cellspacing="0">
+                      <tr>
+                        <th width="45%">Document Name</th>
+                        <th width="20%">Description</th>
+                        <th width="20%">Uploaded On</th>
+                        <th>Uploaded By</th>
+                      </tr>
+                      <tr *ngFor="let ssnDoc of ssnDocumentInfo">
+                        <td class="file-name">
+                          <div *ngIf="ssnDoc?.fileExtension === '.pdf'">
+                            <img
+                              width="24px"
+                              src="./assets/svg/icn-pdf.svg"
+                              alt=""
+                            />
+                          </div>
+                          <div *ngIf="fileExt.includes(ssnDoc?.fileExtension!)">
+                            <img
+                              width="24px"
+                              src="./assets/svg/icn-image.svg"
+                              alt=""
+                            />
+                          </div>
+                          <p>{{ ssnDoc.displayName }}</p>
+                          <span>
+                            <mat-icon
+                              matTooltip="Preview"
+                              (click)="previewDocument(ssnDoc)"
+                              >remove_red_eye</mat-icon
+                            > </span
+                          ><span>
+                            <mat-icon
+                              matTooltip="Download"
+                              (click)="downloadDocument(ssnDoc)"
+                              >get_app</mat-icon
+                            >
+                          </span>
+                        </td>
+                        <td>
+                          {{
+                            ssnDoc?.fileDescription === 'null'
+                              ? ''
+                              : ssnDoc?.fileDescription
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            ssnDoc?.createdDateTime | date: 'M-d-yyyy h:mm a'
+                          }}
+                        </td>
+                        <td>
+                          {{ personName }}
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="min-rows" *ngIf="totalSSNFiles > 1">
+                    <button class="show-more-btn" (click)="showMoreLess(2)">
+                      {{ btnMoreLessSSNText }}
+                      <mat-icon
+                        [ngClass]="{ less: btnMoreLessSSNText === 'Less' }"
+                        >expand_more</mat-icon
+                      >
+                    </button>
+                  </div>
+                  <div class="no-files" *ngIf="totalSSNFiles === 0">
+                    <img
+                      src="./assets/svg/no-doc-attached.svg"
+                      width="24px"
+                      alt=""
+                    />
+                    <h4>Documents Not Uploaded</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>
+      </div>
+      <!-- SSN INFORMATION END -->
+      <hr />
+
+      <!-- DRIVING LICENSE INFORMATION BEGIN -->
+      <div class="employee-details__content-header">
+        <h3><b>Driving License Information</b></h3>
+        <button
+          mat-button
+          color="primary"
+          (click)="addDrivingLicenseInfo('Add')"
+        >
+          Add New
+        </button>
+      </div>
+
+      <div class="card-parent">
+        <div class="card" *ngIf="isLoading; else dlData">
+          <div class="spinner">
+            <app-spinner diameter="25"></app-spinner>
+          </div>
+        </div>
+        <ng-template #dlData>
+          <div class="card card-no-data" *ngIf="totalDLDocs === 0; else DLDocs">
+            <div class="no-data">
+              <mat-icon> find_in_page </mat-icon>
+              <h4>Information Not Added</h4>
+            </div>
+          </div>
+          <ng-template #DLDocs>
+            <div class="card">
+              <div
+                class="card__edit-icon"
+                matTooltip="Edit"
+                aria-label="Button that displays a tooltip when focused or hovered over"
+              >
+                <mat-icon
+                  (click)="
+                    editDrivingLicenseInfo('Edit', latestDrivingLicenseInfo)
+                  "
+                  >edit</mat-icon
+                >
+              </div>
+              <div class="card-fields">
+                <ul>
+                  <li>
+                    <p class="card-fields__label">License Number</p>
+                    <p class="card-fields__value">
+                      {{ latestDrivingLicenseInfo?.drivingLicenseNo }}
+                    </p>
+                  </li>
+
+                  <li>
+                    <p class="card-fields__label">Issued Date</p>
+                    <p class="card-fields__value">
+                      {{
+                        latestDrivingLicenseInfo?.issueDate | date: 'MM-dd-yyyy'
+                      }}
+                    </p>
+                  </li>
+
+                  <li>
+                    <p class="card-fields__label">Expiry Date</p>
+                    <p class="card-fields__value">
+                      {{
+                        latestDrivingLicenseInfo?.expiryDate
+                          | date: 'MM-dd-yyyy'
+                      }}
+                    </p>
+                  </li>
+                  <li>
+                    <p class="card-fields__label">Location</p>
+                    <p class="card-fields__value">
+                      {{ latestDLLocation }}
+                    </p>
+                  </li>
+                  <li>
+                    <p class="card-fields__label">Purpose</p>
+                    <p class="card-fields__value">Driving License</p>
+                  </li>
+                </ul>
+
+                <div class="file-area">
+                  <div
+                    class="document-table"
+                    [ngClass]="{ 'rows-collapse': toggleMoreLessDL }"
+                    *ngIf="latestDrivingLicenseInfo?.documents?.length! > 0"
+                  >
+                    <table cellspacing="0">
+                      <tr>
+                        <th width="45%">Document Name</th>
+                        <th width="20%">Description</th>
+                        <th width="20%">Uploaded On</th>
+                        <th>Uploaded By</th>
+                      </tr>
+                      <tr
+                        *ngFor="
+                          let drivingLicenseDoc of latestDrivingLicenseInfo?.documents
+                        "
+                      >
+                        <td class="file-name">
+                          <div
+                            *ngIf="drivingLicenseDoc?.fileExtension === '.pdf'"
+                          >
+                            <img
+                              width="24px"
+                              src="./assets/svg/icn-pdf.svg"
+                              alt=""
+                            />
+                          </div>
+                          <div
+                            *ngIf="
+                              fileExt.includes(
+                                drivingLicenseDoc?.fileExtension!
+                              )
+                            "
+                          >
+                            <img
+                              width="24px"
+                              src="./assets/svg/icn-image.svg"
+                              alt=""
+                            />
+                          </div>
+                          <p>{{ drivingLicenseDoc.displayName }}</p>
+                          <span>
+                            <mat-icon
+                              matTooltip="Preview"
+                              (click)="previewDocument(drivingLicenseDoc)"
+                              >remove_red_eye
+                            </mat-icon> </span
+                          ><span>
+                            <mat-icon
+                              matTooltip="Download"
+                              (click)="downloadDocument(drivingLicenseDoc)"
+                              >get_app
+                            </mat-icon>
+                          </span>
+                        </td>
+                        <td>
+                          {{
+                            drivingLicenseDoc?.fileDescription === 'null'
+                              ? ''
+                              : drivingLicenseDoc?.fileDescription
+                          }}
+                        </td>
+                        <td>
+                          {{
+                            drivingLicenseDoc?.createdDateTime
+                              | date: 'M-d-yyyy h:mm a'
+                          }}
+                        </td>
+                        <td>
+                          {{ personName }}
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div
+                    class="min-rows"
+                    *ngIf="latestDrivingLicenseInfo?.documents?.length! > 1"
+                  >
+                    <button class="show-more-btn" (click)="showMoreLess(3)">
+                      {{ btnMoreLessDrivLText }}
+                      <mat-icon
+                        [ngClass]="{ less: btnMoreLessDrivLText === 'Less' }"
+                        >expand_more</mat-icon
+                      >
+                    </button>
+                  </div>
+                  <div
+                    class="no-files"
+                    *ngIf="latestDrivingLicenseInfo?.documents?.length === 0"
+                  >
+                    <img
+                      src="./assets/svg/no-doc-attached.svg"
+                      width="24px"
+                      alt=""
+                    />
+                    <h4>Documents Not Uploaded</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="other-degrees"
+              *ngIf="previousDrivingLicenseDocumentsLength > 0"
+            >
+              <mat-accordion>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    <h4>
+                      <i class="fas fa-xs fa-info-circle"></i> Previous
+                      Documents
+                      <span class="previous-document-count">{{
+                        previousDrivingLicenseDocumentsLength
+                      }}</span>
+                    </h4>
+                  </mat-expansion-panel-header>
+                  <ng-template matExpansionPanelContent>
+                    <div>
+                      <div
+                        *ngFor="
+                          let previousDrivingLicense of previousDrivingLicenseResult;
+                          let i = index
+                        "
+                      >
+                        <div class="card">
+                          <div class="card__edit-icon" title="Edit">
+                            <mat-icon
+                              (click)="
+                                editDrivingLicenseInfo(
+                                  'Edit',
+                                  previousDrivingLicense
+                                )
+                              "
+                              >edit</mat-icon
+                            >
+                          </div>
+                          <div class="card-fields">
+                            <ul>
+                              <li>
+                                <p class="card-fields__label">License Number</p>
+                                <p class="card-fields__value">
+                                  {{ previousDrivingLicense?.drivingLicenseNo }}
+                                </p>
+                              </li>
+
+                              <li>
+                                <p class="card-fields__label">Issued Date</p>
+                                <p class="card-fields__value">
+                                  {{
+                                    previousDrivingLicense?.issueDate
+                                      | date: 'MM-dd-yyyy'
+                                  }}
+                                </p>
+                              </li>
+
+                              <li>
+                                <p class="card-fields__label">Expiry Date</p>
+                                <p class="card-fields__value">
+                                  {{
+                                    previousDrivingLicense?.expiryDate
+                                      | date: 'MM-dd-yyyy'
+                                  }}
+                                </p>
+                              </li>
+                              <li>
+                                <p class="card-fields__label">Location</p>
+                                <p class="card-fields__value">
+                                  {{
+                                    getLocation(previousDrivingLicense.location)
+                                  }}
+                                </p>
+                              </li>
+                              <li>
+                                <p class="card-fields__label">Purpose</p>
+                                <p class="card-fields__value">
+                                  Driving License
+                                </p>
+                              </li>
+                            </ul>
+
+                            <div class="file-area">
+                              <div
+                                class="document-table"
+                                [ngClass]="{
+                                  'rows-collapse': dlMoreOrLess[i]
+                                }"
+                                *ngIf="
+                                  previousDrivingLicense?.documents?.length! > 0
+                                "
+                              >
+                                <table cellspacing="0">
+                                  <tr>
+                                    <th width="45%">Document Name</th>
+                                    <th width="20%">Description</th>
+                                    <th width="20%">Uploaded On</th>
+                                    <th>Uploaded By</th>
+                                  </tr>
+                                  <tr
+                                    *ngFor="
+                                      let previousLicenseDoc of previousDrivingLicense?.documents
+                                    "
+                                  >
+                                    <td class="file-name">
+                                      <div
+                                        *ngIf="
+                                          previousLicenseDoc?.fileExtension ===
+                                          '.pdf'
+                                        "
+                                      >
+                                        <img
+                                          width="24px"
+                                          src="./assets/svg/icn-pdf.svg"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <div
+                                        *ngIf="
+                                          fileExt.includes(
+                                            previousLicenseDoc?.fileExtension!
+                                          )
+                                        "
+                                      >
+                                        <img
+                                          width="24px"
+                                          src="./assets/svg/icn-image.svg"
+                                          alt=""
+                                        />
+                                      </div>
+                                      <p>
+                                        {{ previousLicenseDoc.displayName }}
+                                      </p>
+                                      <span>
+                                        <mat-icon
+                                          matTooltip="Preview"
+                                          (click)="
+                                            previewDocument(previousLicenseDoc)
+                                          "
+                                          >remove_red_eye</mat-icon
+                                        > </span
+                                      ><span>
+                                        <mat-icon
+                                          matTooltip="Download"
+                                          (click)="
+                                            downloadDocument(previousLicenseDoc)
+                                          "
+                                          >get_app</mat-icon
+                                        >
+                                      </span>
+                                    </td>
+                                    <td>
+                                      {{
+                                        previousLicenseDoc?.fileDescription ===
+                                        'null'
+                                          ? ''
+                                          : previousLicenseDoc?.fileDescription
+                                      }}
+                                    </td>
+                                    <td>
+                                      {{
+                                        previousLicenseDoc?.createdDateTime
+                                          | date: 'M-d-yyyy h:mm a'
+                                      }}
+                                    </td>
+                                    <td>
+                                      {{ personName }}
+                                    </td>
+                                  </tr>
+                                </table>
+                              </div>
+                              <div
+                                class="min-rows"
+                                *ngIf="
+                                  previousDrivingLicense?.documents?.length! > 1
+                                "
+                              >
+                                <button
+                                  class="show-more-btn"
+                                  (click)="
+                                    dlMoreOrLess[i] = !dlMoreOrLess[i];
+                                    showMoreLessDrivingLicense(i)
+                                  "
+                                >
+                                  {{ btnMoreLessDLText[i] }}
+                                  <mat-icon
+                                    [ngClass]="{
+                                      less: btnMoreLessDLText[i] === 'Less'
+                                    }"
+                                    >expand_more</mat-icon
+                                  >
+                                </button>
+                              </div>
+                              <div
+                                class="no-files"
+                                *ngIf="
+                                  previousDrivingLicense?.documents?.length ===
+                                  0
+                                "
+                              >
+                                <img
+                                  src="./assets/svg/no-doc-attached.svg"
+                                  width="24px"
+                                  alt=""
+                                />
+                                <h4>Documents Not Uploaded</h4>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-template>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </ng-template>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

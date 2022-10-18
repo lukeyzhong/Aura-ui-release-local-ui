@@ -1,0 +1,276 @@
+@import '../../../../styles/utilities/variables';
+.candidate-dboard {
+  height: Calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+}
+.can-db {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #ededed;
+  &__banner {
+    min-height: 80px;
+    background-image: url('^assets/svg/candidate-dashboard/B1.svg');
+    background-size: 100%;
+    background-position: bottom;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 50px;
+  }
+  &__wlcm-note {
+    bottom: 20px;
+    right: 30px;
+    position: absolute;
+    font-size: 22px;
+    font-family: 'Brush Script MT', cursive !important;
+    span {
+      font-size: 20px;
+    }
+  }
+}
+.cnd-content {
+  padding: 15px;
+  background-color: #f0f0f0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.job-card {
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #fff;
+  display: grid;
+  grid-template-columns: minmax(500px, 1fr) auto;
+  gap: 10px;
+  @media (max-width: 500px) {
+    grid-template-columns: repeat(minmax(500px, 1fr), 1fr);
+  }
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  gap: 15px;
+  &__profile {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(1, 1fr);
+      gap: 10px;
+    }
+    background-color: #b7e7da;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+  }
+  &__about {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &--header {
+      color: $primary;
+      font-size: 18px;
+      font-family: 'ProximaNova-bold' !important;
+    }
+    p {
+      font-size: 15px;
+      line-height: 3.5vh;
+      font-family: 'ProximaNova-Regular' !important;
+    }
+  }
+}
+.candidate {
+  &__profile {
+    display: flex;
+    padding-right: 15px;
+    border-right: 2px solid #000;
+    align-items: center;
+    @media (max-width: 768px) {
+      padding-bottom: 10px;
+      border-bottom: 2px solid #000;
+      border-right: 0;
+    }
+    &--pic {
+      padding: 0;
+      border-radius: 100px;
+      max-width: 100px;
+      min-width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      margin-right: 15px;
+      overflow: hidden;
+
+      img {
+        min-width: 100%;
+        min-height: 100%;
+      }
+    }
+    &--details {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      h2 {
+        font-family: 'ProximaNova-bold' !important;
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      h4 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  &__contact {
+    padding-left: 15px;
+    flex-grow: 1;
+    overflow: hidden;
+    ul {
+      width: 100%;
+      li {
+        padding: 5px 0;
+        font-family: 'ProximaNova-Regular' !important;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        mat-icon {
+          margin-right: 10px;
+          font-size: 14px !important;
+          min-width: 24px;
+        }
+        p {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+  }
+}
+.row {
+  padding-left: 0 10px;
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 25% Calc(50% - 20px) 25%;
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  gap: 10px;
+  flex: 1;
+
+  &__card {
+    position: relative;
+    padding: 7px 15px 10px;
+    border-radius: 10px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    &--header {
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      h3 {
+        font-family: 'ProximaNova-semibold' !important;
+        font-size: 14px;
+      }
+      button {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        min-width: 32px;
+        height: 32px;
+        width: 32px;
+        ::ng-deep .mat-button-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          mat-icon {
+            color: #818181;
+          }
+        }
+      }
+    }
+  }
+}
+.tasks {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.no-jobs {
+  border-radius: 136px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 220px;
+  height: 220px;
+  background-color: #fff9f5;
+  img {
+    padding-bottom: 15px;
+  }
+  h4 {
+    color: $primary;
+    font-family: 'ProximaNova-semibold' !important;
+  }
+  &__alert {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.apld-jobs {
+  height: Calc(100vh - 413px);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  &__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+}
+.task-list {
+  height: Calc(100vh - 413px);
+  overflow: auto;
+  // &__items {
+  // }
+  .mat-list-item {
+    cursor: pointer;
+    height: 30px;
+    mat-icon {
+      font-size: 14px;
+      color: #e58382;
+    }
+    &:hover {
+      // background-color: #eaf3f7;
+      border-radius: 10px;
+    }
+    &.pending {
+      color: #e58382;
+    }
+  }
+}
+.spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  &.profile-card {
+    background-color: rgba(183, 231, 218, 0.9);
+  }
+}

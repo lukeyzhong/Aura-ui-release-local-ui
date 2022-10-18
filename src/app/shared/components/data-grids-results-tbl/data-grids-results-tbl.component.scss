@@ -1,0 +1,113 @@
+.adp__tbl {
+  table {
+    width: 100%;
+
+    th {
+      padding: 12px 10px;
+
+      &:nth-child(2) {
+        border-right: 0;
+        width: 28px;
+        padding: 10px 5px 10px 10px;
+      }
+
+      &:nth-child(3) {
+        padding: 10px 10px 10px 0px;
+      }
+
+    }
+
+    td {
+      padding: 5px 10px;
+
+      &:nth-child(2) {
+        border-right: 0;
+        padding: 10px 5px 10px 10px;
+      }
+
+      &:nth-child(3) {
+        padding: 10px 10px 10px 0px;
+      }
+
+    }
+  }
+}
+
+.spinner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-data-display {
+  display: block;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.54);
+  border-bottom: 1px solid #ccc;
+}
+
+.edit-icon {
+  display: block;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  padding: 0;
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ::ng-deep .mat-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  mat-icon {
+    font-size: 18px;
+  }
+}
+
+.actions-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+::ng-deep .mat-icon-button.mat-button-disabled.mat-button-disabled {
+  background-color: transparent;
+  border: none;
+}
+
+::ng-deep .mat-paginator {
+  background: transparent !important;
+}
+
+.btnprnt {
+  display: flex;
+
+  button {
+    margin-left: 10px;
+  }
+}
+
+.employee {
+  display: flex;
+  align-items: center;
+
+  img {
+    border-radius: 40px;
+  }
+
+  label {
+    color: blue;
+  }
+}

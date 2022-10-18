@@ -1,0 +1,44 @@
+<div class="p-roll">
+  <button
+    mat-button
+    class="dashboard__schedules--open-new"
+    (click)="openPayRollDialog()"
+  >
+    <mat-icon> open_in_new </mat-icon>
+  </button>
+  <div class="spinner" *ngIf="isLoading; else payRollCalendar">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <ng-template #payRollCalendar>
+    <div class="card-title">Upcoming Payroll - {{ currentDate?.year }}</div>
+    <div class="holiday">
+      <div
+        class="holiday__Previous"
+        [style.visibility]="!isPrevious ? 'hidden' : 'visible'"
+        (click)="previous()"
+      >
+        <button mat-button>
+          <span class="material-icons"> arrow_back_ios_new </span>
+        </button>
+      </div>
+      <div class="holiday__date">
+        <h3>
+          {{ payMonth?.slice(0, 3) }}
+          {{ payDate?.toString()?.length === 1 ? '0' + payDate : payDate }}
+        </h3>
+        <h5>{{ payDay }}</h5>
+        <p>Timesheet submission date</p>
+        <p class="holiday__date--dt">{{ subDate | date: 'MM/dd/yyyy' }}</p>
+      </div>
+      <div class="holiday__next">
+        <button
+          mat-button
+          [style.visibility]="!isNext ? 'hidden' : 'visible'"
+          (click)="next()"
+        >
+          <span class="material-icons"> arrow_forward_ios </span>
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</div>

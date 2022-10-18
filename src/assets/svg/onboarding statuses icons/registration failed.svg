@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="21.025" height="21.088" viewBox="0 0 21.025 21.088">
+  <g id="Order_history" transform="translate(-44.984 -48)">
+    <path id="Path_15637" data-name="Path 15637" d="M55.012,67.723H46.238a7.485,7.485,0,0,0,1.569-4.612V48.789H61.343v7.553a.389.389,0,1,0,.778,0V48.394A.392.392,0,0,0,61.732,48H47.418a.392.392,0,0,0-.389.394V63.111A6.69,6.69,0,0,1,45.1,67.839a.4.4,0,0,0-.084.43.389.389,0,0,0,.359.243h9.639a.395.395,0,0,0,0-.789Z" fill="#fff"/>
+    <path id="Path_15639" data-name="Path 15639" d="M153.216,203.4a.431.431,0,0,0-.431-.431h-9.879a.431.431,0,0,0,0,.861h9.879A.431.431,0,0,0,153.216,203.4Z" transform="translate(-93.238 -145.304)" fill="#fff"/>
+    <path id="Path_15640" data-name="Path 15640" d="M148.923,257.6a.43.43,0,0,0-.431-.431h-5.585a.431.431,0,0,0,0,.861h5.585A.431.431,0,0,0,148.923,257.6Z" transform="translate(-92.873 -196.845)" fill="#fff"/>
+    <path id="Path_15641" data-name="Path 15641" d="M142.907,311.375a.431.431,0,1,0,0,.861h3.513a.431.431,0,1,0,0-.861Z" transform="translate(-92.797 -248.385)" fill="#fff"/>
+    <path id="Path_15689" data-name="Path 15689" d="M142.907,311.375a.431.431,0,1,0,0,.861h3.513a.431.431,0,1,0,0-.861Z" transform="translate(-86.872 -256.374)" fill="#fff"/>
+    <path id="Path_15690" data-name="Path 15690" d="M142.907,311.375a.431.431,0,1,0,0,.861h3.513a.431.431,0,1,0,0-.861Z" transform="translate(-86.872 -258.425)" fill="#fff"/>
+    <g id="Group_4021" data-name="Group 4021" transform="translate(49.45 50.567)">
+      <g id="Group_4021-2" data-name="Group 4021" transform="translate(1.25)">
+        <path id="Path_15687" data-name="Path 15687" d="M7.75,5.5A1.25,1.25,0,1,1,9,4.25,1.252,1.252,0,0,1,7.75,5.5Zm0-1.875a.625.625,0,1,0,.625.625A.626.626,0,0,0,7.75,3.625Z" transform="translate(-6.5 -3)" fill="#fff"/>
+      </g>
+      <g id="Group_4022" data-name="Group 4022" transform="translate(0 3.126)">
+        <path id="Path_15688" data-name="Path 15688" d="M9.189,10.5a.313.313,0,0,1-.313-.313V9.563a.939.939,0,0,0-.938-.938H6.063a.939.939,0,0,0-.938.938v.625a.313.313,0,0,1-.625,0V9.563A1.565,1.565,0,0,1,6.063,8H7.938A1.565,1.565,0,0,1,9.5,9.563v.625A.313.313,0,0,1,9.189,10.5Z" transform="translate(-4.5 -8)" fill="#fff"/>
+      </g>
+    </g>
+    <g id="Ellipse_324" data-name="Ellipse 324" transform="translate(57.292 60.371)" fill="none" stroke="#fff" stroke-width="0.8">
+      <circle cx="4.359" cy="4.359" r="4.359" stroke="none"/>
+      <circle cx="4.359" cy="4.359" r="3.959" fill="none"/>
+    </g>
+    <text id="_" data-name="!" transform="translate(61.121 67.088)" fill="#fff" font-size="6" font-family="ProximaNova-Bold, Proxima Nova" font-weight="700"><tspan x="0" y="0">!</tspan></text>
+  </g>
+</svg>

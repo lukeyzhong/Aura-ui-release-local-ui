@@ -1,0 +1,94 @@
+@import 'variables';
+::ng-deep .mat-tab-label {
+  height: 38px !important;
+  position: relative !important;
+  color: #333;
+  padding: 0 !important;
+  font-size: 16px;
+  background-color: #ccc;
+  border-radius: 0 10px 0 10px;
+  overflow: visible;
+  margin-right: 2px;
+  opacity: 1 !important;
+  font-weight: 300;
+  width: auto;
+  min-width: auto !important;
+  font-family: 'ProximaNova-light' !important;
+  .mat-tab-label-content {
+    font-size: 14px !important;
+    padding: 0 10px;
+  }
+  &:after {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 26px;
+    position: absolute;
+    border-radius: 0 0 0 10px !important;
+    bottom: 0 !important;
+    right: -18px;
+    box-shadow: -6px 13px 0 0 #ccc !important;
+  }
+  &::before {
+    content: '';
+    display: block;
+    width: 16px;
+    overflow: hidden;
+    height: 100%;
+    position: absolute;
+    border-radius: 0px 8px 0px 0px;
+    top: 0;
+    right: 100%;
+    box-shadow: 4px -21px 0 0 #ccc;
+  }
+  &:first-child::before {
+    display: block;
+    border-radius: 0 0 10px 0;
+    box-shadow: 8px 12px 0 0 #ccc !important;
+    width: 20px;
+    top: 0;
+  }
+  &:first-child {
+    border-radius: 10px 10px 0 0 !important;
+  }
+}
+
+::ng-deep .mat-tab-group {
+  .mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination {
+    display: none;
+  }
+}
+
+::ng-deep .mat-ink-bar {
+  visibility: hidden !important;
+}
+::ng-deep .mat-tab-header {
+  border-bottom: none;
+}
+::ng-deep .mat-tab-label-active {
+  background-color: $primary !important;
+  color: #fff !important;
+  border-radius: 0px 10px 0 10px !important;
+  font-family: 'ProximaNova-Regular' !important;
+  &:after {
+    box-shadow: -10px 10px 0 0 $primary !important;
+  }
+  &::before {
+    box-shadow: 10px -14px 0 0 $primary !important;
+  }
+  &:first-child::before {
+    box-shadow: 8px 12px 0 0 $primary !important;
+  }
+}
+::ng-deep .mat-tab-body {
+  min-height: 310px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+::ng-deep .mat-tab-body-content {
+  border: 1px solid #ccc !important;
+  border-radius: 10px !important;
+  background-color: #fff !important;
+  overflow: hidden !important;
+  font-size: 16px;
+}

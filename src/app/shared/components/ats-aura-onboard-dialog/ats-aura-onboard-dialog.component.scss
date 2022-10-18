@@ -1,0 +1,58 @@
+@import '../../../styles/utilities/variables';
+::ng-deep .ats-aura-timer {
+  .mat-dialog-container {
+    padding: 0 !important;
+    background-color: #e5fcfb;
+  }
+}
+
+.timer {
+  border-radius: 10px;
+  padding: 20px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  button {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+.timer-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  padding: 25px 0;
+  mat-icon {
+    margin-right: 25px;
+    font-size: 50px;
+    color: $primary;
+  }
+  p {
+    text-align: center;
+    font-size: 14px;
+    font-family: 'ProximaNova-semibold' !important;
+  }
+}
+.time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__count {
+    color: #e79f1c;
+    p {
+      font-size: 22px;
+      &:nth-child(2) {
+        font-size: 14px;
+      }
+    }
+  }
+  span {
+    position: absolute;
+    font-size: 20px;
+    font-family: 'ProximaNova-bold' !important;
+  }
+}

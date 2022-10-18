@@ -1,0 +1,153 @@
+@import '../../../../../../styles/utilities/variables';
+.modal-popup {
+  width: 70%;
+  &__content {
+    padding: 10px;
+    background-color: #f8f8f8;
+  }
+}
+
+::ng-deep .mat-expansion-indicator {
+  position: absolute;
+  right: 30px;
+  color: #0088c9 !important;
+  border-radius: 100px;
+  border: solid 1px #0088c9;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+}
+
+::ng-deep .mat-expansion-indicator::after {
+  color: #0088c9 !important;
+}
+
+::ng-deep .mat-expansion-panel-header-title {
+  color: #333 !important;
+  font-weight: 600;
+}
+
+.mat-expansion-panel-header {
+  color: red !important;
+}
+
+.mat-expansion-panel {
+  color: #008acc !important;
+  margin-bottom: 10px !important;
+  border-radius: 5px !important;
+}
+::ng-deep .mat-expansion-panel-header.mat-expanded {
+  height: 48px;
+}
+.mat-expansion-panel-header,
+.mat-expansion-panel:not(.mat-expanded)
+  .mat-expansion-panel-header:hover:not([aria-disabled='true']),
+.mat-expansion-panel-header.mat-expanded:focus,
+.mat-expansion-panel-header.mat-expanded:hover {
+  background: #fff;
+  border-radius: 5px;
+  height: 40px !important;
+  padding: 25px;
+}
+::ng-deep .mat-expanded {
+  background: #e1f5fd !important;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  .mat-expansion-panel-header-title {
+    color: #0182c1 !important;
+  }
+  .mat-expansion-indicator {
+    background-color: $primary;
+    &::after {
+      color: #fff !important;
+    }
+  }
+}
+.mat-expansion-panel-spacing {
+  margin: 0;
+}
+
+::ng-deep .mat-expansion-panel-body {
+  padding: 10px !important;
+  background-color: #fff !important;
+  table {
+    width: 100%;
+    border-radius: 10px;
+    tr {
+      th {
+        background-color: transparent !important;
+        color: #afafaf;
+        font-weight: 500 !important;
+        border-right: 0 !important;
+        border-bottom: 1px solid #ccc !important;
+      }
+      td {
+        border-right: 0 !important;
+        border-bottom: 1px solid #ccc !important;
+        padding: 5px 10px;
+        &.candidate-profile {
+          display: flex;
+          align-items: center;
+          span {
+            width: 30px;
+            height: 30px;
+            border-radius: 25px;
+            display: block;
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.onboarding-header {
+  display: flex;
+  justify-content: space-between;
+  &--search {
+    ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+      padding: 10px 0 10px 0 !important;
+      .mat-input-element {
+        color: #333;
+      }
+    }
+  }
+  &--controls {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+    button {
+      margin-left: 15px;
+      &.delete {
+        min-width: 32px;
+        height: 32px;
+        width: 30px;
+        margin-top: 5px;
+
+        ::ng-deep .mat-button-wrapper {
+          padding: 0 !important;
+          width: 22px;
+          height: 22px;
+        }
+
+        mat-icon {
+          font-size: 22px;
+        }
+      }
+    }
+  }
+}
+
+input[type='text'] {
+  margin-right: 10px;
+  border-radius: 25px;
+  height: 34px;
+  width: 250px;
+  border: 1px solid #ccc;
+  margin-left: 20px;
+  padding: 3px 10px;
+}
+.accordion-parent {
+  max-height: Calc(100vh - 250px);
+  overflow: auto;
+}

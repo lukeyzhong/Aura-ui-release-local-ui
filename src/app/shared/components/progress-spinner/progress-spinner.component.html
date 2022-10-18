@@ -1,0 +1,32 @@
+<svg>
+  <circle
+    class="progress-circle-properites"
+    cx="70"
+    cy="70"
+    [style.r]="radius"
+    stroke-dasharray="0"
+  ></circle>
+  <circle
+    class="progress-circle"
+    [ngClass]="{
+        statusnew: status === 1,
+        'in-progress': status === 5,
+        'hr-verify': status === 6,
+        'offer-declined': status === 3,
+        'integration-initiated': status === 2,
+        'integration-failed': status === 4,
+        'verification-failed': status === 10,
+        'onboarding-completed': status === 7,
+        onhold: status === 8,
+        'rollback-offer': status === 9
+    }"
+    cx="70"
+    cy="70"
+    [style.r]="radius"
+    [style.strokeDasharray]="circumference"
+    [style.strokeDashoffset]="strokeDashoffset"
+  ></circle>
+  <text x="70" y="74" class="textStyle" text-anchor="middle">
+    {{ percentage + '%' }}
+  </text>
+</svg>

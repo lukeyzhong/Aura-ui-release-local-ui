@@ -1,0 +1,53 @@
+<div *ngIf="type !== 'HRVERIFY'" class="confirmation">
+  <div md-dialog-content class="confirmation__content">
+    {{ confirmMessage }}
+  </div>
+  <div mat-dialog-actions class="confirmation__footer">
+    <button
+      mat-button
+      mat-raised-button
+      color="primary"
+      (click)="dialogConfirmRef.close(false)"
+    >
+      No
+    </button>
+    <button mat-raised-button (click)="dialogConfirmRef.close(true)">
+      Yes
+    </button>
+  </div>
+</div>
+
+<div *ngIf="type === 'HRVERIFY'">
+  <div *ngIf="positionID && error !== 'TAX ID already exists and cannot be duplicated.'" class="success-popup">
+    <div class="success-popup__icon">
+      <mat-icon class="done">check_circle</mat-icon>
+    </div>
+    <h3 class="done">ADP Account is successfully created.</h3>
+    <p>
+      ADP Position ID :<b> {{ positionID }} </b>
+    </p>
+    <button mat-raised-button color="primary" (click)="afterCloseMsgBox(true)">
+      CLOSE
+    </button>
+  </div>
+  <div *ngIf="!positionID && error !== 'TAX ID already exists and cannot be duplicated.'" class="success-popup">
+    <div class="success-popup__icon">
+      <mat-icon class="reject">cancel</mat-icon>
+    </div>
+    <h3 class="reject">Error while creating the ADP account.</h3>
+    <p>Please contact ADP support team for further actions.</p>
+    <button mat-raised-button color="primary" (click)="afterCloseMsgBox(true)">
+      CLOSE
+    </button>
+  </div>
+  <div *ngIf="error === 'TAX ID already exists and cannot be duplicated.'" class="success-popup">
+    <div class="success-popup__icon">
+      <mat-icon class="reject">cancel</mat-icon>
+    </div>
+    <h3 class="reject">Duplicate Case</h3>
+    <p>ADP Profile already Exist</p>
+    <button mat-raised-button color="primary" (click)="afterCloseMsgBox(true)">
+      CLOSE
+    </button>
+  </div>
+</div>

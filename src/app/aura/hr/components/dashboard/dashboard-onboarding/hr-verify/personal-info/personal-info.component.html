@@ -1,0 +1,448 @@
+<mat-expansion-panel (afterExpand)="getComments()" class="accordion-parent">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="accordion-header">
+        <img
+          src="./assets/svg/HR Verify Icons/Personal-Info.svg"
+          width="40px"
+          alt=""
+        />
+        <h3>Personal Information</h3>
+        <div *ngIf="countKeysPersonalInfo !== 0" class="comment">
+          HR Comments
+          <div class="count">
+            <p>{{ countKeysPersonalInfo }}</p>
+          </div>
+        </div>
+        <div *ngIf="countKeysPersonalInfo !== 0" class="comment">
+          <button
+            class="delete"
+            type="button"
+            (click)="deleteComment('All', $event)"
+            mat-raised-button
+            color="warn"
+            matTooltip="Delete All Comments"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="form-l-group">
+    <div class="form-l-group__form disable-form">
+      <label for="">First Name</label>
+      <p>{{ candidateOnboardingPersonalInfoResult?.firstName }}</p>
+    </div>
+    <div class="form-l-group__form disable-form">
+      <label for="">Last Name</label>
+      <p>{{ candidateOnboardingPersonalInfoResult?.lastName }}</p>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.aliasName')
+      }"
+    >
+      <label for="">Alias</label>
+      <p
+        id="personalInformation.aliasName"
+        #aliasName
+        (mouseenter)="onHover(aliasName.id)"
+      >
+        {{ candidateOnboardingPersonalInfoResult?.aliasName }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.dateOfBirth')
+      }"
+    >
+      <label for="">Date Of Birth</label>
+      <p
+        id="personalInformation.dateOfBirth"
+        #dateOfBirth
+        (mouseenter)="onHover(dateOfBirth.id)"
+      >
+        {{
+          candidateOnboardingPersonalInfoResult?.dateOfBirth!
+            | date: 'MM/dd/yyyy'
+        }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{ rejected: hrCommentsMap.has('personalInformation.gender') }"
+    >
+      <label for="">Gender</label>
+      <p
+        id="personalInformation.gender"
+        #gender
+        (mouseenter)="onHover(gender.id)"
+      >
+        {{ candidateOnboardingPersonalInfoResult?.gender }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.maritalStatus')
+      }"
+    >
+      <label for="">Marital Status</label>
+      <p
+        id="personalInformation.maritalStatus"
+        #maritalStatus
+        (mouseenter)="onHover(maritalStatus.id)"
+      >
+        {{ candidateOnboardingPersonalInfoResult?.maritalStatus }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.ethnicity')
+      }"
+    >
+      <label for="">Ethnicity </label>
+      <p
+        id="personalInformation.ethnicity"
+        #ethnicity
+        (mouseenter)="onHover(ethnicity.id)"
+      >
+        {{ candidateOnboardingPersonalInfoResult?.ethnicity }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{ rejected: hrCommentsMap.has('personalInformation.race') }"
+    >
+      <label for="">Race</label>
+      <p id="personalInformation.race" #race (mouseenter)="onHover(race.id)">
+        {{ candidateOnboardingPersonalInfoResult?.race }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+  </div>
+  <div class="form-l-group__header-hr">
+    <h3><b>Mailling Address</b></h3>
+    <hr />
+  </div>
+  <div class="form-l-group">
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.addressLine1')
+      }"
+    >
+      <label for="">Address 1</label>
+      <p
+        id="personalInformation.addressLine1"
+        #addressLine1
+        (mouseenter)="onHover(addressLine1.id)"
+      >
+        {{ candidateOnboardingPersonalInfoResult?.address?.addressLine1 }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.addressLine2')
+      }"
+    >
+      <label for="">Address 2</label>
+      <p
+        id="personalInformation.addressLine2"
+        #addressLine2
+        (mouseenter)="onHover(addressLine2.id)"
+      >
+        {{ candidateOnboardingPersonalInfoResult?.address?.addressLine2 }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{ rejected: hrCommentsMap.has('personalInformation.city') }"
+    >
+      <label for="">City</label>
+      <p id="personalInformation.city" #city (mouseenter)="onHover(city.id)">
+        {{ candidateOnboardingPersonalInfoResult?.address?.city }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has(
+          'personalInformation.livingAddrressStateName'
+        )
+      }"
+    >
+      <label for="">State</label>
+      <p
+        id="personalInformation.livingAddrressStateName"
+        #livingAddrressStateName
+        (mouseenter)="onHover(livingAddrressStateName.id)"
+      >
+        {{ livingAddrStateName }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has(
+          'personalInformation.livingAddressCountryName'
+        )
+      }"
+    >
+      <label for="">Country</label>
+      <p
+        id="personalInformation.livingAddressCountryName"
+        #livingAddressCountryName
+        (mouseenter)="onHover(livingAddressCountryName.id)"
+      >
+        {{ livingAddrCountryName }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.postalCode')
+      }"
+    >
+      <label for="">Zip Code</label>
+      <p
+        id="personalInformation.postalCode"
+        #postalCode
+        (mouseenter)="onHover(postalCode.id)"
+      >
+        {{ candidateOnboardingPersonalInfoResult?.address?.postalCode }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+  </div>
+  <div class="form-l-group__header-hr">
+    <h3><b>Contact Details</b></h3>
+    <hr />
+  </div>
+  <div class="form-l-group">
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.cellPhoneNumber')
+      }"
+    >
+      <label for="">Cell Phone</label>
+      <p
+        *ngIf="cellPhoneNumber"
+        id="personalInformation.cellPhoneNumber"
+        #cellPhoneNum
+        (mouseenter)="onHover(cellPhoneNum.id)"
+      >
+        + {{ cellCountry }}-{{ cellPhoneNumber }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.homePhoneNumber')
+      }"
+    >
+      <label for="">Home Phone</label>
+      <p
+        *ngIf="homePhoneNumber"
+        id="personalInformation.homePhoneNumber"
+        #homePhoneNum
+        (mouseenter)="onHover(homePhoneNum.id)"
+      >
+        + {{ homeCountry }}-{{ homePhoneNumber }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+
+    <div
+      class="form-l-group__form"
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.officePhoneNumber')
+      }"
+    >
+      <label for="">Office Phone</label>
+      <p
+        *ngIf="officePhoneNumber"
+        id="personalInformation.officePhoneNumber"
+        #officePhoneNum
+        (mouseenter)="onHover(officePhoneNum.id)"
+      >
+        + {{ officeCountry }}-{{ officePhoneNumber }}-({{ officeExtension }})
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+    <div
+      class="form-l-group__form"
+      [ngClass]="{ rejected: hrCommentsMap.has('personalInformation.email') }"
+    >
+      <label for="">Email Address</label>
+      <p
+        id="personalInformation.email"
+        #emailId
+        (mouseenter)="onHover(emailId.id)"
+      >
+        {{ email }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+  </div>
+  <div class="form-l-group__header-hr">
+    <h3><b>Social Profiles</b></h3>
+    <hr />
+  </div>
+  <div class="form-l-group">
+    <div
+      class="form-l-group__form"
+      *ngFor="
+        let socialMedia of candidateOnboardingPersonalInfoResult?.socialMediaLinks;
+        let i = index
+      "
+      [ngClass]="{
+        rejected: hrCommentsMap.has('personalInformation.socialMediaLink' + i)
+      }"
+    >
+      <label for="">{{ socialMedia.socialMediaLink }}</label>
+      <p
+        class="socialMediaLinks"
+        (click)="goToExternalUrl(socialMedia.url)"
+        id="{{ 'personalInformation.socialMediaLink' + i }}"
+        #socialMediaLink
+        (mouseenter)="onHover(socialMediaLink.id)"
+      >
+        {{ socialMedia.url }}
+      </p>
+      <div
+        *ngIf="showUpdateButton === false; then showAddBtn; else showUpdateBtn"
+      ></div>
+    </div>
+  </div>
+
+  <div class="mat-menu-parent">
+    <mat-menu
+      #commentMenus="matMenu"
+      xPosition="before"
+      yPosition="below"
+      [overlapTrigger]="false"
+    >
+      <div class="rejection-reasson" (click)="$event.stopPropagation()">
+        <form [formGroup]="commentForm" (ngSubmit)="onSave()">
+          <div class="rejection-reasson__header">
+            <h4>Rejection Reason</h4>
+            <div
+              class="rejection-reasson__header--btns"
+              *ngIf="hrCommentsMap.has(commentKey)"
+            >
+              <button
+                type="button"
+                (click)="deleteComment('Single', $event)"
+                mat-button
+                color="warn"
+                matTooltip="Delete"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="rejection-reasson__content">
+            <textarea
+              formControlName="comment"
+              matInput
+              cols="30"
+              rows="4"
+            ></textarea>
+          </div>
+          <div class="rejection-reasson__footer">
+            <button
+              type="button"
+              (click)="closeMenu()"
+              mat-stroked-button
+              color="primary"
+            >
+              Close
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="commentForm?.invalid || commentForm?.pristine"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-menu>
+  </div>
+
+  <ng-template #showUpdateBtn>
+    <button
+      mat-raised-button
+      color="warn"
+      matTooltip="Update Reason"
+      [matMenuTriggerFor]="commentMenus"
+      class="rejection rejection__update"
+    >
+      <mat-icon> chat_bubble </mat-icon>
+    </button>
+  </ng-template>
+
+  <ng-template #showAddBtn>
+    <button
+      mat-raised-button
+      color="warn"
+      matTooltip="Reject"
+      (click)="$event.stopPropagation()"
+      [matMenuTriggerFor]="commentMenus"
+      class="rejection rejection__add"
+    >
+      <mat-icon> close </mat-icon>
+    </button>
+  </ng-template>
+</mat-expansion-panel>

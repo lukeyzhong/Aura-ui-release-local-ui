@@ -1,0 +1,48 @@
+<div class="emp-tasks">
+  <div class="spinner" *ngIf="isLoading">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <div class="emp-tasks__header">
+    <h2 class="card-title ">Tasks</h2>
+  </div>
+  <div class="emp-tasks__cnt">
+    <div class="no-data__parent" *ngIf="totalAssignments === 0">
+      <div class="no-data">
+        <img
+          src="./assets/svg/employee-dashboard/No Tasks.svg"
+          width="65%"
+          alt=""
+        />
+        <h4>No Tasks</h4>
+      </div>
+    </div>
+    <ul *ngIf="totalAssignments !== 0">
+      <li
+      *ngFor="let task of assignmentsResult"
+      (click)="goToOnboarding(task)"
+    >
+      {{ task?.resourceTitle }} - {{task?.assignmentType}}
+    </li>
+    </ul>
+  </div>
+</div>
+<div class="overlay" *ngIf="linkExpired"></div>
+<div class="task-expired" *ngIf="linkExpired">
+  <div class="info-not-valid">
+    <button mat-button color="primary" (click)="linkExpired = false">
+      <mat-icon>close</mat-icon>
+    </button>
+    <img
+      src="./assets/svg/terms-conditions/linkexpired.svg"
+      width="200px"
+      alt=""
+    />
+    <br />
+    <h2 class="link-expired">Link Expired.</h2>
+    <p>
+      Please contact
+      <a href="mailto:hr@antra.com" target="_blank">hr@antra.com</a> for further
+      assistance.
+    </p>
+  </div>
+</div>

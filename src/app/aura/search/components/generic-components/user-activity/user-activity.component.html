@@ -1,0 +1,112 @@
+<div class="activity modal-popup">
+  <div class="modal-popup__header">
+    <h3>User Activity</h3>
+    <button mat-button color="primary" (click)="closeUserActivity()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="activity__container">
+    <div class="timeline-parent">
+      <div
+        class="spinner header-spinner"
+        *ngIf="isLoading; else userActivityFlow"
+      >
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <ng-template #userActivityFlow>
+        <div class="act-filter">
+          <div class="act-filter__icon" aria-expanded="false">
+            <mat-icon matTooltip="Choose Categories">filter_alt</mat-icon>
+          </div>
+          <mat-form-field matTooltip="Choose Categories">
+            <mat-select
+              [formControl]="categoryNames"
+              multiple
+              [(value)]="selectedCategories"
+              (selectionChange)="chooseCategories(selectedCategories)"
+            >
+              <mat-option
+                *ngFor="let entry of mapUACatergoryList | keyvalue"
+                [value]="entry.value"
+                >{{ entry.value }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-select-trigger class="mat-chip">
+            <mat-chip-list>
+              <mat-chip
+                *ngFor="let category of categoryNames.value; let i = index"
+                [removable]="true"
+                (removed)="removeChip(category)"
+              >
+                {{ category }}
+                <mat-icon matChipRemove>close</mat-icon>
+              </mat-chip>
+              <mat-chip
+                *ngIf="categoryNames.value?.length > 1"
+                (click)="clearAllChips()"
+              >
+                <mat-icon matTooltip="Clear All Filters" class="close-all"
+                  >close</mat-icon
+                >
+              </mat-chip>
+            </mat-chip-list>
+          </mat-select-trigger>
+        </div>
+        <div class="download-btn">
+          <img
+            (click)="exportToCSV()"
+            src="./assets/svg/excel-icon.svg"
+            width="36px"
+            alt=""
+            matTooltip="Export To Excel"
+          />
+        </div>
+
+        <ul class="timeline">
+          <cdk-virtual-scroll-viewport itemSize="10" class="timeline__height">
+            <li
+              class="timeline__list"
+              *cdkVirtualFor="
+                let userActivity of userActivityResult;
+                let i = index
+              "
+            >
+              <div class="timeline-item" [ngClass]="bindCSSFromDB(i)">
+                <span class="timeline__list--status"> </span>
+                <div
+                  class="timeline__card"
+                  [ngStyle]="
+                    tempIndex === i
+                      ? { 'background-color': '#e6e6e6' }
+                      : { 'background-color': '#f2f2f2' }
+                  "
+                >
+                  <div class="timeline__header" (click)="showActivityText(i)">
+                    <div class="timeline__list--header">
+                      {{ userActivity?.userActivityType?.name }}
+                      <span>
+                        <mat-icon>keyboard_arrow_down</mat-icon>
+                      </span>
+                    </div>
+                    <div class="timeline__list--time">
+                      {{ userActivity?.activityOn | date: 'M-d-yyyy h:mm a' }}
+                      <p
+                        class="timeline__card--details"
+                        *ngIf="i === indexNumber"
+                      >
+                        {{ userActivity?.activityText }}
+                        by {{ userActivity?.activityBy }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </cdk-virtual-scroll-viewport>
+        </ul>
+      </ng-template>
+    </div>
+  </div>
+</div>

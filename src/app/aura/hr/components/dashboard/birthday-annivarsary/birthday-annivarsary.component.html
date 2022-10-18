@@ -1,0 +1,181 @@
+<div *ngIf="isLoadSpinner; else birthdayAnniversary" class="spinner">
+  <app-spinner diameter="35"></app-spinner>
+</div>
+<ng-template #birthdayAnniversary>
+  <div class="card">
+    <button
+      (click)="holidayAnniversaryDetails()"
+      class="dashboard__schedules--open-new"
+      mat-button
+    >
+      <span class="material-icons">open_in_new</span>
+    </button>
+    <div class="birthdays-Anniversaries">
+      <mat-tab-group (selectedTabChange)="tabChanged($event)">
+        <mat-tab label="Anniversaries">
+          <div class="birthday">
+            <div class="birthday__profile">
+              <div class="birthday__profile--pic">
+                <img
+                  *ngIf="
+                    anniversaryData[0]?.displayPictureBase64;
+                    else defaultImage
+                  "
+                  [src]="anniversaryData[0]?.displayPictureBase64"
+                  width="100%"
+                  alt=""
+                />
+              </div>
+              <div class="birthday__profile--name">
+                {{ anniversaryData[0]?.firstName }}
+              </div>
+              <div class="birthday__profile--date">
+                {{ anniversaryDate[0] }} {{ anniversaryMonth[0]?.slice(0, 3) }}
+              </div>
+            </div>
+            <div class="birthday__profile">
+              <div class="birthday__profile--pic">
+                <img
+                  *ngIf="
+                    anniversaryData[1]?.displayPictureBase64;
+                    else defaultImage
+                  "
+                  [src]="anniversaryData[1]?.displayPictureBase64"
+                  width="100%"
+                  alt=""
+                />
+              </div>
+              <div class="birthday__profile--name">
+                {{ anniversaryData[1]?.firstName }}
+              </div>
+              <div class="birthday__profile--date">
+                {{ anniversaryDate[1] }} {{ anniversaryMonth[1]?.slice(0, 3) }}
+              </div>
+            </div>
+            <div class="birthday__profile">
+              <div class="birthday__profile--pic">
+                <img
+                  *ngIf="
+                    anniversaryData[2]?.displayPictureBase64;
+                    else defaultImage
+                  "
+                  [src]="anniversaryData[2]?.displayPictureBase64"
+                  width="100%"
+                  alt=""
+                />
+              </div>
+              <div class="birthday__profile--name">
+                {{ anniversaryData[2]?.firstName }}
+              </div>
+              <div class="birthday__profile--date">
+                {{ anniversaryDate[2] }} {{ anniversaryMonth[2]?.slice(0, 3) }}
+              </div>
+            </div>
+            <div class="birthday__profile">
+              <div class="birthday__profile--pic">
+                <img
+                  *ngIf="
+                    anniversaryData[3]?.displayPictureBase64;
+                    else defaultImage
+                  "
+                  [src]="anniversaryData[3]?.displayPictureBase64"
+                  width="100%"
+                  alt=""
+                />
+              </div>
+              <div class="birthday__profile--name">
+                {{ anniversaryData[3]?.firstName }}
+              </div>
+              <div class="birthday__profile--date">
+                {{ anniversaryDate[3] }} {{ anniversaryMonth[3]?.slice(0, 3) }}
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Birthdays ">
+          <div class="birthday">
+            <div class="birthday__profile">
+              <div class="birthday__profile--pic">
+                <img
+                  *ngIf="
+                    birthdayData[0]?.displayPictureBase64;
+                    else defaultImage
+                  "
+                  [src]="birthdayData[0]?.displayPictureBase64"
+                  width="100%"
+                  alt=""
+                />
+              </div>
+              <div class="birthday__profile--name">
+                {{ birthdayData[0]?.firstName }}
+              </div>
+              <div class="birthday__profile--date">
+                {{ birthdayDate[0] }} {{ birthdayMonth[0]?.slice(0, 3) }}
+              </div>
+            </div>
+            <div class="birthday__profile">
+              <div class="birthday__profile--pic">
+                <img
+                  *ngIf="
+                    birthdayData[1]?.displayPictureBase64;
+                    else defaultImage
+                  "
+                  [src]="birthdayData[1]?.displayPictureBase64"
+                  width="100%"
+                  alt=""
+                />
+              </div>
+              <div class="birthday__profile--name">
+                {{ birthdayData[1]?.firstName }}
+              </div>
+              <div class="birthday__profile--date">
+                {{ birthdayDate[1] }} {{ birthdayMonth[1]?.slice(0, 3) }}
+              </div>
+            </div>
+            <div class="birthday__profile">
+              <div class="birthday__profile--pic">
+                <img
+                  *ngIf="
+                    birthdayData[2]?.displayPictureBase64;
+                    else defaultImage
+                  "
+                  [src]="birthdayData[2]?.displayPictureBase64"
+                  width="100%"
+                  alt=""
+                />
+              </div>
+              <div class="birthday__profile--name">
+                {{ birthdayData[2]?.firstName }}
+              </div>
+              <div class="birthday__profile--date">
+                {{ birthdayDate[2] }} {{ birthdayMonth[2]?.slice(0, 3) }}
+              </div>
+            </div>
+            <div class="birthday__profile">
+              <div class="birthday__profile--pic">
+                <img
+                  *ngIf="
+                    birthdayData[3]?.displayPictureBase64;
+                    else defaultImage
+                  "
+                  [src]="birthdayData[3]?.displayPictureBase64"
+                  width="100%"
+                  alt=""
+                />
+              </div>
+              <div class="birthday__profile--name">
+                {{ birthdayData[3]?.firstName }}
+              </div>
+              <div class="birthday__profile--date">
+                {{ birthdayDate[3] }} {{ birthdayMonth[3]?.slice(0, 3) }}
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <ng-template #defaultImage>
+          <img src="./assets/svg/profile-empty.svg" width="100%" alt="" />
+        </ng-template>
+      </mat-tab-group>
+    </div>
+  </div>
+</ng-template>

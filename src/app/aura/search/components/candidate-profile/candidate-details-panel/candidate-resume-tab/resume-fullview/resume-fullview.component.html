@@ -1,0 +1,16 @@
+<div class="preview">
+    <div class="overlay"></div>
+    <div class="modal-popup">     
+      <div class="modal-popup__content">    
+        <mat-icon (click)="closePreview()" class="resume-close">close</mat-icon>         
+        <div>
+          <pdf-viewer [src]="docURL" [original-size]="false"></pdf-viewer>
+        </div>        
+        <div class="error-Message" *ngIf="errorMessage">
+          <img src="./assets/svg/data-error.svg" width="100px" />
+          <p>{{ errorMessage }}</p>
+        </div>
+      </div>
+    </div>
+</div>
+  

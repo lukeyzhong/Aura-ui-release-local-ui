@@ -1,0 +1,20 @@
+@import './app/styles/utilities/variables';
+@import './app/styles/reset/reset';
+@import './app/styles/utilities/utilities';
+@import './app/styles/dashboard/dashboard';
+@import './app/styles/component/breadcrumb';
+@import './app/styles/component/header';
+@import 'antra-ui/lib/styles.scss';
+@import './app/styles/utilities/mixins';
+@import './app/styles/utilities/custom';
+@import './app/styles/utilities/modal-box';
+@import './app/styles/utilities/summary';
+@import './app/styles/Fonts/font-face.scss';
+@import './app/styles/component/forms';
+@import './app/styles/utilities/table';
+
+.material-icons {
+  font-family: 'Material Icons' !important;
+}
+
+

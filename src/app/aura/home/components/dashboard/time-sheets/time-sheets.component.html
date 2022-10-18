@@ -1,0 +1,55 @@
+<div class="t-sheet">
+  <div class="t-sheet__header">
+    <h3 class="card-title">Time Sheets</h3>
+    <button class="t-sheet__open-new" mat-button color="primary">
+      <span class="material-icons">open_in_new</span>
+    </button>
+  </div>
+  <div class="t-sheet__cnt">
+    <mat-tab-group
+      (selectedTabChange)="tabChanged($event)"
+      mat-align-tabs="start"
+    >
+      <mat-tab label="Submitted">
+        <app-timesheet-table-details
+          [isLoading]="submittedTimesheetPanelConfig.isLoading"
+          [displayedColumns]="submittedTimesheetPanelConfig.displayedColumns"
+          [columns]="submittedTimesheetPanelConfig.columns"
+          [tableData]="submittedTimesheetPanelConfig.tableData"
+          [totalRows]="submittedTimesheetPanelConfig.totalRows"
+          (paginatorClicked)="getNextRecords($event)"
+        ></app-timesheet-table-details>
+      </mat-tab>
+      <mat-tab label="Rejected">
+        <app-timesheet-table-details
+          [isLoading]="rejectedTimesheetPanelConfig.isLoading"
+          [displayedColumns]="rejectedTimesheetPanelConfig.displayedColumns"
+          [columns]="rejectedTimesheetPanelConfig.columns"
+          [tableData]="rejectedTimesheetPanelConfig.tableData"
+          [totalRows]="rejectedTimesheetPanelConfig.totalRows"
+          (paginatorClicked)="getNextRecords($event)"
+        ></app-timesheet-table-details>
+      </mat-tab>
+      <mat-tab label="Approved">
+        <app-timesheet-table-details
+          [isLoading]="approvedTimesheetPanelConfig.isLoading"
+          [displayedColumns]="approvedTimesheetPanelConfig.displayedColumns"
+          [columns]="approvedTimesheetPanelConfig.columns"
+          [tableData]="approvedTimesheetPanelConfig.tableData"
+          [totalRows]="approvedTimesheetPanelConfig.totalRows"
+          (paginatorClicked)="getNextRecords($event)"
+        ></app-timesheet-table-details>
+      </mat-tab>
+      <!-- <mat-tab label="In Progress">
+        <app-timesheet-table-details
+          [isLoading]="inprogressTimesheetPanelConfig.isLoading"
+          [displayedColumns]="inprogressTimesheetPanelConfig.displayedColumns"
+          [columns]="inprogressTimesheetPanelConfig.columns"
+          [tableData]="inprogressTimesheetPanelConfig.tableData"
+          [totalRows]="inprogressTimesheetPanelConfig.totalRows"
+          (paginatorClicked)="getNextRecords($event)"
+        ></app-timesheet-table-details>
+      </mat-tab> -->
+    </mat-tab-group>
+  </div>
+</div>

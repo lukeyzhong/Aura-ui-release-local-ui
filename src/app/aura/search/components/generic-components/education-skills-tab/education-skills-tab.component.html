@@ -1,0 +1,294 @@
+<div class="side-menu">
+  <mat-tab-group animationDuration="0ms">
+    <!-- Education Info Begin -->
+    <mat-tab label="Education">
+      <div class="employee-details">
+        <div class="employee-details__tabs-content">
+          <div class="employee-details__content-header">
+            <h3><b>Education Information</b></h3>
+            <button mat-button color="primary" (click)="addEducationInfo('Add')">
+              Add New
+            </button>
+          </div>
+
+          <div class="card-parent">
+            <div class="card" *ngIf="isLoading; else educationData">
+              <div class="spinner">
+                <app-spinner diameter="25"></app-spinner>
+              </div>
+            </div>
+            <ng-template #educationData>
+              <div class="card card-no-data" *ngIf="totalEducationDocs === 0; else EducationDocs">
+                <div class="no-data">
+                  <mat-icon> find_in_page </mat-icon>
+                  <h4>Information Not Added</h4>
+                </div>
+              </div>
+              <ng-template #EducationDocs>
+                <div
+                  *ngFor="let educationInfo of educationResult; let i = index"
+                >
+                  <div class="card">
+                    <div class="card__edit-icon" matTooltip="Edit" (click)="editEducationInfo('Edit', i)"
+                      aria-label="Button that displays a tooltip when focused or hovered over">
+                      <mat-icon>edit</mat-icon>
+                    </div>
+
+                    <div class="card-fields">
+                      <ul>
+                        <li>
+                          <p class="card-fields__label">Degree Name</p>
+                          <p class="card-fields__value">
+                            {{ educationInfo.degreeName }}
+                          </p>
+                        </li>
+                        <li>
+                          <p class="card-fields__label">Institution Name</p>
+                          <p class="card-fields__value">
+                            {{ educationInfo.universityName }}
+                          </p>
+                        </li>
+                        <li>
+                          <p class="card-fields__label">Start Date</p>
+                          <p class="card-fields__value">
+                            {{ educationInfo.startDate | date: 'MM-dd-yyyy' }}
+                          </p>
+                        </li>
+                        <li>
+                          <p class="card-fields__label">End Date</p>
+                          <p class="card-fields__value">
+                            {{ educationInfo.endDate | date: 'MM-dd-yyyy' }}
+                          </p>
+                        </li>
+                        <li>
+                          <p class="card-fields__label">Major 1</p>
+                          <p class="card-fields__value">
+                            {{ educationInfo.majorType }}
+                          </p>
+                        </li>
+                        <li class="more-info">
+                          <button [mdePopoverTriggerFor]="educationContent"
+                            (mouseover)="seteducationMoreOrLess(educationInfo)">
+                            <span></span><span></span><span></span>
+                          </button>
+
+                          <mde-popover
+                            #educationContent="mdePopover"
+                            mdePopoverPositionX="after"
+                            [mdeFocusTrapEnabled]="false"
+                            [mdeFocusTrapAutoCaptureEnabled]="false"
+                            [mdePopoverOffsetX]="0"
+                            [mdePopoverOffsetY]="30"
+                          >
+                            <!-- <div class="popover-arrow" id="popover-arrow"></div> -->
+                            <div class="gs-moreinfo">
+                              <div class="gs-moreinfo__row">
+                                <div>
+                                  <div class="gs-moreinfo__title">
+                                    <b> More Info</b>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="gs-moreinfo__row">
+                                <div>
+                                  <div class="gs-moreinfo__lable">Major 2</div>
+                                  <div class="gs-moreinfo__value">
+                                    {{ major2 }}
+                                  </div>
+                                </div>
+                                <div>
+                                  <div class="gs-moreinfo__lable">
+                                    Stem Flag
+                                  </div>
+                                  <div class="gs-moreinfo__value">
+                                    <button class="btn-flag">
+                                      {{ stemFlag }}
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </mde-popover>
+                        </li>
+                      </ul>
+                      <div class="file-area">
+                        <div class="document-table" [ngClass]="{
+                            'rows-collapse': educationMoreOrLess[i]
+                          }"
+                          *ngIf="educationInfo?.documents?.length! > 0"
+                        >
+                          <table cellspacing="0">
+                            <tr>
+                              <th width="45%">Document Name</th>
+                                  <th width="20%">Description</th>
+                                  <th width="20%">Uploaded On</th>
+                                  <th>Uploaded By</th>
+                            </tr>
+                            <tr
+                              *ngFor="
+                                let eduDocument of educationInfo?.documents;
+                                let i = index
+                              ">
+                              <td class="file-name">
+                                <div *ngIf="eduDocument?.fileExtension === '.pdf'">
+                                  <img width="24px" src="./assets/svg/icn-pdf.svg" alt="" />
+                                </div>
+                                <div *ngIf="
+                                    fileExt.includes(
+                                      eduDocument?.fileExtension!
+                                    )
+                                  ">
+                                  <img width="24px" src="./assets/svg/icn-image.svg" alt="" />
+                                </div>
+                                <p>{{ eduDocument.displayName }}</p>
+                                <span>
+                                  <mat-icon
+                                    matTooltip="Preview"
+                                    (click)="previewDocument(eduDocument)"
+                                    >remove_red_eye
+                                  </mat-icon> </span
+                                ><span>
+                                  <mat-icon
+                                    matTooltip="Download"
+                                    (click)="downloadDocument(eduDocument)"
+                                    >get_app
+                                  </mat-icon>
+                                </span>
+                              </td>
+                              <td>
+                                {{
+                                eduDocument?.fileDescription === 'null'
+                                ? ''
+                                : eduDocument?.fileDescription
+                                }}
+                              </td>
+                              <td>
+                                {{
+                                eduDocument?.createdDateTime
+                                | date: 'M-d-yyyy h:mm a'
+                                }}
+                              </td>
+                              <td>
+                                {{ personName }}
+                              </td>
+                            </tr>
+                          </table>
+                        </div>
+                        <div
+                          class="min-rows"
+                          *ngIf="educationInfo?.documents?.length! > 1"
+                        >
+                          <button
+                            class="show-more-btn"
+                            (click)="
+                              educationMoreOrLess[i] = !educationMoreOrLess[i];
+                              showMoreLessEducation(i)
+                            ">
+                            {{ btnMoreLessEduText[i] }}
+                            <mat-icon
+                              [ngClass]="{
+                                less: btnMoreLessEduText[i] === 'Less'
+                              }"
+                              >expand_more</mat-icon
+                            >
+                          </button>
+                        </div>
+                        <div
+                          class="no-files"
+                          *ngIf="educationInfo?.documents?.length === 0"
+                        >
+                          <img
+                            src="./assets/svg/no-doc-attached.svg"
+                            width="24px"
+                            alt=""
+                          />
+                          <h4>Documents Not Uploaded</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <!-- Education Info End -->
+
+    <!-- Skills Begin -->
+    <mat-tab label="Skills">
+      <div class="employee-details">
+        <div class="employee-details__tabs-content">
+          <div class="employee-details__content-header">
+            <h3><b>Skills</b></h3>
+            <button mat-button color="primary" (click)="addSkillsInfo('Add')">
+              Add New
+            </button>
+          </div>
+          <div class="card-parent">
+            <div class="card" *ngIf="isLoading; else skillsData">
+              <div class="spinner">
+                <app-spinner diameter="25"></app-spinner>
+              </div>
+            </div>
+            <ng-template #skillsData>
+              <div class="card card-no-data" *ngIf="totalSkills === 0; else SkillsInfo">
+                <div class="no-data">
+                  <mat-icon> find_in_page </mat-icon>
+                  <h4>Information Not Added</h4>
+                </div>
+              </div>
+              <ng-template #SkillsInfo>
+                <div *ngFor="let skillsInfo of skillsResult; let i = index">
+                  <div class="card">
+                    <div class="card__edit-icon" matTooltip="Edit" (click)="editSkillsInfo('Edit', i)"
+                      aria-label="Button that displays a tooltip when focused or hovered over">
+                      <mat-icon>edit</mat-icon>
+                    </div>
+                    <div class="card-fields">
+                      <ul>
+                        <li>
+                          <p class="card-fields__label">Skill</p>
+                          <p class="card-fields__value">
+                            {{ skillsInfo?.skill }}
+                          </p>
+                        </li>
+                        <li>
+                          <p class="card-fields__label">Skill Level</p>
+                          <p class="card-fields__value">
+                            {{ skillsInfo?.skillLevel }}
+                          </p>
+                        </li>
+                        <li>
+                          <p class="card-fields__label">Last used in</p>
+                          <p class="card-fields__value">
+                            {{ skillsInfo?.lastUsedYear }}
+                          </p>
+                        </li>
+                        <li>
+                          <p class="card-fields__label">Updated By</p>
+                          <p class="card-fields__value">{{ personName }}</p>
+                        </li>
+                        <li>
+                          <p class="card-fields__label">Updated On</p>
+                          <p class="card-fields__value">
+                            {{
+                            skillsInfo?.createdDateTime
+                            | date: 'M-d-yyyy h:mm a'
+                            }}
+                          </p>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <!-- Skills End -->
+  </mat-tab-group>
+</div>

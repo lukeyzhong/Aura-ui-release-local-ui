@@ -1,0 +1,38 @@
+<div class="timer">
+  <button (click)="onCancel($event)" mat-button color="primary">
+    <mat-icon>close</mat-icon>
+  </button>
+  <div class="timer-container" *ngIf="progress === 0">
+    <div class="time">
+      <img
+        src="./assets/svg/Onboarding Info Icons/ats-aura-failure.svg"
+        width="200px"
+      />
+    </div>
+    <p>
+      Data is not loaded successfully from ATS to Aura. Please contact support
+      team.
+    </p>
+  </div>
+  <div class="timer-container" *ngIf="progress !== 0">
+    <div class="time">
+      <!-- <mat-progress-spinner
+        class="example-margin"
+        [color]="color"
+        [mode]="mode"
+        [value]="progress"
+      >
+      </mat-progress-spinner> -->
+      <mat-icon>timer</mat-icon>
+      <div class="time__count">
+        <p>{{ timer | date: 'mm:ss':'UTC' }}</p>
+        <p>time left</p>
+      </div>
+    </div>
+    <!-- <p>
+      Please wait for {{ timer }} seconds while data is updating from ATS to
+      Aura.
+    </p> -->
+    <p>Please wait while data is updating from ATS to Aura.</p>
+  </div>
+</div>

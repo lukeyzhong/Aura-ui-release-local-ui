@@ -1,0 +1,100 @@
+@import '../../../../../styles/utilities/variables';
+@import '../../../../../styles/utilities/form-group';
+@import '../../../../../styles/component/accordions';
+.card__footer {
+  display: flex;
+  justify-content: flex-end;
+  button {
+    margin-left: 15px;
+  }
+  .disable-btn {
+    background-color: white;
+  }
+}
+.preview-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
+  margin-right: 15px;
+}
+
+.mat-mini-fab {
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.p-container {
+  padding: 20px 15px;
+}
+.preview-edit-btn {
+  position: absolute;
+  top: 9px;
+  right: 72px;
+  background-color: #e2f5ff;
+  box-shadow: none;
+  ::ng-deep .mat-button-wrapper {
+    padding: 5px;
+    display: flex;
+  }
+  mat-icon {
+    color: $primary;
+    font-size: 18px;
+  }
+}
+.form-docs {
+  ul {
+    margin-left: 100px;
+    li {
+      line-height: 30px;
+      color: #747474;
+    }
+  }
+}
+.si__content {
+  flex: 1;
+}
+.preview-tab-fc {
+  padding: 10px 30px;
+  display: flex;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%),
+    0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+}
+::ng-deep .mat-expansion-panel-header-title,
+.mat-expansion-panel-header-description {
+  flex-grow: 0;
+}
+::ng-deep .mat-content {
+  align-items: center;
+}
+.error-Message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 300px;
+  font-size: 14px;
+  padding-bottom: 100px;
+}
+.employment-details {
+  padding: 0 25px;
+}
+.aura-accordion {
+  .mat-expansion-panel-header-title {
+    display: flex;
+    // position: relative;
+    justify-content: space-between;
+    .preview-icon {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      font-family: 'ProximaNova-semibold' !important;
+    }
+    .mat-expansion-panel-header-description {
+      margin: 0;
+    }
+  }
+}

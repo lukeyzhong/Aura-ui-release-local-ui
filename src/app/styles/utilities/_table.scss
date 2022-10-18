@@ -1,0 +1,65 @@
+// Custom Mat Table
+.mat-table {
+  border-radius: 10px;
+  tr {
+    th {
+      background: #008acc !important;
+      color: white;
+      font-size: 12px !important;
+      &.text-center {
+        text-align: center;
+      }
+      &:last-child {
+        border-top-right-radius: 10px;
+      }
+      &:first-child {
+        border-top-left-radius: 10px;
+      }
+    }
+    td {
+      font-size: 12px !important;
+      &.text-center {
+        text-align: center;
+      }
+    }
+    &:last-child {
+      td {
+        &:first-child {
+          border-bottom-left-radius: 10px;
+        }
+        &:last-child {
+          border-bottom-right-radius: 10px;
+        }
+      }
+    }
+  }
+
+  .mat-row:nth-child(even),
+  .mat-header-cell {
+    background-color: #f7f7f7;
+  }
+
+  .mat-header-cell {
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .mat-row,
+  .mat-header-row {
+    height: 35px;
+  }
+
+  .mat-cell,
+  .mat-header-cell {
+    text-align: left;
+    padding-left: 15px;
+  }
+
+  .mat-cell:not(:last-child),
+  .mat-header-cell:not(:last-child) {
+    border-right: 1px solid #ebebeb;
+  }
+}
+::ng-deep .mat-paginator {
+  background: transparent !important;
+}

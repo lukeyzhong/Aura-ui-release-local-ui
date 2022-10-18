@@ -1,0 +1,548 @@
+<mat-expansion-panel (afterExpand)="getComments()" class="accordion-parent">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <div class="accordion-header">
+        <img src="./assets/svg/HR Verify Icons/Education.svg" width="" alt="" />
+        <h3>Education Information</h3>
+        <div *ngIf="countKeysEducationInfo !== 0" class="comment">
+          HR Comments
+          <div class="count">
+            <p>{{ countKeysEducationInfo }}</p>
+          </div>
+        </div>
+        <div *ngIf="countKeysEducationInfo !== 0" class="comment">
+          <button
+            class="delete"
+            type="button"
+            (click)="deleteComment('All', $event)"
+            mat-button
+            color="warn"
+            matTooltip="Delete All Comments"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="education">
+    <div class="form-l-group__header-hr">
+      <h3><b>Education</b></h3>
+      <hr />
+    </div>
+    <div
+      class="form-l-group"
+      *ngFor="
+        let eduInfo of educationInformationResult?.educationInfo;
+        let i = index
+      "
+    >
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('educationInformation.degreeName' + i)
+        }"
+      >
+        <label for="">Degree Name</label>
+        <p
+          id="{{ 'educationInformation.degreeName' + i }}"
+          #degreeNme
+          (mouseenter)="onHover(degreeNme.id)"
+        >
+          {{ eduInfo?.educationData?.degreeName }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('educationInformation.universityName' + i)
+        }"
+      >
+        <label for="">Institution Name</label>
+        <p
+          id="{{ 'educationInformation.universityName' + i }}"
+          #universityNme
+          (mouseenter)="onHover(universityNme.id)"
+        >
+          {{ eduInfo?.educationData?.universityName }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'educationInformation.educationStartDate' + i
+          )
+        }"
+      >
+        <label for="">Start date</label>
+        <p
+          id="{{ 'educationInformation.educationStartDate' + i }}"
+          #educationStrDate
+          (mouseenter)="onHover(educationStrDate.id)"
+        >
+          {{ eduInfo?.educationData?.startDate | date: 'MM/dd/yyyy' }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'educationInformation.educationEndDate' + i
+          )
+        }"
+      >
+        <label for="">End date</label>
+        <p
+          id="{{ 'educationInformation.educationEndDate' + i }}"
+          #educationEndDte
+          (mouseenter)="onHover(educationEndDte.id)"
+        >
+          {{ eduInfo?.educationData?.endDate | date: 'MM/dd/yyyy' }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('educationInformation.majorType1' + i)
+        }"
+      >
+        <label for="">Major 1</label>
+        <p
+          id="{{ 'educationInformation.majorType1' + i }}"
+          #major1
+          (mouseenter)="onHover(major1.id)"
+        >
+          {{ eduInfo?.educationData?.majorType }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('educationInformation.majorType2' + i)
+        }"
+      >
+        <label for="">Major 2</label>
+        <p
+          id="{{ 'educationInformation.majorType2' + i }}"
+          #major2
+          (mouseenter)="onHover(major2.id)"
+        >
+          {{ eduInfo?.educationData?.majorType1 }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div class="form-l-group__form">
+        <label for="">Stem flag</label>
+        <div class="stemFlag">
+          <mat-checkbox
+            color="primary"
+            (change)="
+              onChangeStemFlag($event, eduInfo?.educationData?.educationInfoId!)
+            "
+            [checked]="eduInfo?.educationData?.stemFlag! ? eduInfo?.educationData?.stemFlag! : false"
+          >
+          </mat-checkbox>
+        </div>
+      </div>
+      <div
+        class="form-l-group__form"
+        *ngFor="let eduDoc of eduInfo?.educationData?.documents; let j = index"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'educationInformation.educationDocument' + eduDoc.documentId
+          )
+        }"
+      >
+        <label for="">Document</label>
+        <p
+          id="{{
+            'educationInformation.educationDocument' + eduDoc.documentId
+          }}"
+          class="file"
+          #eduDocs
+          (mouseenter)="onHover(eduDocs.id)"
+        >
+          <img
+            *ngIf="eduDoc?.fileExtension === '.pdf'"
+            src="./assets/svg/icn-pdf.svg"
+            width="24px"
+            alt=""
+          />
+          <img
+            *ngIf="fileExtO.includes(eduDoc?.fileExtension!.toLowerCase())"
+            src="./assets/svg/icn-image.svg"
+            width="24px"
+            alt=""
+          />
+          {{ eduDoc?.displayName }}
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-sm btn-sm__white view"
+            (click)="previewDocument(eduDoc)"
+          >
+            <mat-icon matTooltip="Preview">remove_red_eye</mat-icon>
+          </button>
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+    </div>
+    <div class="form-l-group__header-hr">
+      <h3><b>Certificates</b></h3>
+      <hr />
+    </div>
+    <div
+      class="form-l-group"
+      *ngFor="
+        let certInfo of educationInformationResult?.certificateInfo;
+        let i = index
+      "
+    >
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'educationInformation.certificationName' + i
+          )
+        }"
+      >
+        <label for="">Certification Name</label>
+        <p
+          id="{{ 'educationInformation.certificationName' + i }}"
+          #certificationNme
+          (mouseenter)="onHover(certificationNme.id)"
+        >
+          {{ certInfo?.certificateData?.certificationName }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'educationInformation.certificationCode' + i
+          )
+        }"
+      >
+        <label for="">Certification Code</label>
+        <p
+          id="{{ 'educationInformation.certificationCode' + i }}"
+          #certiCode
+          (mouseenter)="onHover(certiCode.id)"
+        >
+          {{ certInfo?.certificateData?.certificationCode }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'educationInformation.certificateSerialNumber' + i
+          )
+        }"
+      >
+        <label for="">Certification Serial Number</label>
+        <p
+          id="{{ 'educationInformation.certificateSerialNumber' + i }}"
+          #certiSerialNum
+          (mouseenter)="onHover(certiSerialNum.id)"
+        >
+          {{ certInfo?.certificateData?.certificateSerialNumber }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'educationInformation.certifyingAgency' + i
+          )
+        }"
+      >
+        <label for="">Certifying Organization</label>
+        <p
+          id="{{ 'educationInformation.certifyingAgency' + i }}"
+          #certiAgency
+          (mouseenter)="onHover(certiAgency.id)"
+        >
+          {{ certInfo?.certificateData?.certifyingAgency }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('educationInformation.issuedDate' + i)
+        }"
+      >
+        <label for="">Date of Issue</label>
+        <p
+          id="{{ 'educationInformation.issuedDate' + i }}"
+          #issuedDte
+          (mouseenter)="onHover(issuedDte.id)"
+        >
+          {{ certInfo?.certificateData?.issuedDate | date: 'MM/dd/yyyy' }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has('educationInformation.expiryDate' + i)
+        }"
+      >
+        <label for="">Expiration Date</label>
+        <p
+          id="{{ 'educationInformation.expiryDate' + i }}"
+          #expiryDte
+          (mouseenter)="onHover(expiryDte.id)"
+        >
+          {{ certInfo?.certificateData?.expiryDate | date: 'MM/dd/yyyy' }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'educationInformation.certificationStatus' + i
+          )
+        }"
+      >
+        <label for="">Status</label>
+        <p
+          id="{{ 'educationInformation.certificationStatus' + i }}"
+          #certStatus
+          (mouseenter)="onHover(certStatus.id)"
+        >
+          {{ certInfo?.certificateData?.certificationStatus }}
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+      <div
+        class="form-l-group__form"
+        *ngFor="
+          let certDoc of certInfo?.certificateData?.documents;
+          let j = index
+        "
+        [ngClass]="{
+          rejected: hrCommentsMap.has(
+            'educationInformation.certificationDocument' + certDoc.documentId
+          )
+        }"
+      >
+        <label for="">Document</label>
+        <p
+          id="{{
+            'educationInformation.certificationDocument' + certDoc.documentId
+          }}"
+          class="file"
+          #certDocs
+          (mouseenter)="onHover(certDocs.id)"
+        >
+          <img
+            *ngIf="certDoc?.fileExtension === '.pdf'"
+            src="./assets/svg/icn-pdf.svg"
+            width="24px"
+            alt=""
+          />
+          <img
+            *ngIf="fileExtO.includes(certDoc?.fileExtension!.toLowerCase())"
+            src="./assets/svg/icn-image.svg"
+            width="24px"
+            alt=""
+          />
+          {{ certDoc?.displayName }}
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn-sm btn-sm__white view"
+            (click)="previewDocument(certDoc)"
+          >
+            <mat-icon matTooltip="Preview">remove_red_eye</mat-icon>
+          </button>
+        </p>
+        <div
+          *ngIf="
+            showUpdateButton === false;
+            then showAddBtn;
+            else showUpdateBtn
+          "
+        ></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mat-menu-parent">
+    <mat-menu
+      #commentMenus="matMenu"
+      xPosition="before"
+      yPosition="below"
+      class="mt-menu"
+      [overlapTrigger]="false"
+    >
+      <div class="rejection-reasson" (click)="$event.stopPropagation()">
+        <form [formGroup]="commentForm" (ngSubmit)="onSave()">
+          <div class="rejection-reasson__header">
+            <h4>Rejection Reason</h4>
+            <div
+              class="rejection-reasson__header--btns"
+              *ngIf="hrCommentsMap.has(commentKey)"
+            >
+              <button
+                type="button"
+                (click)="deleteComment('Single', $event)"
+                mat-button
+                color="warn"
+                matTooltip="Delete"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="rejection-reasson__content">
+            <textarea
+              formControlName="comment"
+              matInput
+              cols="30"
+              rows="4"
+            ></textarea>
+          </div>
+          <div class="rejection-reasson__footer">
+            <button
+              type="button"
+              (click)="closeMenu()"
+              mat-stroked-button
+              color="primary"
+            >
+              Close
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              [disabled]="commentForm.invalid || commentForm?.pristine"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-menu>
+  </div>
+
+  <ng-template #showUpdateBtn>
+    <button
+      mat-raised-button
+      color="warn"
+      matTooltip="Update Reason"
+      [matMenuTriggerFor]="commentMenus"
+      class="rejection rejection__update"
+    >
+      <mat-icon> chat_bubble </mat-icon>
+    </button>
+  </ng-template>
+
+  <ng-template #showAddBtn>
+    <button
+      mat-raised-button
+      color="warn"
+      matTooltip="Reject"
+      (click)="$event.stopPropagation()"
+      [matMenuTriggerFor]="commentMenus"
+      class="rejection rejection__add"
+    >
+      <mat-icon> close </mat-icon>
+    </button>
+  </ng-template>
+</mat-expansion-panel>

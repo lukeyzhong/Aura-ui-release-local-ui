@@ -1,0 +1,1251 @@
+<div class="cnd-preview">
+  <mat-accordion class="aura-accordion">
+    <!-- PERSONAL INFO -->
+    <mat-expansion-panel
+      (afterExpand)="
+        setPersonalInfo(); setIdentificationInfo(); setEducationInfo()
+      "
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="accordion-header">
+            <img
+              src="./assets/svg/HR Verify Icons/Personal-Info.svg"
+              width="40px"
+              alt=""
+            />
+            <h3>Personal Information</h3>
+          </div>
+        </mat-panel-title>
+        <button
+          class="panel-edit"
+          mat-mini-fab
+          color="primary"
+          aria-label="Example icon button with a menu icon"
+          (click)="redirectTo(0)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-expansion-panel-header>
+
+      <div class="form-l-group">
+        <div class="form-l-group__form">
+          <label for="">First Name</label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.firstName }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Last Name</label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.lastName }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Alias</label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.aliasName }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Date Of Birth</label>
+          <p>
+            {{
+              candidateOnboardingPersonalInfoResult?.dateOfBirth!
+                | date: 'MM/dd/yyyy'
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Gender</label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.gender }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Marital Status</label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.maritalStatus }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Ethnicity </label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.ethnicity }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Race</label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.race }}
+          </p>
+        </div>
+      </div>
+      <div class="form-l-group__header-hr">
+        <h3>Mailing Address</h3>
+        <hr />
+      </div>
+      <div class="form-l-group">
+        <div class="form-l-group__form">
+          <label for="">Address 1</label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.address?.addressLine1 }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Address 2</label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.address?.addressLine2 }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">City</label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.address?.city }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">State</label>
+          <p>
+            {{ livingAddrStateName }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Country</label>
+          <p>
+            {{ livingAddrCountryName }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Zip Code</label>
+          <p>
+            {{ candidateOnboardingPersonalInfoResult?.address?.postalCode }}
+          </p>
+        </div>
+      </div>
+      <div class="form-l-group__header-hr">
+        <h3>Contact Details</h3>
+        <hr />
+      </div>
+      <div class="form-l-group">
+        <div class="form-l-group__form">
+          <label for="">Mobile Phone</label>
+          <p *ngIf="cellCountry[0]">
+            {{ '+' + cellCountry[0] }}-{{ cellPhoneNumber[0] }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Home Phone</label>
+          <p *ngIf="homeCountry[0]">
+            {{ '+' + homeCountry[0] }}-{{ homePhoneNumber[0] }}
+          </p>
+        </div>
+
+        <div class="form-l-group__form">
+          <label for="">Work Phone</label>
+          <p
+            *ngIf="officeCountry[0]"
+            id="personalInformation.officePhoneNumber"
+          >
+            {{ '+' + officeCountry[0] }}-{{ officePhoneNumber[0] }}-({{
+              officeExtension[0]
+            }})
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Email Address</label>
+          <p>
+            {{ email[0] }}
+          </p>
+        </div>
+      </div>
+      <div class="form-l-group__header-hr">
+        <h3>Social Profiles</h3>
+        <hr />
+      </div>
+      <div class="form-l-group">
+        <div
+          class="form-l-group__form"
+          *ngFor="
+            let socialMedia of candidateOnboardingPersonalInfoResult?.socialMediaLinks;
+            let i = index
+          "
+        >
+          <div *ngIf="socialMedia?.socialMediaLink === 'Linkedin'">
+            <a href="{{ socialMedia?.url }}" target="_blank">
+              <img width="18px" src="./assets/svg/linkedin-sm.svg" alt="" />
+            </a>
+          </div>
+          <div *ngIf="socialMedia?.socialMediaLink === 'Twitter'">
+            <a href="{{ socialMedia?.url }}" target="_blank">
+              <img width="18px" src="./assets/svg/twitter-sm.svg" alt="" />
+            </a>
+          </div>
+          <div *ngIf="socialMedia?.socialMediaLink === 'Facebook'">
+            <a href="{{ socialMedia?.url }}" target="_blank">
+              <img width="18px" src="./assets/svg/facebook-sm.svg" alt="" />
+            </a>
+          </div>
+          <div *ngIf="socialMedia?.socialMediaLink === 'Youtube'">
+            <a href="{{ socialMedia?.url }}" target="_blank">
+              <img width="18px" src="./assets/svg/youtube-sm.svg" alt="" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-l-group__header-hr">
+        <h3>SSN</h3>
+        <hr />
+      </div>
+      <div class="form-l-group">
+        <div class="form-l-group__form">
+          <label for="">SSN Number</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.ssnInfo
+                ?.socialSecurityNumber
+            }}
+          </p>
+        </div>
+        <div
+          class="form-l-group__form file"
+          *ngFor="
+            let ssnDoc of identificationImmigrationInformationResult?.ssnInfo
+              ?.documents;
+            let i = index
+          "
+        >
+          <label for="">Document</label>
+          <p class="file">
+            <img
+              *ngIf="ssnDoc?.fileExtension === '.pdf'"
+              src="./assets/svg/icn-pdf.svg"
+              width="24px"
+              alt=""
+            />
+            <img
+              *ngIf="fileExtO.includes(ssnDoc?.fileExtension!.toLowerCase())"
+              src="./assets/svg/icn-image.svg"
+              width="24px"
+              alt=""
+            />
+            {{ ssnDoc?.displayName }}
+            <button
+              mat-raised-button
+              color="primary"
+              class="btn-sm btn-sm__white view"
+              matTooltip="Preview"
+              (click)="previewDocument(ssnDoc)"
+            >
+              <mat-icon>remove_red_eye</mat-icon>
+            </button>
+          </p>
+        </div>
+      </div>
+      <div class="form-l-group__header-hr">
+        <h3>Passport Information</h3>
+        <hr />
+      </div>
+      <div class="form-l-group">
+        <div class="form-l-group__form">
+          <label for="">Passport Number</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.passportInfo
+                ?.passportNumber
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Issue Date</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.passportInfo
+                ?.passportIssueDate | date: 'MM/dd/yyyy'
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Expiry Date</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.passportInfo
+                ?.passportExpiryDate | date: 'MM/dd/yyyy'
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Issue City</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.passportInfo
+                ?.passportIssuedCity
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Issue Country</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.passportInfo
+                ?.passportIssueCountry
+            }}
+          </p>
+        </div>
+        <div
+          class="form-l-group__form"
+          *ngFor="
+            let passportDoc of identificationImmigrationInformationResult
+              ?.passportInfo?.documents;
+            let i = index
+          "
+        >
+          <label for="">Document</label>
+          <p class="file">
+            <img
+              *ngIf="passportDoc?.fileExtension === '.pdf'"
+              src="./assets/svg/icn-pdf.svg"
+              width="24px"
+              alt=""
+            />
+            <img
+              *ngIf="
+                fileExtO.includes(passportDoc?.fileExtension!.toLowerCase())
+              "
+              src="./assets/svg/icn-image.svg"
+              width="24px"
+              alt=""
+            />
+            {{ passportDoc?.displayName }}
+            <button
+              mat-raised-button
+              color="primary"
+              class="btn-sm btn-sm__white view"
+              (click)="previewDocument(passportDoc)"
+            >
+              <mat-icon matTooltip="Preview">remove_red_eye</mat-icon>
+            </button>
+          </p>
+        </div>
+      </div>
+
+      <div class="form-l-group__header-hr">
+        <h3>Driving License Information</h3>
+        <hr />
+      </div>
+      <div class="form-l-group">
+        <div class="form-l-group__form">
+          <label for="">License Number</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.drivingLicenseInfo
+                ?.drivingLicenseNo
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Issue Date</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.drivingLicenseInfo
+                ?.issueDate | date: 'MM/dd/yyyy'
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Expiry Date</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.drivingLicenseInfo
+                ?.expiryDate | date: 'MM/dd/yyyy'
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">City</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.drivingLicenseInfo
+                ?.location?.city
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">State</label>
+          <p>
+            {{
+              mapState.get(
+                parseNumberToString(
+                  identificationImmigrationInformationResult?.drivingLicenseInfo
+                    ?.location?.stateCode!
+                )
+              )
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Zip Code</label>
+          <p>
+            {{
+              identificationImmigrationInformationResult?.drivingLicenseInfo
+                ?.location?.zip
+            }}
+          </p>
+        </div>
+        <div
+          class="form-l-group__form file"
+          *ngFor="
+            let licenseDoc of identificationImmigrationInformationResult
+              ?.drivingLicenseInfo?.documents;
+            let i = index
+          "
+        >
+          <label for="">Document</label>
+          <p class="file">
+            <img
+              *ngIf="licenseDoc?.fileExtension === '.pdf'"
+              src="./assets/svg/icn-pdf.svg"
+              width="24px"
+              alt=""
+            />
+            <img
+              *ngIf="
+                fileExtO.includes(licenseDoc?.fileExtension!.toLowerCase())
+              "
+              src="./assets/svg/icn-image.svg"
+              width="24px"
+              alt=""
+            />
+            {{ licenseDoc?.displayName }}
+            <button
+              mat-raised-button
+              color="primary"
+              class="btn-sm btn-sm__white view"
+              (click)="previewDocument(licenseDoc)"
+            >
+              <mat-icon matTooltip="Preview">remove_red_eye</mat-icon>
+            </button>
+          </p>
+        </div>
+      </div>
+      <div class="form-l-group__header-hr">
+        <h3>Immigration Information</h3>
+        <hr />
+      </div>
+      <div
+        class="form-l-group"
+        *ngFor="let immigration of immigrationData; let i = index"
+      >
+        <div class="form-l-group__form">
+          <label for="">Work Authorization</label>
+          <p>
+            {{ immigration?.immigrationInfo?.workAuthorizationType }}
+          </p>
+        </div>
+        <div
+          class="form-l-group__form"
+          *ngIf="immigration?.immigrationInfo?.workAuthorizationType === 'EAD'"
+        >
+          <label for="">EAD Code</label>
+          <p>
+            {{
+              getEADCategoryName(immigration?.immigrationInfo?.eadCategoryCode)
+            }}
+          </p>
+        </div>
+        <div
+          class="form-l-group__form"
+          *ngIf="immigration?.immigrationInfo?.workAuthorizationType === 'EAD'"
+        >
+          <label for="">EAD Category Name</label>
+          <p>
+            {{ immigration?.immigrationInfo?.eadCategory }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Work Authorization Number</label>
+          <p>
+            {{ immigration?.immigrationInfo?.workAuthorizationNumber }}
+          </p>
+        </div>
+
+        <div class="form-l-group__form">
+          <label for="">Validity From Date</label>
+          <p>
+            {{
+              immigration?.immigrationInfo?.workAuthorizationStartDate
+                | date: 'MM/dd/yyyy'
+            }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Validity Expiry Date</label>
+          <p>
+            {{
+              immigration?.immigrationInfo?.workAuthorizationExpiryDate
+                | date: 'MM/dd/yyyy'
+            }}
+          </p>
+        </div>
+        <div
+          class="form-l-group__form file"
+          *ngFor="
+            let immigrationDoc of immigration?.immigrationInfo?.documents;
+            let i = index
+          "
+        >
+          <label for="">Document</label>
+          <p class="file">
+            <img
+              *ngIf="immigrationDoc?.fileExtension === '.pdf'"
+              src="./assets/svg/icn-pdf.svg"
+              width="24px"
+              alt=""
+            />
+            <img
+              *ngIf="
+                fileExtO.includes(immigrationDoc?.fileExtension!.toLowerCase())
+              "
+              src="./assets/svg/icn-image.svg"
+              width="24px"
+              alt=""
+            />
+            {{ immigrationDoc?.displayName }}
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="previewDocument(immigrationDoc)"
+              class="btn-sm btn-sm__white view"
+              matTooltip="Preview"
+            >
+              <mat-icon>remove_red_eye </mat-icon>
+            </button>
+          </p>
+        </div>
+      </div>
+
+      <div class="form-l-group__header-hr">
+        <h3>Education</h3>
+        <hr />
+      </div>
+      <div
+        class="form-l-group"
+        *ngFor="
+          let eduInfo of educationInformationResult?.educationInfo;
+          let i = index
+        "
+      >
+        <div class="form-l-group__form">
+          <label for="">Degree Name</label>
+          <p>
+            {{ eduInfo?.educationData?.degreeName }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Institution Name</label>
+          <p>
+            {{ eduInfo?.educationData?.universityName }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Start date</label>
+          <p>
+            {{ eduInfo?.educationData?.startDate | date: 'MM/dd/yyyy' }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">End date</label>
+          <p>
+            {{ eduInfo?.educationData?.endDate | date: 'MM/dd/yyyy' }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Major 1</label>
+          <p>
+            {{ eduInfo?.educationData?.majorType }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Major 2</label>
+          <p>
+            {{ eduInfo?.educationData?.majorType1 }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Stem flag</label>
+          <p>
+            {{
+              eduInfo?.educationData?.stemFlag === null
+                ? ''
+                : eduInfo?.educationData?.stemFlag
+                ? 'Yes'
+                : 'No'
+            }}
+          </p>
+        </div>
+        <div
+          class="form-l-group__form file"
+          *ngFor="
+            let eduDoc of eduInfo?.educationData?.documents;
+            let j = index
+          "
+        >
+          <label for="">Document</label>
+          <p class="file">
+            <img
+              *ngIf="eduDoc?.fileExtension === '.pdf'"
+              src="./assets/svg/icn-pdf.svg"
+              width="24px"
+              alt=""
+            />
+            <img
+              *ngIf="fileExtO.includes(eduDoc?.fileExtension!.toLowerCase())"
+              src="./assets/svg/icn-image.svg"
+              width="24px"
+              alt=""
+            />
+            {{ eduDoc?.displayName }}
+            <button
+              mat-raised-button
+              color="primary"
+              class="btn-sm btn-sm__white view"
+              (click)="previewDocument(eduDoc)"
+            >
+              <mat-icon matTooltip="Preview">remove_red_eye</mat-icon>
+            </button>
+          </p>
+        </div>
+      </div>
+      <div class="form-l-group__header-hr">
+        <h3>Certificates</h3>
+        <hr />
+      </div>
+      <div
+        class="form-l-group"
+        *ngFor="
+          let certInfo of educationInformationResult?.certificateInfo;
+          let i = index
+        "
+      >
+        <div class="form-l-group__form">
+          <label for="">Certification Name</label>
+          <p>
+            {{ certInfo?.certificateData?.certificationName }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Certification Code</label>
+          <p>
+            {{ certInfo?.certificateData?.certificationCode }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Certification ID</label>
+          <p>
+            {{ certInfo?.certificateData?.certificateSerialNumber }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Certifying Organization</label>
+          <p>
+            {{ certInfo?.certificateData?.certifyingAgency }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Date Of Issue</label>
+          <p>
+            {{ certInfo?.certificateData?.issuedDate | date: 'MM/dd/yyyy' }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Expiration Date</label>
+          <p>
+            {{ certInfo?.certificateData?.expiryDate | date: 'MM/dd/yyyy' }}
+          </p>
+        </div>
+        <div class="form-l-group__form">
+          <label for="">Status</label>
+          <p>
+            {{ certInfo?.certificateData?.certificationStatus }}
+          </p>
+        </div>
+        <div
+          class="form-l-group__form file"
+          *ngFor="
+            let certDoc of certInfo?.certificateData?.documents;
+            let j = index
+          "
+        >
+          <label for="">Document</label>
+          <p class="file">
+            <img
+              *ngIf="certDoc?.fileExtension === '.pdf'"
+              src="./assets/svg/icn-pdf.svg"
+              width="24px"
+              alt=""
+            />
+            <img
+              *ngIf="fileExtO.includes(certDoc?.fileExtension!.toLowerCase())"
+              src="./assets/svg/icn-image.svg"
+              width="24px"
+              alt=""
+            />
+            {{ certDoc?.displayName }}
+            <button
+              mat-raised-button
+              color="primary"
+              class="btn-sm btn-sm__white view"
+              (click)="previewDocument(certDoc)"
+            >
+              <mat-icon matTooltip="Preview">remove_red_eye</mat-icon>
+            </button>
+          </p>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- EMERGENCY CONTACTS -->
+    <mat-expansion-panel (afterExpand)="setEmergencyContacts()">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="accordion-header">
+            <img
+              src="./assets/svg/HR Verify Icons/Emergency-contact.svg"
+              width=""
+              alt=""
+            />
+            <h3>Emergency Contacts</h3>
+          </div>
+        </mat-panel-title>
+        <button
+          class="panel-edit"
+          mat-mini-fab
+          color="primary"
+          aria-label="Example icon button with a menu icon"
+          (click)="redirectTo(1)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-expansion-panel-header>
+      <div
+        class="education"
+        *ngFor="let contact of emergencyContacts; let i = index"
+      >
+        <div class="form-l-group__header-hr">
+          <h3 *ngIf="i === 0">Primary Contact</h3>
+          <h3 *ngIf="i > 0">Secondary Contact</h3>
+          <hr />
+        </div>
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">First Name</label>
+            <p>
+              {{ contact?.firstName }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Last Name</label>
+            <p>
+              {{ contact?.lastName }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Relationship</label>
+            <p>
+              {{ contact?.relationShipType }}
+            </p>
+          </div>
+        </div>
+        <div class="form-l-group__header-hr">
+          <h3 *ngIf="i === 0">Mailing Address</h3>
+          <h3 *ngIf="i > 0">Address</h3>
+          <hr />
+        </div>
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">Address 1</label>
+            <p>
+              {{ contact?.address?.addressLine1 }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Address 2</label>
+            <p>
+              {{ contact?.address?.addressLine2 }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">City</label>
+            <p>
+              {{ contact?.address?.city }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">State</label>
+            <p>
+              {{ mapState.get(contact?.address?.stateCode!) }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Country</label>
+            <p>
+              {{ mapCountry.get(contact?.address?.countryCode!) }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Zip Code</label>
+            <p>
+              {{ contact?.address?.postalCode }}
+            </p>
+          </div>
+        </div>
+        <div class="form-l-group__header-hr">
+          <h3 *ngIf="i === 0">Contact Details</h3>
+          <h3 *ngIf="i > 0">Contact</h3>
+          <hr />
+        </div>
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">Home Phone</label>
+            <p *ngIf="homeCountry[i]">
+              {{ '+' + homeCountry[i] }}-{{ homePhoneNumber[i] }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Mobile Phone</label>
+            <p *ngIf="cellCountry[i]">
+              {{ '+' + cellCountry[i] }}-{{ cellPhoneNumber[i] }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Work Phone</label>
+            <p *ngIf="officeCountry[i]">
+              {{ '+' + officeCountry[i] }}-{{ officePhoneNumber[i] }}-({{
+                officeExtension[i]
+              }})
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Email Address</label>
+            <p>
+              {{ email[i] }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- BANKS & PAY CHEQUES -->
+    <mat-expansion-panel (afterExpand)="setBanksAndPaychecksDetails()">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="accordion-header">
+            <img
+              src="./assets/svg/HR Verify Icons/bank-paychecks.svg"
+              width=""
+              alt=""
+            />
+            <h3>Banks & Paychecks</h3>
+          </div>
+        </mat-panel-title>
+        <button
+          class="panel-edit"
+          mat-mini-fab
+          color="primary"
+          aria-label="Example icon button with a menu icon"
+          (click)="redirectTo(2)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-expansion-panel-header>
+      <div
+        class="hv-banks-paychecks"
+        *ngFor="let bankInfo of bankPaycheckInfo; let i = index"
+      >
+        <div class="form-l-group__header-hr">
+          <h3>Bank Account {{ i + 1 }}</h3>
+          <hr />
+        </div>
+        <p class="page-note" *ngIf="i === 0">
+          *This bank account will be considered as primary account
+        </p>
+        <div class="form-l-group">
+          <div class="form-l-group__form">
+            <label for="">Name</label>
+            <p>
+              {{ bankInfo?.bankAccountData?.accountName }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Account Type</label>
+            <p>
+              {{ bankInfo?.bankAccountData?.bankAccountType }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for="">Bank Name</label>
+            <p>
+              {{ bankInfo?.bankAccountData?.bankName }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for=""> Routing Number</label>
+            <p>
+              {{ bankInfo?.bankAccountData?.routingNumber }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for=""> Account Number</label>
+            <p>
+              {{ bankInfo?.bankAccountData?.accountNumber }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for=""> Branch Name</label>
+            <p>
+              {{ bankInfo?.bankAccountData?.branchName }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label for=""> Paycheck distribution</label>
+            <p>
+              {{ bankInfo?.bankAccountData?.calculationType }}
+            </p>
+          </div>
+          <div class="form-l-group__form">
+            <label *ngIf="bankInfo?.bankAccountData?.calculationTypeCode === 2">
+              Percentage</label
+            >
+            <label *ngIf="bankInfo?.bankAccountData?.calculationTypeCode === 1">
+              Amount</label
+            >
+            <p>
+              {{ bankInfo?.bankAccountData?.calculationValue }}
+              <span *ngIf="bankInfo?.bankAccountData?.calculationTypeCode === 2"
+                >%</span
+              >
+            </p>
+          </div>
+          <div
+            class="form-l-group__form file"
+            *ngIf="bankInfo?.bankAccountData?.document"
+          >
+            <label for="">Document</label>
+            <p>
+              <img
+                *ngIf="
+                  bankInfo?.bankAccountData?.document?.fileExtension === '.pdf'
+                "
+                src="./assets/svg/icn-pdf.svg"
+                width="24px"
+                alt=""
+              />
+              <img
+                *ngIf="
+                  fileExtO.includes(
+                    bankInfo?.bankAccountData?.document?.fileExtension!.toLowerCase()
+                  )
+                "
+                src="./assets/svg/icn-image.svg"
+                width="24px"
+                alt=""
+              />
+              {{ bankInfo?.bankAccountData?.document?.displayName }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- TAX INFORMATION -->
+
+    <mat-expansion-panel *ngIf="hideTaxTab" (afterExpand)="setTaxInformation()">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="accordion-header">
+            <img
+              src="./assets/svg/HR Verify Icons/tax-info.svg"
+              width=""
+              alt=""
+            />
+            <h3>Tax Information</h3>
+          </div>
+        </mat-panel-title>
+        <button
+          class="panel-edit"
+          mat-mini-fab
+          color="primary"
+          aria-label="Example icon button with a menu icon"
+          (click)="redirectTo(3)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-expansion-panel-header>
+      <div class="container">
+        <div
+          class="container--pdf"
+          *ngIf="taxFormName === 'Federal Tax Withholding'"
+        >
+          <div class="container--pdf--header">
+            <h4 align="center" class="title-h4">Federal Tax Withholding</h4>
+          </div>
+          <div class="container--pdf-view">
+            <pdf-viewer
+              src="{{ federalTaxURL }}"
+              [original-size]="false"
+            ></pdf-viewer>
+          </div>
+        </div>
+
+        <!-- State Tax -->
+        <div
+          class="container--pdf"
+          *ngIf="taxFormName === 'State Tax Withholding'"
+        >
+          <div class="container--pdf--header">
+            <h4 align="center" class="title-h4">State Tax Withholding</h4>
+          </div>
+          <mat-tab-group
+            mat-align-tabs="start"
+            [(selectedIndex)]="selectedIndex"
+          >
+            <mat-tab label="Personal Information">
+              <div class="form-l-group__header-hr">
+                <h3>Step 1: Personal Information</h3>
+                <hr />
+              </div>
+              <div class="form-l-group">
+                <div class="form-l-group__form">
+                  <label for="">First Name</label>
+                  <p>{{ taxInformationResult?.firstName }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Last Name</label>
+                  <p>{{ taxInformationResult?.lastName }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">SSN</label>
+                  <p>{{ taxInformationResult?.ssn }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">City</label>
+                  <p>{{ taxInformationResult?.city }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">State</label>
+                  <p>{{ taxInformationResult?.state }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Country</label>
+                  <p>{{ taxInformationResult?.country }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Zip Code</label>
+                  <p>{{ taxInformationResult?.postalCode }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Marital Status</label>
+                  <p>{{ taxInformationResult?.maritalStatus }}</p>
+                </div>
+
+                <div class="form-l-group__form">
+                  <label for="">Filing Status</label>
+                  <p>{{ taxInformationResult?.stateFilingStatus }}</p>
+                </div>
+              </div>
+              <div class="tax-info__footer">
+                <button mat-raised-button color="primary" (click)="nextStep()">
+                  Next
+                </button>
+              </div>
+            </mat-tab>
+            <mat-tab label="State and Locality Tax's">
+              <div class="form-l-group__header-hr">
+                <h3>State Tax</h3>
+                <hr />
+              </div>
+              <div class="form-l-group">
+                <div class="form-l-group__form">
+                  <label for="">Filing Status</label>
+                  <p>{{ taxInformationResult?.stateFilingStatus }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Worked State</label>
+                  <p>{{ taxInformationResult?.workedState }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Total Exemptions Worked in State</label>
+                  <p>{{ taxInformationResult?.exemptionInWorkedState }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Lived in State</label>
+                  <p>{{ taxInformationResult?.livedInState }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Total Exemptions Lived in State</label>
+                  <p>{{ taxInformationResult?.exemptionsInLivedInState }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Total Exemptions for Age and Blind</label>
+                  <p>
+                    {{ taxInformationResult?.totalExemptionsForAgeOrBlind }}
+                  </p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Additional Taxes Amount</label>
+                  <p>{{ taxInformationResult?.stateAdditionalTaxAmount }}</p>
+                </div>
+              </div>
+
+              <div class="form-l-group__header-hr">
+                <h3>Locality Tax</h3>
+                <hr />
+              </div>
+              <div class="form-l-group">
+                <div class="form-l-group__form">
+                  <label for="">Worked in City</label>
+                  <p>{{ taxInformationResult?.workedinCity }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Exemptions worked in city</label>
+                  <p>{{ taxInformationResult?.exemptionsInWorkedCity }}</p>
+                </div>
+                <div class="form-l-group__form">
+                  <label for="">Lived In Locality</label>
+                  <p>{{ taxInformationResult?.livedInCity }}</p>
+                </div>
+              </div>
+
+              <div class="tax-info__footer">
+                <button
+                  type="button"
+                  mat-stroked-button
+                  color="primary"
+                  (click)="previousStep()"
+                >
+                  Previous
+                </button>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+
+        <div class="container--pdf-list">
+          <ul>
+            <li
+              (click)="showTaxForms(i)"
+              *ngFor="let tax of taxFormsList; let i = index"
+              [ngClass]="{
+                active: currentTaxFormIndex === i,
+                verified: taxFormsUpdated.includes(i)
+              }"
+            >
+              <span class="container--preview">
+                <mat-icon>check_circle</mat-icon>
+              </span>
+              <p matTooltip="{{ tax }}">
+                {{ tax }}
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    <!-- WORK ELIGIBILITY & I9 -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="accordion-header">
+            <img
+              src="./assets/svg/HR Verify Icons/work-eligibility.svg"
+              width=""
+              alt=""
+            />
+            <h3>Work Eligibility & I9</h3>
+          </div>
+        </mat-panel-title>
+        <button
+          class="panel-edit"
+          mat-mini-fab
+          color="primary"
+          aria-label="Example icon button with a menu icon"
+          (click)="redirectTo(4)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-expansion-panel-header>
+      <div class="i-9">
+        <div class="i-9__pdf">
+          <div class="i-9__pdf--file">
+            <div class="pdf-viewer">
+              <div *ngIf="isLoadingI9Form" class="spinner">
+                <app-spinner diameter="35"></app-spinner>
+              </div>
+              <pdf-viewer
+                src="{{ i9DocURL }}"
+                [original-size]="false"
+              ></pdf-viewer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- DOCUMENTS -->
+    <mat-expansion-panel (afterExpand)="refreshDocuments()">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="accordion-header">
+            <img
+              src="./assets/svg/candidate-onboard/Documents.svg"
+              width=""
+              alt=""
+            />
+            <h3>Documents</h3>
+          </div>
+        </mat-panel-title>
+        <button
+          class="panel-edit"
+          mat-mini-fab
+          color="primary"
+          aria-label="Example icon button with a menu icon"
+          (click)="redirectTo(5)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </mat-expansion-panel-header>
+      <app-candidate-onboarding-documents-tab
+        [compName]="compName"
+        [refreshDocs]="refreshDocs"
+        [employeeOnboardingId]="employeeOnboardingId"
+      ></app-candidate-onboarding-documents-tab>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+<div class="cnd-preview__footer">
+  <button
+    type="button"
+    mat-stroked-button
+    color="primary"
+    (click)="onPrevious()"
+  >
+    Previous
+  </button>
+  <button
+    type="button"
+    mat-stroked-button
+    color="primary"
+    (click)="goToDashboard()"
+  >
+    Close
+  </button>
+  <button
+    type="button"
+    mat-raised-button
+    color="primary"
+    (click)="submitCandidateOnboarding()"
+  >
+    Submit
+  </button>
+</div>

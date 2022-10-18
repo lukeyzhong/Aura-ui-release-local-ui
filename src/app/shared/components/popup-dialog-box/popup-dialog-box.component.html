@@ -1,0 +1,7 @@
+<div class="confirmation">   
+    <div md-dialog-content class="confirmation__content" [innerHTML]="confirmMessage"></div>
+    <div mat-dialog-actions class="confirmation__footer">
+      <button mat-button mat-raised-button color="primary" (click)="dialogConfirmRef.close(false)">Cancel</button>
+      <button mat-raised-button (click)="dialogConfirmRef.close(true)">Submit</button>
+    </div>
+</div>

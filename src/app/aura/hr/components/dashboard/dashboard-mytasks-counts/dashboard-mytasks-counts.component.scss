@@ -1,0 +1,220 @@
+@import '../../../../../styles/utilities/variables';
+.task-actions {
+  padding: 10px 10px 0 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 3px 5px 0px rgb(0 0 0 / 20%);
+  -webkit-box-shadow: 0px 3px 5px 0px rgb(0 0 0 / 20%);
+  -moz-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  &--list {
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      overflow: auto;
+      padding: 0 15px !important;
+      li {
+        width: 50%;
+        font-size: 14px;
+        padding: 5px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        input {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+  &--close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 0px;
+    min-width: fit-content;
+    mat-icon {
+      color: #fff;
+    }
+  }
+  &--overlay {
+    position: absolute;
+    z-index: 1111;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 10px;
+    background-color: #000;
+    opacity: 0.8;
+    ::ng-deep .mat-button-wrapper {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  &--options {
+    position: absolute;
+    top: 1px;
+    right: 10px;
+    button {
+      padding: 7px 5px;
+      min-width: 30px;
+      ::ng-deep .mat-button-wrapper {
+        display: flex;
+        gap: 3px;
+        span {
+          display: block;
+          width: 4px;
+          height: 4px;
+          border: 1px solid #333;
+          border-radius: 10px;
+          background-color: #333;
+        }
+      }
+    }
+  }
+  &__nav {
+    display: flex;
+    height: 100%;
+    &--left {
+      display: flex;
+      button {
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        min-width: 30px;
+        margin: 20px 5px;
+      }
+    }
+    &--center {
+      display: flex;
+      flex-grow: 1;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+    &--right {
+      display: flex;
+      button {
+        background-color: transparent;
+        border: none;
+        padding: 0;
+        min-width: 30px;
+        margin: 20px 5px;
+      }
+    }
+    &--card {
+      padding: 10px 0;
+      position: relative;
+      padding: 10px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 10px 0;
+      position: relative;
+      cursor: pointer;
+      &:last-child {
+        .task-actions__nav--c-dtls {
+          border-right: none;
+        }
+      }
+      &::after {
+        content: '';
+        width: 0;
+        right: 0;
+        left: 0;
+        margin: 0 auto;
+        bottom: 0;
+        height: 5px;
+        background-color: #0182c1;
+        border-radius: 5px;
+        z-index: 11;
+        position: absolute;
+        transition: all 0.3s ease-in-out;
+      }
+      &:hover {
+        &::after {
+          opacity: 1;
+
+          width: 100%;
+          transition: all 500ms ease-in-out;
+        }
+      }
+
+      &::before {
+        position: absolute;
+        content: '';
+        left: 0;
+        top: 100%;
+        right: 0;
+        bottom: 0;
+        background-image: linear-gradient(
+          to bottom,
+          #ffffff,
+          #f9faff,
+          #f0f5ff,
+          #e4f2ff,
+          #d6efff
+        );
+        z-index: 1;
+        transition: all 600ms ease-in;
+        transition: all 600ms ease-out;
+      }
+      &:hover::before {
+        top: 0;
+      }
+    }
+    &--c-dtls {
+      border-right: 1px solid $primary;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      h2 {
+        z-index: 2;
+        color: $primary;
+        font-size: 20px;
+        font-family: 'ProximaNova-semibold' !important;
+        text-align: center;
+      }
+      p {
+        z-index: 2;
+        font-size: 14px;
+        text-align: center;
+        font-family: 'ProximaNova-semibold' !important;
+        letter-spacing: normal;
+      }
+    }
+  }
+}
+.spinner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.task {
+  &__expand {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    button {
+      min-width: auto;
+      padding: 0;
+      padding: 3px;
+      color: #b4b4b4;
+      ::ng-deep .mat-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}

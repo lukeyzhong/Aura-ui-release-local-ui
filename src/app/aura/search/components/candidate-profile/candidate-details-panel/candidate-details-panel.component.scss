@@ -1,0 +1,7 @@
+@import '../../employee-profile/employee-details-panel/employee-details-panel.component.scss';
+::ng-deep .mat-tab-labels {
+  margin-left: 25px;
+}
+::ng-deep .mat-tab-body {
+  min-height: Calc(100vh - 363px);
+}

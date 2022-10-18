@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="79" height="79" viewBox="0 0 79 79">
+  <g id="Group_3970" data-name="Group 3970" transform="translate(-62.91 -212.13)">
+    <circle id="Ellipse_373" data-name="Ellipse 373" cx="39.5" cy="39.5" r="39.5" transform="translate(62.91 212.13)" fill="#fff"/>
+    <g id="camera" transform="translate(84.777 238.3)" opacity="0.502">
+      <path id="Path_15611" data-name="Path 15611" d="M3.2,39.929H9.944V38.9a2.3,2.3,0,0,1,2.3-2.3H22.7A2.3,2.3,0,0,1,25,38.9v1.024h6.743a3.224,3.224,0,0,1,3.2,3.2V60.543a3.224,3.224,0,0,1-3.2,3.2H3.2a3.224,3.224,0,0,1-3.2-3.2V43.13A3.2,3.2,0,0,1,3.2,39.929Z" transform="translate(0 -36.6)" fill="#4a566e"/>
+      <path id="Path_15612" data-name="Path 15612" d="M97,102.756a6.852,6.852,0,1,0,2.006,4.865A7.208,7.208,0,0,0,97,102.756ZM92.178,99a8.443,8.443,0,0,1,6.06,2.518,8.62,8.62,0,0,1,2.518,6.06,8.443,8.443,0,0,1-2.518,6.06,8.62,8.62,0,0,1-6.06,2.518,8.443,8.443,0,0,1-6.06-2.518A8.57,8.57,0,0,1,92.178,99Z" transform="translate(-74.68 -92.342)" fill="#00b594"/>
+      <g id="Group_3917" data-name="Group 3917" transform="translate(12.804 6.572)">
+        <circle id="Ellipse_371" data-name="Ellipse 371" cx="1.707" cy="1.707" r="1.707" transform="translate(15.45 0)" fill="#fff"/>
+        <circle id="Ellipse_372" data-name="Ellipse 372" cx="4.695" cy="4.695" r="4.695" transform="translate(0 3.969)" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</svg>

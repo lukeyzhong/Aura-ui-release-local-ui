@@ -1,0 +1,207 @@
+@import '../../dashboard/dashboard.component.scss';
+
+.my-task {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 3px 5px 0px rgb(0 0 0 / 20%);
+  -webkit-box-shadow: 0px 3px 5px 0px rgb(0 0 0 / 20%);
+  -moz-box-shadow: 0px 3px 5px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    text-align: left;
+    position: relative;
+
+    h3 {
+      font-weight: 500;
+      color: black;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    &--open-new {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      color: #b4b4b4;
+      font-size: 24px;
+      cursor: pointer;
+      min-width: 32px;
+      padding: 0;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      ::ng-deep .mat-button-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+    &--left {
+      justify-content: space-between;
+      display: flex;
+    }
+
+    &--right {
+      flex-grow: 1;
+      min-height: 150px;
+      position: relative;
+      padding-right: 15px;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+.chart-parent {
+  display: flex;
+  // flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  height: 100%;
+}
+
+// .task-chart {
+//   flex: 1;
+// }
+.year-select {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 10px;
+  align-items: center;
+  width: 100%;
+
+  .mat-form-field {
+    margin-right: 10px;
+  }
+
+  form {
+    display: flex;
+    margin-right: 10px;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px;
+    min-width: auto;
+    height: 33px;
+
+    ::ng-deep .mat-button-wrapper {
+      display: flex;
+      height: 24px;
+    }
+  }
+
+  ::ng-deep .mat-form-field-appearance-outline {
+    width: 130px;
+
+    .mat-form-field-infix {
+      padding: 5px 0 !important;
+    }
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+  }
+
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-label {
+    top: 15px;
+  }
+
+  ::ng-deep .mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+    transform: translateY(-12px) scale(0.75);
+  }
+}
+
+.dashboard__schedules--open-new {
+  position: absolute;
+  top: -5px;
+  right: 0px;
+}
+
+.spinner {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  position: absolute;
+}
+
+.absolute-center {
+  position: absolute;
+  top: 45%;
+  left: 28%;
+}
+
+@media (max-width: 1920px) {
+  .absolute-center {
+    top: 47%;
+    left: 32%;
+  }
+}
+
+@media (max-width: 1600px) {
+  .absolute-center {
+    left: 29%;
+  }
+}
+
+@media (max-width: 1370px) {
+  .absolute-center {
+    left: 20%;
+    top: 45%;
+  }
+}
+
+.text-center {
+  text-align: center;
+
+  p {
+    color: black;
+    font-size: 15px;
+  }
+}
+
+.error_message-chart {
+  color: red;
+  font-size: 10px;
+  display: flex;
+  margin-left: 10px;
+
+  .material-icons {
+    font-size: 15px;
+    margin-top: 5px;
+    margin-right: 3px;
+  }
+}
+
+.chart-parent {
+  width: 100%;
+}
+
+.no-data-display {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

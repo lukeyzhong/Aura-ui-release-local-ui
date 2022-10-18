@@ -1,0 +1,403 @@
+<div class="employee-details-parent">
+  <div class="employee-details">
+    <div class="employee-details__tabs-content">
+      <div *ngFor="let filteredImmigration of filteredImmigrationResult; let i = index">
+        <div *ngFor="let immigrationDetails of filteredImmigration?.immigrationList | slice: 0:1">
+          <div class="employee-details__content-header">
+            <h3>
+              <B>{{ immigrationDetails?.workAuthorizationType }}</B>
+            </h3>
+            <button *ngIf="i === 0" mat-button color="primary" matTooltip="Add New"
+              (click)="addImmigrationRecord('Add')">
+              Add New
+            </button>
+          </div>
+          <div class="card-parent">
+            <div class="card" *ngIf="isLoading; else immigrationData">
+              <div class="spinner">
+                <app-spinner diameter="25"></app-spinner>
+              </div>
+            </div>
+
+            <ng-template #immigrationData>
+              <div class="card card-no-data" *ngIf="immigrationResult?.length === 0; else immigrationDocs">
+                <div class="no-data">
+                  <mat-icon> find_in_page </mat-icon>
+                  <h4>Information Not Added</h4>
+                </div>
+              </div>
+              <ng-template #immigrationDocs>
+                <div class="card">
+                  <div *ngIf="
+                  (immigrationDetails?.workAuthorizationExpiryDate
+                    | date: 'yyyy-MM-dd')! > currentDate!
+                " class="card__status-active">
+                    ACTIVE
+                  </div>
+                  <div *ngIf="
+                    (immigrationDetails?.workAuthorizationExpiryDate
+                      | date: 'yyyy-MM-dd')! < currentDate!
+                    " class="card__status-inactive">
+                    CLOSED
+                  </div>
+                  <div class="card__edit-icon" matTooltip="Edit"
+                    (click)="editImmigrationRecord('Edit', immigrationDetails)"
+                    aria-label="Button that displays a tooltip when focused or hovered over">
+                    <mat-icon>edit</mat-icon>
+                  </div>
+                  <div class="card-fields">
+                    <ul>
+                      <li>
+                        <p class="card-fields__label">Work Authorization Number</p>
+                        <p class="card-fields__value">
+                          {{ immigrationDetails?.workAuthorizationNumber }}
+                        </p>
+                      </li>
+                      <li *ngIf="immigrationDetails?.workAuthorizationType === 'EAD'">
+                        <p class="card-fields__label">EAD Code</p>
+                        <p class="card-fields__value">
+                          {{ immigrationDetails?.eadCategoryCode }}
+                        </p>
+                      </li>
+                      <li *ngIf="immigrationDetails?.workAuthorizationType === 'EAD'">
+                        <p class="card-fields__label">EAD Category Name</p>
+                        <p class="card-fields__value">
+                          {{ immigrationDetails?.eadCategory }}
+                        </p>
+                      </li>
+                      <li>
+                        <p class="card-fields__label">Validity From Date</p>
+                        <p class="card-fields__value">
+                          {{ immigrationDetails?.workAuthorizationStartDate
+                          | date: 'M-d-yyyy h:mm a' }}
+                        </p>
+                      </li>
+                      <li>
+                        <p class="card-fields__label">Validity Expiry Date</p>
+                        <p class="card-fields__value">
+                          {{ immigrationDetails?.workAuthorizationExpiryDate
+                          | date: 'M-d-yyyy h:mm a' }}
+                        </p>
+                      </li>
+                      <li>
+                        <p class="card-fields__label" *ngIf="immigrationDetails?.prevailingWage">H1 Prevailing Wage</p>
+                        <p class="card-fields__value">
+                          {{ immigrationDetails?.prevailingWage }}
+                        </p>
+                      </li>
+                    </ul>
+                    <div class="file-area">
+                      <div
+                      class="document-table"
+                      [ngClass]="{ 'rows-collapse': toggleMoreLess[i] }"
+                      *ngIf="
+                      immigrationDetails.documents?.length! > 0
+                      "
+                    >
+                      <table cellspacing="0">
+                        <tr>
+                          <th>Document Name</th>
+                          <th>Description</th>
+                          <th>Uploaded On</th>
+                          <th>Uploaded By</th>
+                        </tr>
+                        <tr
+                          *ngFor="
+                          let immigrationDoc of immigrationDetails.documents
+                          "
+                        >
+                          <td class="file-name">
+                            <div
+                              *ngIf="immigrationDoc?.fileExtension === '.pdf'"
+                            >
+                              <img
+                                width="24px"
+                                src="./assets/svg/icn-pdf.svg"
+                                alt=""
+                              />
+                            </div>
+                            <div
+                              *ngIf="
+                                fileExt.includes(immigrationDoc?.fileExtension!)
+                              "
+                            >
+                              <img
+                                width="24px"
+                                src="./assets/svg/icn-image.svg"
+                                alt=""
+                              />
+                            </div>
+                            <p>{{ immigrationDoc.displayName }}</p>
+                            <span>
+                              <mat-icon
+                                matTooltip="Preview"
+                                (click)="previewDocument(immigrationDoc)"
+                                >remove_red_eye</mat-icon
+                              ></span
+                            ><span>
+                              <mat-icon
+                                matTooltip="Download"
+                                (click)="downloadDocument(immigrationDoc)"
+                                >get_app</mat-icon
+                              >
+                            </span>
+                          </td>
+                          <td>
+                            {{
+                              immigrationDoc?.fileDescription === 'null'
+                                ? ''
+                                : immigrationDoc?.fileDescription
+                            }}
+                          </td>
+                          <td>
+                            {{
+                              immigrationDoc?.createdDateTime
+                                | date: 'M-d-yyyy h:mm a'
+                            }}
+                          </td>
+                          <td>
+                            {{ personName }}
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div
+                    class="min-rows"
+                    *ngIf="
+                    immigrationDetails?.documents
+                        ?.length! > 1
+                    "
+                  >
+                    <button
+                      class="show-more-btn"
+                      (click)=" toggleMoreLess[i] =
+                      !toggleMoreLess[i];
+                      showMoreLess(i)"
+                    >
+                      {{ btnMoreLessText[i] }}
+                      <mat-icon
+                      [ngClass]="{ less: btnMoreLessText[i] === 'Less' }"
+                      >expand_more
+                    </mat-icon>
+                    </button>                  
+                  </div>
+                    <div
+                      class="no-files"
+                      *ngIf="
+                      immigrationDetails.documents?.length === 0
+                      "
+                    >
+                      <mat-icon>find_in_page</mat-icon>
+                      <h4>Documents Not Uploaded</h4>
+                    </div>                   
+                    </div>
+                  </div>
+                </div>
+
+                <div class="other-degrees" *ngIf="
+                  filteredImmigration?.immigrationList?.length! > 0 &&
+                  filteredImmigration?.immigrationList?.length! - 1 !== 0
+                  ">
+                  <mat-accordion>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <h4>
+                          <i class="fas fa-xs fa-info-circle"></i> Previous
+                          Immigration
+                          <span class="previous-document-count">{{
+                            filteredImmigration?.immigrationList?.length! - 1
+                            }}</span>
+                        </h4>
+                      </mat-expansion-panel-header>
+                      <ng-template matExpansionPanelContent>
+                        <div>
+                          <div *ngFor="
+                              let immigration of filteredImmigration?.immigrationList
+                                | slice: 1:filteredImmigration?.immigrationList.length;
+                                let i = index
+                            ">
+                            <div class="card">
+                              <div *ngIf="
+                                (immigration?.workAuthorizationExpiryDate
+                                  | date: 'yyyy-MM-dd')! > currentDate!
+                              " class="card__status-active">
+                                ACTIVE
+                              </div>
+                              <div *ngIf="
+                            (immigration?.workAuthorizationExpiryDate
+                              | date: 'yyyy-MM-dd')! < currentDate!
+                            " class="card__status-inactive">
+                                CLOSED
+                              </div>
+                              <div class="card__edit-icon" matTooltip="Edit"
+                                (click)="editImmigrationRecord('Edit', immigration)"
+                                aria-label="Button that displays a tooltip when focused or hovered over">
+                                <mat-icon>edit</mat-icon>
+                              </div>
+
+                              <div class="card-fields">
+                                <ul>
+                                  <li>
+                                    <p class="card-fields__label">Work Authorization Number</p>
+                                    <p class="card-fields__value">
+                                      {{ immigration?.workAuthorizationNumber }}
+                                    </p>
+                                  </li>
+                                  <li *ngIf="immigrationDetails?.workAuthorizationType === 'EAD'">
+                                    <p class="card-fields__label">EAD Code</p>
+                                    <p class="card-fields__value">
+                                      {{ immigration?.eadCategoryCode }}
+                                    </p>
+                                  </li>
+                                  <li *ngIf="immigrationDetails?.workAuthorizationType === 'EAD'">
+                                    <p class="card-fields__label">EAD Category Name</p>
+                                    <p class="card-fields__value">
+                                      {{ immigration?.eadCategory }}
+                                    </p>
+                                  </li>
+                                  <li>
+                                    <p class="card-fields__label">Validity From Date</p>
+                                    <p class="card-fields__value">
+                                      {{ immigration?.workAuthorizationStartDate
+                                      | date: 'M-d-yyyy h:mm a' }}
+                                    </p>
+                                  </li>
+                                  <li>
+                                    <p class="card-fields__label">Validity Expiry Date</p>
+                                    <p class="card-fields__value">
+                                      {{ immigration?.workAuthorizationExpiryDate
+                                      | date: 'M-d-yyyy h:mm a' }}
+                                    </p>
+                                  </li>
+                                  <li>
+                                    <p class="card-fields__label" *ngIf="immigration?.prevailingWage">H1 Prevailing Wage
+                                    </p>
+                                    <p class="card-fields__value">
+                                      {{ immigration?.prevailingWage }}
+                                    </p>
+                                  </li>
+                                </ul>
+                                <div class="file-area">
+                                  <div
+                                  class="document-table"
+                                  [ngClass]="{
+                                    'rows-collapse': togglePreviousMoreOrLess[i]
+                                  }"
+                                  *ngIf="
+                                  immigration.documents?.length! > 0
+                                  "
+                                >
+                                  <table cellspacing="0">
+                                    <tr>
+                                      <th>Document Name</th>
+                                      <th>Description</th>
+                                      <th>Uploaded On</th>
+                                      <th>Uploaded By</th>
+                                    </tr>
+                                    <tr
+                                      *ngFor="
+                                      let immigrationDocument of immigration.documents
+                                      "
+                                    >
+                                      <td class="file-name">
+                                        <div
+                                          *ngIf="immigrationDocument?.fileExtension === '.pdf'"
+                                        >
+                                          <img
+                                            width="24px"
+                                            src="./assets/svg/icn-pdf.svg"
+                                            alt=""
+                                          />
+                                        </div>
+                                        <div
+                                          *ngIf="
+                                            fileExt.includes(immigrationDocument?.fileExtension!)
+                                          "
+                                        >
+                                          <img
+                                            width="24px"
+                                            src="./assets/svg/icn-image.svg"
+                                            alt=""
+                                          />
+                                        </div>
+                                        <p>{{ immigrationDocument.displayName }}</p>
+                                        <span>
+                                          <mat-icon
+                                            matTooltip="Preview"
+                                            (click)="previewDocument(immigrationDocument)"
+                                            >remove_red_eye</mat-icon
+                                          ></span
+                                        ><span>
+                                          <mat-icon
+                                            matTooltip="Download"
+                                            (click)="downloadDocument(immigrationDocument)"
+                                            >get_app</mat-icon
+                                          >
+                                        </span>
+                                      </td>
+                                      <td>
+                                        {{
+                                          immigrationDocument?.fileDescription === 'null'
+                                            ? ''
+                                            : immigrationDocument?.fileDescription
+                                        }}
+                                      </td>
+                                      <td>
+                                        {{
+                                          immigrationDocument?.createdDateTime
+                                            | date: 'M-d-yyyy h:mm a'
+                                        }}
+                                      </td>
+                                      <td>
+                                        {{ personName }}
+                                      </td>
+                                    </tr>
+                                  </table>
+                                </div>
+                                <div
+                                class="min-rows"
+                                *ngIf="
+                                immigration?.documents?.length! > 1
+                                "
+                              >
+                                <button
+                                  class="show-more-btn"
+                                  (click)="
+                                  togglePreviousMoreOrLess[i] =
+                                    !togglePreviousMoreOrLess[i];
+                                    showMoreLessPrevious(i)
+                                "
+                                >                              
+                                  {{ btnPreviousMoreLessText[i] }} 
+                                  <mat-icon
+                                  [ngClass]="{ less: btnPreviousMoreLessText[i] === 'Less' }"
+                                  >expand_more
+                                </mat-icon>                                
+                                </button>
+                              </div>
+                                <div
+                                  class="no-files"
+                                  *ngIf="
+                                  immigration.documents?.length === 0
+                                  "
+                                >
+                                  <mat-icon>find_in_page</mat-icon>
+                                  <h4>Documents Not Uploaded</h4>
+                                </div>                                 
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </div>
+              </ng-template>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

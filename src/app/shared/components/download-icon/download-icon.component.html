@@ -1,0 +1,24 @@
+<div [matMenuTriggerFor]="downloadOptions" aria-expanded="false">
+  <button mat-button class="btn-excel">
+    <img
+      src="./assets/svg/ua-download.svg"
+      alt=""
+      width="30px
+    "
+    />
+  </button>
+</div>
+<div>
+  <mat-menu #downloadOptions="matMenu">
+    <mat-selection-list class="d-format" [multiple]="false">
+      <mat-list-option (click)="download('xlsx')">
+        <img src="./assets/svg/excel.svg" alt="" width="24px" /> Download as
+        Excel</mat-list-option
+      >
+      <mat-list-option (click)="download('csv')">
+        <img src="./assets/svg/csv.svg" alt="" width="24px" />Download as
+        CSV</mat-list-option
+      >
+    </mat-selection-list>
+  </mat-menu>
+</div>

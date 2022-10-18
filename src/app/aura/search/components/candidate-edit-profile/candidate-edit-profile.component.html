@@ -1,0 +1,311 @@
+<form [formGroup]="editProfileForm" (ngSubmit)="onSave()">   
+<div class="dialog-header">
+    <div>Personal Information</div>
+    <span class="material-icons" (click)="onCancel($event)">close</span>
+  </div> 
+  <div class="candidate">
+    <div class="candidate__profile">
+      <div class="candidate__profile--pic">
+        <div appImageDrag (files)="filesDropped($event)">
+            <div *ngIf="!uploadedFiles && !imgURL" class="candidate__profile__widget">        
+                 <img [src]="profileImgSrc" />                        
+            </div>
+            <div *ngIf="imgURL" class="candidate__profile__widget">        
+                <img [src]="imgURL" />                        
+           </div>
+           <div *ngIf="fileUploaded" class="candidate__profile__widget"> 
+            <div> 
+              <img [src]="uploadedFiles[0].url"/>  
+            </div>          
+           </div>  
+        </div>            
+           <p class="candidate__profile--info">Click to upload or Drop image here</p>
+           <div class="edit-profilepic__edit">
+            <button type="button" mat-button (click)="onUpload()"><span class="material-icons">add</span></button>           
+            <input #file type="file" id="fileUpload" accept="{{accept}}" name="fileUpload"
+            (change)="preview(file?.files!,$event)" style="display:none;" />         
+           </div>  
+           <span *ngIf="message" class="validation-msg">{{message}}</span>  
+      </div>      
+    </div>
+    <div class="candidate__primary">
+      <h4>PRIMARY</h4>
+      <ul>
+        <li> 
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" placeholder="Placeholder">
+            <mat-error *ngIf="editProfileForm.controls['firstName'].errors?.required">This field is mandatory.</mat-error>
+            <mat-error *ngIf="editProfileForm.controls['firstName'].errors?.minlength">Minimum 1 charactors required.</mat-error>
+            <mat-error *ngIf="editProfileForm.controls['firstName'].errors?.maxlength">Maximum 50 charactors allowed.</mat-error>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" placeholder="Placeholder">
+            <mat-error *ngIf="editProfileForm.controls['lastName'].errors?.required">This field is mandatory.</mat-error>
+            <mat-error *ngIf="editProfileForm.controls['lastName'].errors?.minlength">Minimum 1 charactors required.</mat-error>
+            <mat-error *ngIf="editProfileForm.controls['lastName'].errors?.maxlength">Maximum 50 charactors allowed.</mat-error>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline">
+            <mat-label>Alias Name</mat-label>
+            <input matInput formControlName="alias" placeholder="Placeholder">
+            <mat-error *ngIf="editProfileForm.controls['alias'].errors?.minlength">Minimum 1 charactors required.</mat-error>
+            <mat-error *ngIf="editProfileForm.controls['alias'].errors?.maxlength">Maximum 100 charactors allowed.</mat-error>
+          </mat-form-field>
+        </li>
+        <li class="phone-code-number"> 
+          <mat-form-field appearance="outline" class="country-code">
+            <mat-label>Country code</mat-label>
+            <input matInput formControlName="cellCountryCode" placeholder="+123">
+            <mat-error *ngIf="editProfileForm.controls['cellCountryCode'].errors?.pattern">Invalid county code i.e. +123</mat-error>  
+            <mat-error *ngIf="editProfileForm.controls['cellCountryCode'].errors?.maxlength">Maximum 4 charactors allowed.</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="c-phone">
+            <mat-label>Cell Phone</mat-label>
+            <input matInput formControlName="cellPhoneNumber" phoneMask [preValue]="editProfileForm.value.cellPhoneNumber" maxlength="14" placeholder="(012) 345-6789"/> 
+            <mat-error *ngIf="editProfileForm.controls['cellPhoneNumber'].errors?.required">This field is mandatory.</mat-error>
+            <mat-error *ngIf="editProfileForm.controls['cellPhoneNumber'].errors?.minlength">Should be of 10 digits.</mat-error>
+          </mat-form-field>
+        </li>
+        <li class="office-ph office-ph-ext"> 
+          <mat-form-field appearance="outline" class="office-ph__code">
+            <mat-label>Country code</mat-label>            
+            <input matInput formControlName="officeCountryCode" placeholder="+123"/> 
+            <mat-error *ngIf="editProfileForm.controls['officeCountryCode'].errors?.pattern">Invalid county code i.e. +123</mat-error> 
+            <mat-error *ngIf="editProfileForm.controls['officeCountryCode'].errors?.maxlength">Maximum 4 charactors allowed.</mat-error>
+          </mat-form-field>       
+          <mat-form-field appearance="outline" class="office-ph__number">
+            <mat-label>Office Phone</mat-label>              
+            <input matInput formControlName="officePhoneNumber" phoneMask [preValue]="editProfileForm.value.officePhoneNumber" maxlength="14" placeholder="(012) 345-6789"/> 
+            <mat-error *ngIf="editProfileForm.controls['officePhoneNumber'].errors?.minlength">Should be of 10 digits.</mat-error>           
+          </mat-form-field>       
+            <mat-form-field appearance="outline" class="office-ph__ext">
+              <mat-label>Ext</mat-label>
+              <input matInput formControlName="officeExt" placeholder="0123"/>
+              <mat-error *ngIf="editProfileForm.controls['officeExt'].errors?.pattern">Invalid extension number i.e. 0123</mat-error>                          
+            </mat-form-field>
+        </li>
+          <li class="phone-code-number"> 
+            <mat-form-field appearance="outline" class="country-code">
+              <mat-label>Country code</mat-label>
+              <input matInput formControlName="homeCountryCode" placeholder="+123">
+              <mat-error *ngIf="editProfileForm.controls['homeCountryCode'].errors?.pattern">Invalid county code i.e. +123</mat-error> 
+              <mat-error *ngIf="editProfileForm.controls['homeCountryCode'].errors?.maxlength">Maximum 4 charactors allowed.</mat-error>
+            </mat-form-field>         
+            <mat-form-field appearance="outline" class="c-phone">
+              <mat-label>Home Phone</mat-label>                
+              <input matInput formControlName="homePhoneNumber" phoneMask [preValue]="editProfileForm.value.homePhoneNumber" maxlength="14" placeholder="(012) 345-6789"/> 
+              <mat-error *ngIf="editProfileForm.controls['homePhoneNumber'].errors?.minlength">Should be of 10 digits.</mat-error>           
+            </mat-form-field>
+          </li>
+        <li> 
+          <mat-form-field appearance="outline">
+            <mat-label>Email ID</mat-label>
+            <input matInput formControlName="emailId" placeholder="Placeholder">
+            <mat-error *ngIf="editProfileForm.controls['emailId'].errors?.required">This field is mandatory.</mat-error>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>SSN</mat-label>
+            <input matInput formControlName="socialSecurityNumber" placeholder="Placeholder">
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Marital Status</mat-label>
+            <mat-select formControlName="maritalStatus">
+                <mat-option *ngFor="let entry of mapMarital | keyvalue" [value]="entry.key">{{entry.value}}</mat-option>          
+            </mat-select>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+                <mat-option *ngFor="let entry of mapGender | keyvalue" [value]="entry.key">{{entry.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Date of Birth</mat-label>
+            <input matInput formControlName="dateOfBirth" type="date" placeholder="Placeholder">
+            <mat-error *ngIf="editProfileForm.controls['dateOfBirth'].errors?.required">This field is mandatory.</mat-error>
+            <mat-error *ngIf="editProfileForm.controls['dateOfBirth'].errors?.isAgeInvalid">Age can not be < 18 and > 100 years</mat-error> 
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Address line 1</mat-label>
+            <input matInput formControlName="mailingAddressLine1" placeholder="Placeholder">
+            <mat-error *ngIf="editProfileForm.controls['mailingAddressLine1'].errors?.required">This field is mandatory.</mat-error>            
+            <mat-error *ngIf="editProfileForm.controls['mailingAddressLine1'].errors?.maxlength">Maximum 50 charactors allowed.</mat-error>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Address line 2</mat-label>
+            <input matInput formControlName="mailingAddressLine2" placeholder="Placeholder">
+            <mat-error *ngIf="editProfileForm.controls['mailingAddressLine2'].errors?.required">This field is mandatory.</mat-error>            
+            <mat-error *ngIf="editProfileForm.controls['mailingAddressLine2'].errors?.maxlength">Maximum 50 charactors allowed.</mat-error>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Country</mat-label>
+            <mat-select formControlName="mailingCountry">
+                <mat-option *ngFor="let entry of mapCountry | keyvalue" [value]="entry.key">{{entry.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>State</mat-label>
+            <mat-select formControlName="mailingStateCode">
+                <mat-option *ngFor="let entry of mapState | keyvalue" [value]="entry.key">{{entry.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>City</mat-label>
+            <input matInput formControlName="mailingCity" placeholder="Placeholder">
+            <mat-error *ngIf="editProfileForm.controls['mailingCity'].errors?.required">This field is mandatory.</mat-error>            
+            <mat-error *ngIf="editProfileForm.controls['mailingCity'].errors?.maxlength">Maximum 20 charactors allowed.</mat-error>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>ZipCode</mat-label>
+            <input matInput formControlName="mailingPostalCode" placeholder="Placeholder">
+            <mat-error *ngIf="editProfileForm.controls['mailingPostalCode'].errors?.pattern">Invalid Postal Code i.e. 01234</mat-error>
+          </mat-form-field>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="isLoading">
+        <app-spinner diameter="35"></app-spinner>
+     </div>  
+    <div class="candidate__details">
+      <h4>CANDIDATE PROFILE</h4>
+      <ul>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Employment Type</mat-label>
+            <mat-select formControlName="employmentType">
+                <mat-option *ngFor="let entry of mapEmpType | keyvalue" [value]="entry.key">{{entry.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </li>
+        <li> 
+            <mat-form-field appearance="outline" >
+              <mat-label>Work Auth Status</mat-label>
+              <mat-select formControlName="workAuthorizationStatus">
+                <mat-option *ngFor="let entry of mapWorkAuth | keyvalue" [value]="entry.key">{{entry.value}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Source</mat-label>
+            <mat-select formControlName="source">
+                <mat-option *ngFor="let entry of mapSource | keyvalue" [value]="entry.key">{{entry.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Job Applied for</mat-label>
+            <input matInput formControlName="jobAppliedFor" placeholder="Placeholder">
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Recruiter</mat-label>
+            <input matInput formControlName="recruiter" placeholder="Placeholder">
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Willing to Relocate</mat-label>
+            <mat-select formControlName="willingToRelocate">
+              <mat-option [value]="true">Yes</mat-option>
+              <mat-option [value]="false">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Willing to Telecommute</mat-label>
+            <mat-select formControlName="willingToTelecommute">
+              <mat-option [value]="true">Yes</mat-option>
+              <mat-option [value]="false">No</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </li>       
+        <li class="work-experience"> 
+            <mat-form-field appearance="outline"  class="work-experience__years">
+              <mat-label>Work Exp Yrs</mat-label>
+              <mat-select formControlName="workExperienceYears">
+                <mat-option *ngFor="let year of expYears" [value]="year">{{year}}</mat-option>                
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="work-experience__months">
+              <mat-label>Months</mat-label>
+              <mat-select formControlName="workExperienceMonths">
+                <mat-option *ngFor="let month of expMonths" [value]="month">{{month}}</mat-option>  
+              </mat-select>
+            </mat-form-field>
+          </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Availability</mat-label>
+            <mat-select formControlName="availability">
+                <mat-option *ngFor="let entry of mapNotice | keyvalue" [value]="entry.key">{{entry.value}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </li>
+        <li>  
+          <mat-form-field appearance="outline">
+            <mat-label>Current Annual Salary</mat-label>
+            <input matInput formControlName="currAnnualSalary" placeholder="">
+            <span matPrefix>$&nbsp;</span>            
+            <mat-error *ngIf="editProfileForm.controls['currAnnualSalary'].errors?.pattern">Salary should be numeric.</mat-error>
+            <mat-error *ngIf="editProfileForm.controls['currAnnualSalary'].errors?.min">Minimum salary should be 10000</mat-error>  
+            <mat-error *ngIf="editProfileForm.controls['currAnnualSalary'].errors?.max">Maximum salary should be 300000</mat-error>           
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Expected Annual Salary</mat-label>
+            <input matInput formControlName="expAnnualSalary" placeholder="">
+            <span matPrefix>$&nbsp;</span>
+            <mat-error *ngIf="editProfileForm.controls['expAnnualSalary'].errors?.pattern">Salary should be numeric.</mat-error>
+            <mat-error *ngIf="editProfileForm.controls['expAnnualSalary'].errors?.min">Minimum salary should be 10000</mat-error>  
+            <mat-error *ngIf="editProfileForm.controls['expAnnualSalary'].errors?.max">Maximum salary should be 300000</mat-error> 
+          </mat-form-field>
+        </li>
+        <li> 
+          <mat-form-field appearance="outline" >
+            <mat-label>Proposed Annual Salary</mat-label>
+            <input matInput formControlName="proAnnualSalary" placeholder="">
+            <span matPrefix>$&nbsp;</span>
+            <mat-error *ngIf="editProfileForm.controls['proAnnualSalary'].errors?.pattern">Salary should be numeric.</mat-error>
+            <mat-error *ngIf="editProfileForm.controls['proAnnualSalary'].errors?.min">Minimum salary should be 10000</mat-error>  
+            <mat-error *ngIf="editProfileForm.controls['proAnnualSalary'].errors?.max">Maximum salary should be 300000</mat-error>           
+          </mat-form-field>
+        </li>
+      </ul>
+    </div>
+  </div>  
+  <div class="dialog-actions">
+    <button mat-raised-button (click)="onCancel($event)">Cancel</button>       
+    <button mat-raised-button color="primary" [disabled]="editProfileForm.invalid" class="aura-space-left-md">Save</button>
+  </div>
+  <div *ngIf="errorMsg" class="error-msg">{{errorMsg}}</div>
+</form>

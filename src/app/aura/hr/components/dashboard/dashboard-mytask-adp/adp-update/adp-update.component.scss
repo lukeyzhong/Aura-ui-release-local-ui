@@ -1,0 +1,9 @@
+.modal-popup {
+  width: 30%;
+}
+.modal-popup__fields {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  .mat-form-field {
+    width: 100%;
+  }
+}

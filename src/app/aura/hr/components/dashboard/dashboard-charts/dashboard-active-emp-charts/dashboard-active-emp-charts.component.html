@@ -1,0 +1,57 @@
+<div
+  class="dashboard__overview dashboard__overview--active-employees aura-widget"
+>
+  <button
+    class="dashboard__overview--open-new"
+    mat-button
+    (click)="activeEmployeesDetails()"
+  >
+    <span class="material-icons">open_in_new</span>
+  </button>
+  <div *ngIf="isLoadSpinner; else activeEmp" class="spinner">
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <ng-template #activeEmp>
+    <div class="dashboard__overview--count">
+      <h1>
+        <span class="chart-count"><b>
+          {{ Math.abs(chartResponseData?.totalActiveEmployeesCount! - chartResultPreviousYearMonth[0]?.activeEmployeeCount!) }}
+        </b>
+        </span>
+        <span *ngIf="activeEmpUp" class="material-icons"> arrow_upward </span>
+        <span *ngIf="activeEmpDown" class="material-icons arrowcolor">
+          arrow_downward
+        </span>
+        <span class="c-info">
+          <div>
+            <p>
+              {{ monthName?.slice(0, 3) }} {{ previousYear }}
+              -
+              {{ chartResultPreviousYearMonth[0]?.activeEmployeeCount }}
+            </p>
+            <p>
+              {{ monthName?.slice(0, 3) }} {{ currYear }}
+              -
+              {{ chartResult[currMonth]?.activeEmployeeCount }}
+            </p>
+          </div>
+        </span>     
+      </h1>
+      <p>Total Active Employees (YTD)</p>
+    </div>
+    <div [style.height]="getChartHeight()">       
+      <canvas
+        class="canvas"
+        baseChart
+        [datasets]="activeEmpLineChartData"
+        [labels]="activeEmpLineChartLabels"
+        [options]="activeEmpLineChartOptions"
+        [colors]="activeEmpLineChartColors"
+        [legend]="activeEmpLineChartLegend"
+        [chartType]="activeEmpLineChartType"
+      >
+      </canvas>
+    </div>
+    <div></div>
+  </ng-template>
+</div>

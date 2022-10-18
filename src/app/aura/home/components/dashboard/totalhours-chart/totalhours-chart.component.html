@@ -1,0 +1,56 @@
+<div class="chart">
+  <div class="chart__header">
+    <h2 class="card-title">Total Hours Worked</h2>
+    <button class="chart__header--open-new" mat-button color="primary">
+      <mat-icon>open_in_new</mat-icon>
+    </button>
+  </div>
+  <div
+    *ngIf="isLoadTotalHoursChartSpinner; else totalHoursChart"
+    class="spinner"
+  >
+    <app-spinner diameter="35"></app-spinner>
+  </div>
+  <div class="chart__cnt">
+    <ng-template #totalHoursChart>
+      <div class="chart__cnt--chart">
+        <div class="year-select">
+          <mat-form-field appearance="outline">
+            <mat-label>Year</mat-label>
+            <mat-select
+              [formControl]="workYear"
+              (selectionChange)="workYearSelection()"
+            >
+              <mat-option *ngFor="let yr of year" [value]="yr">{{
+                yr
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <canvas
+          *ngIf="totalHoursChartData?.totalCount !== 0"
+          baseChart
+          style="width: 100%; height: 100%"
+          [datasets]="empTotalHoursDoughnutChartData"
+          [labels]="empTotalHoursDoughnutChartLabels"
+          [options]="empTotalHoursDoughnutChartOptions"
+          [colors]="empTotalHoursDoughnutChartColors"
+          [legend]="empTotalHoursDoughnutChartLegend"
+          [chartType]="empTotalHoursDoughnutChartType"
+          [plugins]="doughnutChartPlugins"
+        >
+        </canvas>
+        <div
+          *ngIf="totalHoursChartData?.totalCount === 0"
+          class="absolute-center text-center no-data-display"
+        >
+          <img
+            src="./assets/svg/employee-dashboard/total hours worked.svg"
+            alt=""
+          />
+          <p>No Data to display</p>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

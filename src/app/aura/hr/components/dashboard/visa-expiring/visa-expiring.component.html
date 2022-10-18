@@ -1,0 +1,33 @@
+<div class="adp">
+    <div class="adp__title">
+        <h3>H1-B Visa Expiring in 60 Days</h3>
+    </div>
+    <div class="adp__cnt">
+        <div class="adp__header">
+            <div class="adp__header--search">
+                <div class="orm-fld-group">
+                    <mat-form-field appearance="outline" floatLabel="always">
+                        <input matInput matTooltip="Search....." class="example-right-align" #search
+                            (keyup)="performSearch(search.value)" placeholder="Search....." />
+                        <span matPrefix>
+                            <mat-icon>search</mat-icon> &nbsp;
+                        </span>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="adp__header--filter">
+                <app-download-icon (downloadBtnClicked)="download($event)"></app-download-icon>
+            </div>
+        </div>
+        <app-data-grids-results-tbl [isLoading]="countsDataGridsPanelConfig.isLoading"
+            [displayedColumns]="countsDataGridsPanelConfig.displayedColumns"
+            [columns]="countsDataGridsPanelConfig.columns" [tableData]="countsDataGridsPanelConfig.tableData"
+            [totalRows]="countsDataGridsPanelConfig.totalRows" (paginatorClicked)="getNextRecords($event)">
+        </app-data-grids-results-tbl>
+        <div class="cnd-personal-info__footer">
+            <button mat-raised-button color="primary" (click)="goToDashboard()">
+                Close
+            </button>
+        </div>
+    </div>
+</div>

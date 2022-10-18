@@ -1,0 +1,47 @@
+@import '../../styles/utilities/variables';
+
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    margin: 10px 0 0 20px;
+    font-size: 11px;
+
+    &__home {
+        line-height: 10px;
+    }
+
+    .material-icons {
+        color: #BEBEBE;
+    }
+
+    &__home {
+        img {
+            width: 16px;
+            cursor: pointer;
+            outline: none;
+        }
+    }
+
+    li {
+        list-style: none;
+        font-size: 12px;
+    }
+
+    &__item {
+        color: $primary;
+        cursor: pointer;
+        outline: none;
+
+        &--link {
+            color: $primary;
+        }
+
+        &--active {
+            color: #797979;
+            line-height: 24px;
+        }
+    }
+    &__subitem {
+        display: flex;
+    }
+}

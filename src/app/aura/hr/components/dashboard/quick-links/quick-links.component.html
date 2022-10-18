@@ -1,0 +1,57 @@
+<div class="task-actions">
+  <div class="card-title">Quick Links</div>
+  <div class="task-actions__nav">
+    <div class="task-actions__nav--left">
+      <button
+        mat-button
+        [style.visibility]="!isMovingBackward ? 'hidden' : 'visible'"
+        (click)="movingBackward()"
+        color="primary"
+      >
+        <mat-icon>arrow_back_ios</mat-icon>
+      </button>
+    </div>
+    <div class="task-actions__nav--center">
+      <div
+        class="task-actions__nav--card"
+        (click)="goToExternalUrl('Benefits')"
+      >
+        <img src="./assets/svg/{{ quickLinkImage[index] }}" alt="" />
+        <p>{{ quickLinkName[index] }}</p>
+      </div>
+      <div class="task-actions__nav--card" (click)="goToExternalUrl('Payroll')">
+        <img src="./assets/svg/{{ quickLinkImage[index + 1] }}" alt="" />
+        <p>{{ quickLinkName[index + 1] }}</p>
+      </div>
+      <div class="task-actions__nav--card" (click)="goToExternalUrl('Reports')">
+        <img src="./assets/svg/{{ quickLinkImage[index + 2] }}" alt="" />
+        <p>{{ quickLinkName[index + 2] }}</p>
+      </div>
+      <div
+        class="task-actions__nav--card"
+        (click)="goToExternalUrl('Timesheet')"
+      >
+        <img src="./assets/svg/{{ quickLinkImage[index + 3] }}" alt="" />
+        <p>{{ quickLinkName[index + 3] }}</p>
+      </div>
+      <div
+        class="task-actions__nav--card"
+        (click)="goToDocuments()"
+        *ngIf="infoType !== 'HR'"
+      >
+        <img src="./assets/svg/{{ quickLinkImage[index + 4] }}" alt="" />
+        <p>{{ quickLinkName[index + 4] }}</p>
+      </div>
+    </div>
+    <div class="task-actions__nav--right">
+      <button
+        mat-button
+        [style.visibility]="!isMovingForward ? 'hidden' : 'visible'"
+        (click)="movingForkward()"
+        color="primary"
+      >
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

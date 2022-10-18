@@ -1,0 +1,105 @@
+<div class="home">
+  <div class="emp-dboard">
+    <div class="emp-dboard__header">
+      <h2>Welcome {{ firstName }} !</h2>
+      <div class="emp-dboard__header--log-time">
+        <p class="c-time"><app-digital-clock></app-digital-clock></p>
+        <p *ngIf="lastLogin !== 'Invalid Date'" class="l-time">
+          Last Login {{ lastLogin | date: 'dd MMMM yyyy | hh:mm:ss a' }}
+        </p>
+      </div>
+    </div>
+    <div class="emp-dboard__cnt">
+      <div *ngIf="isLoadingPI" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+
+      <!-- BASIC INFO -->
+      <div
+        class="card empl-card"
+        *ngIf="isVisible(EmployeeDashboardComponents.EmployeeQuickView)"
+      >
+        <app-basic-info
+          [infoType]="infoType"
+          [profileInfoResult]="dashboardProfileInfoResult"
+        ></app-basic-info>
+      </div>
+
+      <!-- TASKS INFO -->
+      <div
+        class="card"
+        *ngIf="isVisible(EmployeeDashboardComponents.EMPDashTasks)"
+      >
+        <app-generic-tasks
+          [dashboardAssignmentsResult]="dashboardAssignmentsResult"
+          [infoType]="infoType"
+          class="tasks"
+        ></app-generic-tasks>
+      </div>
+
+      <!-- PAYROLL CALENDAR -->
+      <div
+        class="card payroll"
+        *ngIf="isVisible(EmployeeDashboardComponents.EMPDashPayrollCalendar)"
+      >
+        <app-payroll-calendar></app-payroll-calendar>
+      </div>
+
+      <!-- TOTAL HOURS CHART -->
+      <div
+        class="card total-hours"
+        *ngIf="isVisible(EmployeeDashboardComponents.EMPDashTHWWidget)"
+      >
+        <app-totalhours-chart [employeeId]="employeeId"></app-totalhours-chart>
+      </div>
+
+      <!-- PTO CHART -->
+      <div
+        class="card opt"
+        *ngIf="isVisible(EmployeeDashboardComponents.EMPDashPTOWidget)"
+      >
+        <app-pto-chart [employeeId]="employeeId"></app-pto-chart>
+      </div>
+
+      <!-- INTERVIEWS -->
+      <div
+        class="card interviews"
+        *ngIf="isVisible(EmployeeDashboardComponents.EMPDashInterviewsWidget)"
+      >
+        <app-employee-interviews></app-employee-interviews>
+      </div>
+
+      <!-- HOLIDAYS -->
+      <div
+        class="card holidays"
+        *ngIf="isVisible(EmployeeDashboardComponents.EMPDashHolidaysWidget)"
+      >
+        <app-dashboard-holidays></app-dashboard-holidays>
+      </div>
+
+      <!-- QUICK LINKS -->
+      <div
+        class="card quick-links"
+        *ngIf="isVisible(EmployeeDashboardComponents.EMPDashQuickLinks)"
+      >
+        <app-quick-links [infoType]="infoType"></app-quick-links>
+      </div>
+
+      <!-- TIME SHEETS -->
+      <div
+        class="card time-sheets"
+        *ngIf="isVisible(EmployeeDashboardComponents.EMPDashTimeSheetGrid)"
+      >
+        <app-time-sheets [employeeId]="employeeId"></app-time-sheets>
+      </div>
+
+      <!-- RECENT ACTIVITY -->
+      <div
+        class="card recent-activity"
+        *ngIf="isVisible(EmployeeDashboardComponents.EMPDashRecentActivity)"
+      >
+        <app-recent-activity></app-recent-activity>
+      </div>
+    </div>
+  </div>
+</div>

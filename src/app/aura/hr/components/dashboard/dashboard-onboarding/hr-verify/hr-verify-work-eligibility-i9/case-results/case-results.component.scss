@@ -1,0 +1,68 @@
+@import '../../../../../../../../styles/utilities/variables';
+@import '../../../../../.././../../styles/utilities/form-group';
+.modal-popup {
+  width: 80%;
+  &__content {
+    padding: 10px 15px;
+    min-height: Calc(100vh - 250px);
+  }
+}
+.case-results {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      font-size: 16px;
+    }
+    &--download {
+      display: flex;
+      align-items: center;
+      p {
+        color: $primary;
+        font-size: 14px;
+      }
+      button {
+        margin-left: 15px;
+        mat-icon {
+          width: 24px;
+          height: 24px;
+          color: $primary;
+        }
+      }
+    }
+  }
+}
+.form-l-group {
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  font-size: 12px;
+  padding: 0 10px;
+  gap: 7px;
+  &__header-hr h3 {
+    color: $primary;
+  }
+  &__form {
+    display: flex;
+
+    label {
+      font-size: 12px;
+      margin-right: 10px;
+    }
+    p {
+      font-size: 12px;
+      font-weight: bold;
+    }
+  }
+}
+
+.spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+

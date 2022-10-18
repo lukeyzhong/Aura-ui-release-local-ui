@@ -1,0 +1,80 @@
+circle {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke-linecap: round;
+  }
+  
+  .progress-circle {
+    transition: stroke-dashoffset 1.5s;
+    transform: rotate(0deg);
+    transform-origin: 50% 50%;
+  }
+  
+  .progress-circle-properites {
+    stroke-width: 3;
+    stroke: white;
+  }
+  
+  .progress-circle-1to50percent {
+    stroke-width: 3;
+    stroke: red;
+  }
+  
+  .progress-circle-51to80percent {
+    stroke-width: 3;
+    stroke: rgb(255, 255, 0);
+  }
+  
+  .progress-circle-81to100percent {
+    stroke-width: 3;
+    stroke: rgb(9, 221, 9);
+  }
+  
+  .textStyle {
+    font-family: 'Roboto';
+    font-size: 8px;
+    font-weight: 300;
+    fill: white;
+  }
+
+  .statusnew{
+    stroke: #0182c1 !important;    
+  }
+  
+  .in-progress{
+    stroke: #c79200 !important;    
+  }
+  
+  .hr-verify{
+    stroke: #cb4a53 !important;    
+  }  
+
+  .offer-declined{
+    stroke: #b33942 !important;    
+  }
+  
+  .integration-initiated{
+    stroke: #ce565e !important;    
+  }
+  
+  .integration-failed{
+    stroke: #da7e52 !important;    
+  }
+  
+  .verification-failed{
+    stroke: #ffd8d8 !important;    
+  }
+  
+  .onboarding-completed{
+    stroke: #049f17 !important;    
+  }
+  
+  .onhold{
+    stroke: #3e5463 !important;    
+  }
+  
+  .rollback-offer{
+    stroke: #9b8700 !important;    
+  }
+  

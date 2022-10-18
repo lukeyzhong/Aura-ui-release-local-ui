@@ -1,0 +1,91 @@
+<form [formGroup]="onBoardRejectForm">
+  <div class="modal-popup" *ngIf="reject">
+    <div class="modal-popup__content">
+      <div *ngIf="isLoading" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <mat-form-field appearance="outline">
+        <mat-label>Offer Rejection Reasons</mat-label>
+        <mat-select
+          [(ngModel)]="selectedRejectionsReasonsCodes"
+          multiple
+          formControlName="rejectionReasonCode"
+        >
+          <mat-option
+            *ngFor="let entry of mapRejectionReasons | keyvalue"
+            [value]="entry.key"
+            >{{ entry.value }}</mat-option
+          >
+        </mat-select>
+        <mat-error
+          *ngIf="
+            onBoardRejectForm.controls['rejectionReasonCode'].errors?.required
+          "
+          >This field is mandatory.</mat-error
+        >
+      </mat-form-field>
+      <h3>Enter Reason</h3>
+      <mat-form-field appearance="outline">
+        <textarea
+          formControlName="comments"
+          matInput
+          cols="30"
+          rows="10"
+          placeholder="Enter Reason Here...."
+        ></textarea>
+        <mat-error
+          *ngIf="onBoardRejectForm.controls['comments'].errors?.required"
+          >This field is mandatory.</mat-error
+        >
+      </mat-form-field>
+    </div>
+    <div class="modal-popup__footer">
+      <button
+        type="button"
+        mat-button
+        mat-stroked-button
+        color="primary"
+        (click)="rejectOffer()"
+      >
+        Submit
+      </button>
+      <button
+        type="button"
+        mat-button
+        mat-raised-button
+        color="primary"
+        (click)="onCancel($event)"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</form>
+
+<div class="reject-Respons" *ngIf="reject === false">
+  <div class="reject-Respons__header">
+    <img src="./assets/svg/Antra-logo.png" width="100px" alt="" />
+  </div>
+  <div class="reject-Respons__content">
+    <h3>Thank you for your Response</h3>
+    <p>
+      Your Application will be reviewed and concerned recruiter will connect
+      with you shortly
+    </p>
+    <button
+      type="button"
+      color="primary"
+      mat-stroked-button
+      (click)="onClose($event)"
+    >
+      Close
+    </button>
+    <p>
+      if you need any Assistance please email
+      <a href="mailto:hr@antra.com" target="_blank">hr@antra.com</a>
+    </p>
+    <p>
+      Visit us at <a href="https://antra.com/" target="_blank">www.antra.com</a>
+    </p>
+  </div>
+</div>

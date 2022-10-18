@@ -1,0 +1,13 @@
+<div class="year-clndr">
+  <div class="year-clndr__grid">
+    <mat-card *ngFor="let month of payrollCalendarInfo; let i = index">
+      <h3 class="year-clndr__month-nm" (click)="switchToMonth(Months[i], i)">
+        {{ Months[i] }}
+      </h3>
+      <mat-calendar
+        [startAt]="month.monthStartDate"
+        [dateClass]="hanldeDateClass"
+      ></mat-calendar>
+    </mat-card>
+  </div>
+</div>

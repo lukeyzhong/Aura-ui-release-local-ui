@@ -1,0 +1,218 @@
+<form
+  [formGroup]="immigrationForm"
+  (ngSubmit)="onSave()"
+  (keydown.enter)="$event.preventDefault()"
+>
+  <div class="modal-popup">
+    <div class="modal-popup__header">
+      <h3>{{ headerText }}</h3>
+      <button (click)="onCancel($event)" mat-button color="primary">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-popup__content">
+      <div *ngIf="isLoading" class="spinner">
+        <app-spinner diameter="35"></app-spinner>
+      </div>
+      <div class="form-fld-group">
+        <mat-form-field *ngIf="showAthorizationType" appearance="outline">
+          <mat-label>Work Authorization Type</mat-label>
+          <mat-select
+            formControlName="workAuthorizationType"
+            #selectedValue
+            (ngModelChange)="getSelectedValue(selectedValue.value)"
+          >
+            <mat-option
+              *ngFor="let entry of mapWorkAuth | keyvalue"
+              [value]="entry.key"
+              >{{ entry.value }}</mat-option
+            >
+          </mat-select>
+          <mat-error
+            *ngIf="
+              immigrationForm.controls['workAuthorizationType'].errors?.required
+            "
+            >This field is mandatory.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Work Authorization Number</mat-label>
+          <input
+            matInput
+            formControlName="workAuthorizationNumber"
+            placeholder="A12345678912345"
+          />
+          <mat-error
+            *ngIf="
+              immigrationForm.controls['workAuthorizationNumber'].errors
+                ?.required
+            "
+            >This field is mandatory.
+          </mat-error>
+          <mat-error
+            *ngIf="
+              immigrationForm.controls['workAuthorizationNumber'].errors
+                ?.pattern
+            "
+            >Invalid Athorization Number i.e. A12345678912345
+          </mat-error>
+        </mat-form-field>
+        <div
+          *ngIf="workAuthorizationText === 'EAD' || showEAD"
+          class="work-autho-ead"
+        >
+          <mat-form-field appearance="outline" class="red">
+            <mat-label>EAD Code</mat-label>
+            <mat-select
+              formControlName="eadCategoryCode"
+              (selectionChange)="chooseEAD($event)"
+            >
+              <mat-option
+                *ngFor="let entry of mapEADCategory | keyvalue"
+                [value]="entry.key"
+                >{{ entry.value }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-icon matTooltip="Click to open EAD Category List" 
+          (click)="openEADDialog()">info</mat-icon>
+        </div>
+        <mat-form-field
+          matTooltip=" {{ eadCategory }}"
+          *ngIf="workAuthorizationText === 'EAD' || showEAD"
+          appearance="outline"
+        >
+          <mat-label>EAD Category Name</mat-label>
+          <input matInput formControlName="eadCategory"/>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label> Validity From Date</mat-label>
+          <input
+            matInput
+            type="date"
+            formControlName="workAuthorizationStartDate"
+            placeholder="Placeholder"
+          />
+          <mat-error
+            *ngIf="
+              immigrationForm.controls['workAuthorizationStartDate'].errors
+                ?.required
+            "
+            >This field is mandatory.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label> Validity Expiry Date</mat-label>
+          <input
+            matInput
+            type="date"
+            formControlName="workAuthorizationExpiryDate"
+            placeholder="Placeholder"
+          />
+        </mat-form-field>
+        <mat-form-field *ngIf="showPrevilingWage" appearance="outline">
+          <mat-label>H1 Previling Wage</mat-label>
+          <input matInput formControlName="prevailingWage" placeholder="" />
+          <mat-error
+            *ngIf="immigrationForm.controls['prevailingWage'].errors?.required"
+            >This field is mandatory.
+          </mat-error>
+          <mat-error
+            *ngIf="immigrationForm.controls['prevailingWage'].errors?.pattern"
+            >Prevailing wage should be numeric.
+          </mat-error>
+          <mat-error
+            *ngIf="immigrationForm.controls['prevailingWage'].errors?.min"
+            >Minimum required wage is 15000.
+          </mat-error>
+          <mat-error
+            *ngIf="immigrationForm.controls['prevailingWage'].errors?.max"
+            >Maximum wage can be 30000.
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="edit-files">
+        <div
+          *ngIf="fileCount > 0 || newFileAddedCount > 0"
+          class="width-100 full-width"
+        >
+          <div
+            formArrayName="docProperty"
+            class="modal-popup__uploaded-file"
+            *ngFor="let doc of docProperty.controls; let i = index"
+          >
+            <div [formGroupName]="i" class="width-100 flex-between">
+              <mat-form-field
+                *ngIf="actionType !== 'Add' && actionType !== 'Edit'"
+                appearance="outline"
+                class="file-name"
+              >
+                <mat-label>Document ID</mat-label>
+                <input
+                  matInput
+                  formControlName="documentId"
+                  placeholder="File Name"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="file-name">
+                <mat-label>Change File Name</mat-label>
+                <input
+                  matInput
+                  formControlName="displayName"
+                  placeholder="File Name"
+                />
+                <div class="file-format">
+                  {{ doc?.get('fileExtension')?.value }}
+                </div>
+                <mat-error *ngIf="doc?.get('displayName')?.errors?.maxlength"
+                  >Maximum 30 characters allowed.</mat-error
+                >
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="description">
+                <mat-label> Description</mat-label>
+                <input
+                  matInput
+                  formControlName="fileDescription"
+                  placeholder="File Description"
+                />
+                <mat-error
+                  *ngIf="doc?.get('fileDescription')?.errors?.maxlength"
+                  >Maximum 150 characters allowed.
+                </mat-error>
+              </mat-form-field>
+              <mat-icon (click)="deleteFile(doc, i)">delete</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-fld-group">
+        <div class="modal-popup__file-upload">
+          <input
+            type="file"
+            multiple="multiple"
+            formControlName="fileUpload"
+            (change)="preview($event)"
+          />
+          <button class="btn">BROWSE FILE</button>
+          <P>Drag & Drop File here</P>
+          <P class="file-format-msg"
+            >*Supported File Format (.pdf, .jpg, .jpeg, .png)</P
+          >
+        </div>
+      </div>
+      <div class="modal-popup__footer">
+        <button (click)="onCancel($event)" mat-stroked-button color="primary">
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          [disabled]="immigrationForm.invalid"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+    <div *ngIf="errorMsg" class="error-msg">{{ errorMsg }}</div>
+  </div>
+</form>

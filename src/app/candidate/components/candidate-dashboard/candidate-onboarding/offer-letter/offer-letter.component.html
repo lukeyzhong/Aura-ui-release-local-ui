@@ -1,0 +1,98 @@
+<div class="welcome-card" *ngIf="rejectDialog">
+  <div class="card" *ngIf="welcome">
+    <div class="card__top">
+      <img src="./assets/images/welcome.png" alt="" />
+    </div>
+    <div class="card__bottom">
+      <h4>Welcome To Antra</h4>
+      <h1>{{ candidateName }}</h1>
+      <p>
+        <b>Congratulations!</b> We are delighted to have you on board. We are
+        looking forward to working with you and seeing you achieve great things
+        as a <b>{{ jobTitle }}.</b> To ensure smooth onboarding, we request you
+        to submit the required documents at the earliest.
+      </p>
+
+      <h2>About Antra</h2>
+      <p>
+        We take pride in our work and help organizations address the significant
+        gaps between adapting innovative technologies and their ability to drive
+        faster growth. Through our industry-specific expertise and collaboration
+        with our clients, we have helped them achieve milestones. We have earned
+        our clients trust through our impeccable work and dedication. We are
+        pleased to be at the helm of a business that became a go-to source in a
+        world of digital transformation. Everyone who works at Antra is excited
+        to create a game-changing environment for the evolving business needs of
+        our clients.
+      </p>
+      <p>
+        Visit our Website to know more about us
+        <a href="https://antra.com/about-us/" target="_blank">
+          https://antra.com/about-us/</a
+        >
+      </p>
+    </div>
+    <div class="card__footer">
+      <button
+        type="button"
+        (click)="showOfferLetter()"
+        mat-raised-button
+        color="primary"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="welcome === false" class="offer-letter">
+    <div class="offer-pdf" *ngIf="welcome === false">
+      <div class="offer-pdf__actions">
+        <button mat-mini-fab color="primary">
+          <mat-icon matTooltip="Download" (click)="downloadDocument()"
+            >file_download</mat-icon
+          >
+        </button>
+
+        <button mat-mini-fab color="primary" type="button" target="_blank">
+          <mat-icon matTooltip="Print" (click)="printPreview()">print</mat-icon>
+        </button>
+      </div>
+      <div class="pdf-viewer">
+        <div class="spinner" *ngIf="isLoading; else offerLetterView">
+          <app-spinner diameter="35"></app-spinner>
+        </div>
+        <ng-template #offerLetterView>
+          <pdf-viewer src="{{ docURL }}" [original-size]="false"></pdf-viewer>
+        </ng-template>
+      </div>
+
+      <div class="pdf-viewer__signature">
+        <div class="pdf-viewer__signature--dtl">
+          <p>Name : {{ candidateName }}</p>
+          <p>Date : {{ signDate | date: 'mediumDate' }}</p>
+        </div>
+        <div class="pdf-viewer__signature--btns" *ngIf="signStatus === false">
+          <button mat-stroked-button color="primary" (click)="openReject()">
+            Reject
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="openSignatureDialog()"
+          >
+            Accept
+          </button>
+        </div>
+        <div class="pdf-viewer__signature--btns" *ngIf="signStatus === true">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="openCandidateOnboarding()"
+          >
+            Continue
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

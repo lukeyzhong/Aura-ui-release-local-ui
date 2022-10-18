@@ -1,0 +1,43 @@
+export enum ChartTypes {
+    TotalActiveEmployees = 1,
+    TypeOfEmployment = 2,
+    EmployeeWorkAuthorization = 3,
+    EmployeeNationality = 4,
+    EmployeeGender = 5,
+    EmployeeEthnicity = 6,
+    EmployeeLocation = 7,
+    TaskSummary = 8,
+    NewHiresCount = 9,
+    NewHiresByEmploymentType = 10,
+    NewHiresByWorkAuthorization = 11,
+    NewHiresByStatus = 12,
+    NewHiresByNationality = 13,
+    AttritionCount = 14,
+    AttritionReasons = 15,
+    EmployeeRace = 16,
+    EmployeeCategory = 17,
+    AttritionByWorkAuth = 18,
+    AttritionByHoursWorked = 19
+}
+
+export enum ChartTypeDesc {
+    TotalActiveEmployees = 'Total Active Employees (YTD)',
+    TypeOfEmployment = 'Head Count By Type Of Employment',
+    EmployeeWorkAuthorization = 'Employee By Work Authorization',
+    EmployeeNationality = 'Employee By Nationality',
+    EmployeeGender = 'Employee By Gender',
+    EmployeeEthnicity = 'Employee By Ethnicity',
+    EmployeeLocation = 'No of Employees By Project Location',
+    TaskSummary = 'Task Summary',
+    NewHiresCount = 'New Hire Statistics (YTD)',
+    NewHiresByEmploymentType = 'New Hire By Type Of Employment',
+    NewHiresByWorkAuthorization = 'New Hire By Work Authorization',
+    NewHiresByStatus = 'New Hire Statistics By Status',
+    NewHiresByNationality = 'New Hire By Nationality',
+    AttritionCount = 'Attrition (YTD)',
+    AttritionReasons = 'Attrition Reasons',
+    EmployeeRace = 'Employee By Race',
+    EmployeeCategory = 'New Hire By Employement Category',
+    AttritionByWorkAuth = 'Attrition By Work Authorization',
+    AttritionByHoursWorked = 'Attrition By Hours Worked'
+}

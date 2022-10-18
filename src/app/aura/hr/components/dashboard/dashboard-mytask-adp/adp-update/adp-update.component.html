@@ -1,0 +1,46 @@
+<form *ngIf="type === 'edit'" [formGroup]="updateADPGroup">
+<div class="adp-update">
+  <div class="modal-popup">
+    <div class="modal-popup__header">
+      <h3>Update ADP Position ID</h3>
+      <button mat-button (click)="onCancel($event)">
+        <mat-icon> close </mat-icon>
+      </button>
+    </div>
+    <div class="modal-popup__content">
+      <div class="modal-popup__fields">
+        <div class="form-fld-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Enter ADP Position ID</mat-label>
+            <input matInput formControlName="adpPositionID" maxlength="9"/>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="modal-popup__footer">
+      <button mat-raised-button color="primary" (click)="updateADP()"
+      [disabled]="updateADPGroup.invalid">Submit</button>
+    </div>
+  </div>
+</div>
+</form>
+
+<div *ngIf="type === 'view'" class="adp-update">
+  <div class="modal-popup">
+    <div class="modal-popup__header">
+      <h3>View Additional Information</h3>
+      <button mat-button (click)="onCancel($event)">
+        <mat-icon> close </mat-icon>
+      </button>
+    </div>
+    <div class="modal-popup__content">
+      <div class="modal-popup__fields">
+        <div class="form-fld-group" [innerHtml] = "additionalInfo">
+        </div>
+      </div>
+    </div>
+    <div class="modal-popup__footer">
+      <button mat-raised-button color="primary" (click)="onCancel($event)">Close</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+::ng-deep .mat-drawer-container {
+  height: Calc(100vh - 60px);
+  overflow: hidden;
+}
+::ng-deep .sideNav-content-container {
+  flex: 1;
+}
+::ng-deep .mat-drawer-content {
+  display: flex !important;
+  flex-direction: column;
+  flex: 1;
+  .sideNav-content-container {
+    flex: 1 !important;
+    display: flex;
+    flex-direction: column;
+    app-on-boarding,
+    app-my-documents {
+      display: flex !important;
+      flex-direction: column !important;
+      flex: 1 !important;
+    }
+  }
+}

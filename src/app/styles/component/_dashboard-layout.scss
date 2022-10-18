@@ -1,0 +1,5 @@
+@mixin d-layout($grid-columns, $width) {
+  display: grid;
+  grid-template-columns: repeat($grid-columns, $width);
+ 
+}
